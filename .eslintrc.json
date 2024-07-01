@@ -1,7 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "next-on-pages"],
   "parserOptions": {
     "project": "tsconfig.json",
     "createDefaultProgram": true
@@ -25,7 +25,8 @@
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended", // ts 권장
     "plugin:prettier/recommended", // eslint의 포매팅을 prettier로 사용.
-    "prettier" // eslint-config-prettier prettier와 중복된 eslint 규칙 제거
+    "prettier", // eslint-config-prettier prettier와 중복된 eslint 규칙 제거
+    "plugin:next-on-pages/recommended"
   ],
   "rules": {
     "import/no-extraneous-dependencies": [
@@ -47,6 +48,7 @@
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",
     "import/no-cycle": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "jsx-a11y/label-has-associated-control": "off",
+    "next-on-pages/no-unsupported-configs": "warn"
   }
 }
