@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-function useFavorite() {
-  const [isFavoriteClicked, setIsFavoriteClicked] = useState(false)
+function useFavorite(initialState = false) {
+  const [isFavoriteClicked, setIsFavoriteClicked] = useState(initialState)
 
   const handleFavoriteClick = () => {
     setIsFavoriteClicked(!isFavoriteClicked)

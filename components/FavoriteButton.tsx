@@ -11,18 +11,7 @@ function FavoriteButton({
   isFavoriteClicked,
   onFavoriteClick,
 }: IFavoriteButtonProps) {
-  const getStarImagePath = () => {
-    switch (isFavoriteClicked) {
-      case true:
-        return starYellow
-
-      case false:
-        return starGray
-
-      default:
-        return starGray
-    }
-  }
+  const getStarImagePath = isFavoriteClicked ? starYellow : starGray
 
   return (
     <button
@@ -34,8 +23,8 @@ function FavoriteButton({
       <Image
         width={24}
         height={24}
-        src={getStarImagePath()}
-        alt="yellow star image"
+        src={getStarImagePath}
+        alt={`${isFavoriteClicked ? 'yellow' : 'gray'} star image`}
         className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50"
       />
     </button>
