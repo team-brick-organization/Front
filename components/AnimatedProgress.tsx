@@ -8,17 +8,14 @@ interface AnimatedProgressProps {
 }
 function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
   const [progress, setProgress] = React.useState(0)
-  const [bg, setBg] = React.useState('')
+  const ProgressbarColor = current > min ? 'bg-green-600' : 'bg-slate-400'
 
   React.useEffect(() => {
-    const ProgressbarColor = current > min ? 'bg-green-600' : 'bg-slate-400'
-    setBg(ProgressbarColor)
-
     const value = (current / max) * 100
     const timer = setTimeout(() => setProgress(value), 500)
 
     return () => clearTimeout(timer)
-  }, [current, max, min])
+  }, [current, max])
 
   return (
     <Progress.Root
@@ -29,7 +26,7 @@ function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
       value={progress}
     >
       <Progress.Indicator
-        className={`${bg} ease-[cubic-bezier(0.65, 0, 0.35, 1)] h-full w-full transition-transform duration-[660ms]`}
+        className={`${ProgressbarColor} ease-[cubic-bezier(0.65, 0, 0.35, 1)] h-full w-full transition-transform duration-[660ms]`}
         style={{ transform: `translateX(-${100 - progress}%)` }}
       />
     </Progress.Root>
