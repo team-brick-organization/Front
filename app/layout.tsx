@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <Theme>
           {children}
-          <ThemePanel />
+          <ThemePanel defaultOpen={false} />
         </Theme>
       </body>
     </html>
