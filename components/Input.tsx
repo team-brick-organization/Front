@@ -7,11 +7,11 @@ import { ISignUpFormInputs } from './SignUpForm'
 
 interface InputProps extends React.ComponentProps<typeof TextField.Root> {
   maxWidth?: string
-  hookFormId: string
-  hookFormRequire: string
+  hookFormId?: string
+  hookFormRequire?: string
   hookFormPattern?: ValidationRule<RegExp>
   hookFormMinLength?: ValidationRule<number>
-  register:
+  register?:
     | UseFormRegister<ILoginFormInputs>
     | UseFormRegister<ISignUpFormInputs>
 }
@@ -38,19 +38,24 @@ function Input({
     }
   }
 
-  return (
-    <Box maxWidth={maxWidth}>
-      <TextField.Root
-        {...(register as UseFormRegister<ILoginFormInputs | ISignUpFormInputs>)(
+  // input이 hookform 쓰이지않는 경우도 있기에 register로 조건부사용
+  const inputProps = register
+    ? {
+        ...(register as UseFormRegister<ILoginFormInputs | ISignUpFormInputs>)(
           inputType(),
           {
             required: hookFormRequire,
             pattern: hookFormPattern,
             minLength: hookFormMinLength,
           },
-        )}
-        {...props}
-      />
+        ),
+        ...props,
+      }
+    : props
+
+  return (
+    <Box maxWidth={maxWidth}>
+      <TextField.Root {...inputProps} />
     </Box>
   )
 }

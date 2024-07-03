@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { emailPattern, passwordMinLength } from '@/constants/RegExr'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -20,14 +21,6 @@ function SignInForm(): JSX.Element {
     console.log('로그인', data)
   }
 
-  const { ref, ...rest } = register('password', {
-    required: '비밀번호는 필수 입력입니다.',
-    minLength: {
-      value: 7,
-      message: '7자리 이상 비밀번호를 입력하세요.',
-    },
-  })
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
@@ -41,11 +34,7 @@ function SignInForm(): JSX.Element {
               register={register}
               hookFormId="email"
               hookFormRequire="이메일은 필수 입력입니다."
-              hookFormPattern={{
-                value:
-                  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
-                message: '이메일 형식에 맞지 않습니다.',
-              }}
+              hookFormPattern={emailPattern}
               type="email"
               placeholder="이메일을 입력해주세요"
               className="px-3 py-2 w-full rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -61,11 +50,7 @@ function SignInForm(): JSX.Element {
               register={register}
               hookFormId="password"
               hookFormRequire="비밀번호는 필수 입력입니다."
-              hookFormMinLength={{
-                value: 7,
-                message: '7자리 이상 비밀번호를 입력하세요.',
-              }}
-              {...rest}
+              hookFormMinLength={passwordMinLength}
               type="password"
               placeholder="패스워드를 입력해주세요"
               className="px-3 py-2 w-full rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
