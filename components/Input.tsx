@@ -7,7 +7,7 @@ import { ISignUpFormInputs } from './SignUpForm'
 
 interface InputProps extends React.ComponentProps<typeof TextField.Root> {
   maxWidth?: string
-  hookFormId?: string
+  hookFormId?: 'nickname' | 'email' | 'password'
   hookFormRequire?: string
   hookFormPattern?: ValidationRule<RegExp>
   hookFormMinLength?: ValidationRule<number>
@@ -25,33 +25,20 @@ function Input({
   maxWidth,
   ...props
 }: InputProps) {
-  const inputType = () => {
-    switch (hookFormId) {
-      case 'nickname':
-        return 'nickname'
-
-      case 'email':
-        return `email`
-
-      default:
-        return `password`
-    }
-  }
-
   // input이 hookform 쓰이지않는 경우도 있기에 register로 조건부사용
-  const inputProps = register
-    ? {
-        ...(register as UseFormRegister<ILoginFormInputs | ISignUpFormInputs>)(
-          inputType(),
-          {
+  const inputProps =
+    register && hookFormId
+      ? {
+          ...(
+            register as UseFormRegister<ILoginFormInputs | ISignUpFormInputs>
+          )(hookFormId, {
             required: hookFormRequire,
             pattern: hookFormPattern,
             minLength: hookFormMinLength,
-          },
-        ),
-        ...props,
-      }
-    : props
+          }),
+          ...props,
+        }
+      : props
 
   return (
     <Box maxWidth={maxWidth}>
