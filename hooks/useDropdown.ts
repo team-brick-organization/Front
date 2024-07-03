@@ -7,10 +7,10 @@ interface IUseDropdown {
 }
 
 function useDropdown({ dropDownNames }: IUseDropdown) {
-  const [activeDropdown, setActiveDropdown] = useState(0)
+  const [onActiveDropdown, setActiveDropdown] = useState(0)
 
   return {
-    activeDropdown,
+    onActiveDropdown,
     setActiveDropdown,
     dropDownNames,
   }

@@ -1,23 +1,25 @@
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { DropdownMenu } from '@radix-ui/themes'
 
 interface DropdownProps {
   dropDownNames: string[]
-  activeDropdown: number
+  onActiveDropdown: number
   setActiveDropdown: (index: number) => void
 }
 
 function Dropdown({
   dropDownNames,
-  activeDropdown,
+  onActiveDropdown,
   setActiveDropdown,
 }: DropdownProps) {
   return (
     <div className="m-20pxr">
       <DropdownMenu.Root>
         <DropdownMenu.Trigger className="py-2 flex items-center rounded border px-10pxr">
-          {dropDownNames[activeDropdown]}
-          <ChevronDownIcon className="ml-10pxr" />
+          <button type="button">
+            <p>{dropDownNames[onActiveDropdown]}</p>
+            <ChevronDownIcon className="ml-10pxr" />
+          </button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className="mt-2 rounded border bg-white px-10pxr py-10pxr shadow-lg">
           {dropDownNames.map((name) => (
