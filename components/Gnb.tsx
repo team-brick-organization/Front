@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function Gnb() {
+function Gnb() {
   return (
     <main className="flex h-60pxr w-full flex-row items-center justify-between bg-gray-400 px-50pxr">
       <Link href="/">
@@ -20,3 +20,5 @@ export default function Gnb() {
     </main>
   )
 }
+
+export default Gnb
