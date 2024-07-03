@@ -3,10 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 interface ITabProps {
   tabNames: string[]
   activeTab: number
-  onActiveTab: (index: number) => void
+  onTabClick: (index: number) => void
 }
 
-function Tab({ tabNames, activeTab, onActiveTab }: ITabProps) {
+function Tab({ tabNames, activeTab, onTabClick }: ITabProps) {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 })
 
@@ -31,7 +31,7 @@ function Tab({ tabNames, activeTab, onActiveTab }: ITabProps) {
             <button
               className={`text-24pxr ${isActiveTab(index) ? 'font-bold' : 'font-medium'}`}
               type="button"
-              onClick={() => onActiveTab(index)}
+              onClick={() => onTabClick(index)}
               ref={(el) => {
                 tabRefs.current[index] = el
               }}
