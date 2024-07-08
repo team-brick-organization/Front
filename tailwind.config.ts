@@ -95,7 +95,7 @@ const config = {
           fontWeight: '600',
         },
 
-        'font-title-04': {
+        '.font-title-04': {
           fontSize: pxToRem(16),
           lineHeight: '160%',
           fontWeight: '600',
