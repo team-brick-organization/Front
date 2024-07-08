@@ -19,7 +19,7 @@ function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
 
   return (
     <Progress.Root
-      className="relative h-15pxr w-full overflow-hidden bg-slate-100"
+      className="relative h-4pxr w-full overflow-hidden rounded-full bg-slate-100"
       style={{
         transform: 'translateZ(0)',
       }}
