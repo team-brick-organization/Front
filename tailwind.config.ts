@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 type AccType = Record<string, string>
 
@@ -55,7 +56,79 @@ const config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      const newUtilities = {
+        '.font-headline-01': {
+          fontSize: pxToRem(20),
+          lineHeight: '140%',
+          fontWeight: '500',
+        },
+
+        '.font-headline-02': {
+          fontSize: pxToRem(20),
+          lineHeight: '140%',
+          fontWeight: '700',
+        },
+
+        '.font-headline-03': {
+          fontSize: pxToRem(24),
+          lineHeight: '140%',
+          fontWeight: '700',
+        },
+
+        '.font-title-01': {
+          fontSize: pxToRem(14),
+          lineHeight: '120%',
+          fontWeight: '600',
+        },
+
+        '.font-title-02': {
+          fontSize: pxToRem(14),
+          lineHeight: '160%',
+          fontWeight: '600',
+        },
+
+        '.font-title-03': {
+          fontSize: pxToRem(15),
+          lineHeight: '160%',
+          fontWeight: '600',
+        },
+
+        'font-title-04': {
+          fontSize: pxToRem(16),
+          lineHeight: '160%',
+          fontWeight: '600',
+        },
+
+        '.font-body-01': {
+          fontSize: pxToRem(12),
+          lineHeight: '140%',
+          fontWeight: '500',
+        },
+
+        '.font-body-02': {
+          fontSize: pxToRem(14),
+          lineHeight: '140%',
+          fontWeight: '500',
+        },
+
+        '.font-caption-01': {
+          fontSize: pxToRem(10),
+          lineHeight: '140%',
+          fontWeight: '500',
+        },
+
+        '.font-caption-02': {
+          fontSize: pxToRem(12),
+          lineHeight: '140%',
+          fontWeight: '500',
+        },
+      }
+
+      addUtilities(newUtilities)
+    }),
+  ],
 } satisfies Config
 
 export default config
