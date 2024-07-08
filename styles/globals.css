@@ -5,3 +5,17 @@
 .radix-themes {
   --default-font-family: var(--font-pretendard);
 }
+
+::-webkit-scrollbar {
+  width: 0.375rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #717274;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #dddee0;
+  border-radius: 9999px;
+}

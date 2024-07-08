@@ -15,7 +15,12 @@ function Page() {
 
   return (
     <div className="m-12pxr w-680pxr">
-      <Tab activeTab={activeTab} onTabClick={setActiveTab} tabNames={tabNames}>
+      <Tab
+        activeTab={activeTab}
+        onTabClick={setActiveTab}
+        tabNames={tabNames}
+        maxHeight={1000}
+      >
         {tabContent}
       </Tab>
     </div>
