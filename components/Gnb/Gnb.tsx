@@ -2,9 +2,9 @@
 
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import useSearchStore from '@/store/useSearchStore'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { useEffect } from 'react'
 import Search from './Search'
 
 /**
@@ -14,26 +14,32 @@ import Search from './Search'
 
 function Gnb() {
   const { onSearch, setOnSearch } = useSearchStore()
-  const [onSearchOpacity, setOnSearchOpacity] = useState<
-    'opacity-0 pointer-events-none' | ''
-  >('')
+  const opacityClassName = onSearch ? 'opacity-0 pointer-events-none' : ''
 
   const handleOnSearch = () => {
     setOnSearch(true)
   }
 
+  const handleClickOutside = () => {
+    setOnSearch(false)
+  }
+
   useEffect(() => {
-    if (onSearch) {
-      setOnSearchOpacity('opacity-0 pointer-events-none')
-    } else {
-      setOnSearchOpacity('')
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClickOutside()
+      }
     }
-  }, [onSearch])
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   return (
     <div className="relative w-full bg-gray-200">
       <main
-        className={`${onSearchOpacity} mx-auto h-72pxr w-full max-w-1180pxr`}
+        className={`${opacityClassName} mx-auto h-72pxr w-full max-w-1180pxr`}
       >
         <div className="flex h-full flex-row items-center justify-between">
           <div className="flex w-full max-w-454pxr flex-row items-center gap-46pxr">
@@ -75,11 +81,14 @@ function Gnb() {
         {onSearch ? (
           <>
             <Search />
-            <div className="relative h-screen w-screen bg-black opacity-30" />
+            <div
+              onClick={handleClickOutside}
+              className="relative h-screen w-screen cursor-default bg-black opacity-30"
+            />
           </>
         ) : (
           ''
-        )}{' '}
+        )}
       </div>
     </div>
   )

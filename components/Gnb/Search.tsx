@@ -1,7 +1,7 @@
 import useSearchStore from '@/store/useSearchStore'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 
 /**
  * 돋보기 아이콘 눌렀을시 뜨는 검색창
@@ -9,8 +9,7 @@ import { KeyboardEvent, useEffect, useRef, useState } from 'react'
  */
 
 function Search() {
-  const { setOnSearch, searchValue, setSearchValue } = useSearchStore()
-  const mainRef = useRef<HTMLDivElement>(null)
+  const { searchValue, setSearchValue } = useSearchStore()
   const [recentSearch, setRecentSearch] = useState<string[]>([])
 
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,25 +53,8 @@ function Search() {
     }
   }, [])
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (mainRef.current && !mainRef.current.contains(event.target as Node)) {
-        setOnSearch(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [mainRef, setOnSearch])
-
-  // console.log(recentSearch)
   return (
-    <main
-      ref={mainRef}
-      className="absolute left-1/2 top-0pxr z-10 h-268pxr w-540pxr -translate-x-1/2 transform rounded-b-[10px] bg-slate-50 opacity-100"
-    >
+    <main className="absolute left-1/2 top-0pxr z-10 h-268pxr w-540pxr -translate-x-1/2 transform rounded-b-[10px] bg-slate-50 opacity-100">
       <div className="flex flex-col">
         <section className="p-16pxr">
           <TextField.Root
@@ -89,6 +71,7 @@ function Search() {
                 width="24"
                 height="24"
                 onClick={handleSearch}
+                className="cursor-pointer"
               />
             </TextField.Slot>
           </TextField.Root>
