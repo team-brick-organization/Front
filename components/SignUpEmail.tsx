@@ -9,6 +9,10 @@ import {
 } from '@/constants/RegExr'
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
+import visibility from '@/public/images/svgs/visibility.svg'
+import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
+import Image from 'next/image'
+import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import Input from './Input'
 
 export interface ISignUpFormInputs {
@@ -39,13 +43,20 @@ function SignUpEmail(): JSX.Element {
     return true
   }
 
+  const {
+    showPassword,
+    showPasswordCheck,
+    togglePasswordVisibility,
+    togglePasswordCheckVisibility,
+  } = usePasswordVisibility()
+
   return (
-    <div className="flex h-full w-full items-center justify-center bg-gray-100 py-20pxr">
+    <div className="flex min-h-screen w-screen items-center justify-center bg-[#F3F4F6] pb-149pxr pt-20pxr">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="rounded-10pxr relative h-auto w-480pxr flex-col justify-start bg-gray-50 px-39pxr py-50pxr shadow-2xl"
+        className="rounded-10pxr relative h-auto w-480pxr flex-col justify-start bg-[#F9FAFC] px-39pxr py-50pxr shadow-2xl"
       >
-        <h1 className="leading-33.60pxr pb-47pxr pt-50pxr text-center text-22pxr font-bold text-zinc-900">
+        <h1 className="r pb-47pxr pt-50pxr text-center text-22pxr text-[#1E1F20] font-headline-03">
           이메일로 가입하기
         </h1>
 
@@ -53,7 +64,7 @@ function SignUpEmail(): JSX.Element {
           <div className="mb-24pxr">
             <label
               htmlFor="name"
-              className="text-sm w-402pxr font-semibold leading-snug text-zinc-900"
+              className="w-402pxr text-[#1E1F20] font-title-02"
             >
               이름
             </label>
@@ -66,15 +77,18 @@ function SignUpEmail(): JSX.Element {
               hookFormPattern={namePattern}
               type="text"
               placeholder="이름을 입력해 주세요."
-              className={`mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-                errors.name ? 'ring-1 ring-red-500' : ''
+              className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
+                errors.name ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
               }`}
               variant="soft"
               color="gray"
             />
 
             {errors.name && (
-              <small className="-pt-10pxr text-red-500" role="alert">
+              <small
+                className="-pt-10pxr text-[#DC2626] font-caption-01"
+                role="alert"
+              >
                 {errors.name.message}
               </small>
             )}
@@ -83,7 +97,7 @@ function SignUpEmail(): JSX.Element {
           <div className="mb-24pxr">
             <label
               htmlFor="email"
-              className="text-sm w-402pxr font-semibold leading-snug text-zinc-900"
+              className="w-402pxr text-[#1e1f20] font-title-02"
             >
               이메일
             </label>
@@ -96,15 +110,18 @@ function SignUpEmail(): JSX.Element {
               hookFormPattern={emailPattern}
               type="email"
               placeholder="이메일을 입력해 주세요."
-              className={`mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-                errors.email ? 'ring-1 ring-red-500' : ''
+              className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
+                errors.email ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
               }`}
               variant="soft"
               color="gray"
             />
 
             {errors.email && (
-              <small className="-pt-10pxr text-red-500" role="alert">
+              <small
+                className="-pt-10pxr text-[#DC2626] font-caption-01"
+                role="alert"
+              >
                 {errors.email.message}
               </small>
             )}
@@ -112,7 +129,7 @@ function SignUpEmail(): JSX.Element {
           <div className="mb-24pxr">
             <label
               htmlFor="password"
-              className="text-sm w-402pxr pt-24pxr font-semibold leading-snug text-zinc-900"
+              className="w-402pxr pt-24pxr text-[#1E1F20] font-title-02"
             >
               비밀번호
             </label>
@@ -124,17 +141,38 @@ function SignUpEmail(): JSX.Element {
                 hookFormId="password"
                 hookFormRequire="비밀번호는 필수 입력입니다."
                 hookFormMinLength={passwordMinLength}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="비밀번호를 입력해주세요."
                 variant="soft"
                 color="gray"
-                className={`mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-                  errors.password ? 'ring-1 ring-red-500' : ''
+                className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-01 ${
+                  errors.password ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
                 }`}
               />
+              <button
+                onClick={togglePasswordVisibility}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    togglePasswordVisibility()
+                  }
+                }}
+                type="button"
+                tabIndex={0}
+                className="w-5 h-5 absolute right-16pxr top-1/2 -translate-y-1/2 cursor-pointer"
+              >
+                <Image
+                  src={showPassword ? visibility : visibilityOff}
+                  alt="비밀번호 켜고 꺼지게"
+                  width={20}
+                  height={20}
+                />
+              </button>
             </div>
             {errors.password && (
-              <small className="-pt-10pxr text-red-500" role="alert">
+              <small
+                className="-pt-10pxr text-[#DC2626] font-caption-01"
+                role="alert"
+              >
                 {errors.password.message}
               </small>
             )}
@@ -142,7 +180,7 @@ function SignUpEmail(): JSX.Element {
           <div className="mb-24pxr">
             <label
               htmlFor="passwordCheck"
-              className="text-sm w-402pxr pt-24pxr font-semibold leading-snug text-zinc-900"
+              className="w-402pxr pt-24pxr text-[#1E1F20] font-title-02"
             >
               비밀번호 확인
             </label>
@@ -155,17 +193,38 @@ function SignUpEmail(): JSX.Element {
                 hookFormRequire="비밀번호가 일치하지 않습니다."
                 hookFormMinLength={passwordMinLength}
                 hookFormValidate={passwordCheckValidate}
-                type="password"
+                type={showPasswordCheck ? 'text' : 'password'}
                 placeholder="비밀번호를 다시 한번 입력해주세요."
                 variant="soft"
                 color="gray"
-                className={`mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-                  errors.passwordCheck ? 'ring-1 ring-red-500' : ''
+                className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
+                  errors.passwordCheck ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
                 }`}
               />
+              <button
+                onClick={togglePasswordCheckVisibility}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    togglePasswordCheckVisibility()
+                  }
+                }}
+                type="button"
+                tabIndex={0}
+                className="w-5 h-5 absolute right-16pxr top-1/2 -translate-y-1/2 cursor-pointer"
+              >
+                <Image
+                  src={showPasswordCheck ? visibility : visibilityOff}
+                  alt="비밀번호 켜고 꺼지게"
+                  width={20}
+                  height={20}
+                />
+              </button>
             </div>
             {errors.passwordCheck && (
-              <small className="-pt-10pxr text-red-500" role="alert">
+              <small
+                className="-pt-10pxr text-[#DC2626] font-caption-01"
+                role="alert"
+              >
                 {errors.passwordCheck.message}
               </small>
             )}
@@ -174,15 +233,15 @@ function SignUpEmail(): JSX.Element {
 
         <Button
           type="submit"
-          className="py-3.5 rounded-10pxr gap-2.5 text-sm mt-40pxr inline-flex h-50pxr w-402pxr cursor-pointer items-center justify-center bg-zinc-900 px-182pxr text-center font-semibold leading-snug text-gray-50"
+          className="py-3.5 rounded-10pxr gap-2.5 mt-40pxr inline-flex h-50pxr w-402pxr cursor-pointer items-center justify-center bg-[#1E1F20] px-182pxr text-center text-[#F9FAFC] font-title-02"
         >
           확인
         </Button>
 
-        <div className="text-sm align-center mt-52pxr flex justify-center pb-50pxr text-center font-medium leading-tight text-neutral-400">
+        <div className="align-center mt-52pxr flex justify-center pb-50pxr text-center text-[#DDDEE0] font-body-02">
           이미 회원이신가요?
           <Link href="/signin">
-            <p className="text-sm cursor-pointer pl-9pxr font-medium leading-tight text-zinc-900 underline">
+            <p className="cursor-pointer pl-9pxr text-[#1E1F20] underline">
               로그인
             </p>
           </Link>

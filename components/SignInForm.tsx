@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { emailPattern, passwordMinLength } from '@/constants/RegExr'
 import Image from 'next/image'
@@ -9,6 +9,7 @@ import kakaoTalk from '@/public/images/svgs/kakaoTalk.svg'
 import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
+import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -27,26 +28,22 @@ function SignInForm(): JSX.Element {
     console.log('로그인', data)
   }
 
-  const [showPassword, setShowPassword] = useState(false)
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev)
-  }
+  const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-gray-100 pb-149pxr pt-20pxr">
+    <div className="flex min-h-screen w-screen items-center justify-center bg-gray-100 pb-149pxr pt-20pxr">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="rounded-10pxr relative h-auto w-480pxr flex-col justify-start bg-gray-50 px-39pxr py-50pxr shadow-2xl"
       >
-        <h1 className="leading-33.60pxr pb-47pxr pt-50pxr text-center text-22pxr font-bold text-zinc-900">
+        <h1 className="pb-47pxr pt-50pxr text-center text-zinc-900 font-headline-03">
           로그인
         </h1>
 
         <div>
           <label
             htmlFor="email"
-            className="text-sm w-402pxr font-semibold leading-snug text-zinc-900"
+            className="w-402pxr text-zinc-900 font-title-02"
           >
             이메일
           </label>
@@ -59,8 +56,8 @@ function SignInForm(): JSX.Element {
             hookFormPattern={emailPattern}
             type="email"
             placeholder="이메일을 입력해 주세요."
-            className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-              errors.email ? '-mb-1pxr ring-1 ring-red-500' : ''
+            className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
+              errors.email ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
             }`}
             variant="soft"
             color="gray"
@@ -75,7 +72,7 @@ function SignInForm(): JSX.Element {
           <div>
             <label
               htmlFor="password"
-              className="text-sm w-402pxr pt-24pxr font-semibold leading-snug text-zinc-900"
+              className="w-402pxr pt-24pxr text-zinc-900 font-title-02"
             >
               비밀번호
             </label>
@@ -91,8 +88,8 @@ function SignInForm(): JSX.Element {
                 placeholder="비밀번호를 입력해주세요."
                 variant="soft"
                 color="gray"
-                className={`mt-8pxr cursor-pointer p-12pxr text-10pxr font-medium text-neutral-400 outline-none ${
-                  errors.password ? 'ring-1 ring-red-500' : ''
+                className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
+                  errors.password ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
                 }`}
               />
               <button
@@ -115,7 +112,7 @@ function SignInForm(): JSX.Element {
               </button>
             </div>
             {errors.password && (
-              <small className="-pt-10pxr text-red-500" role="alert">
+              <small className="-pt-10pxr text-[#DC2626]" role="alert">
                 {errors.password.message}
               </small>
             )}
@@ -123,7 +120,7 @@ function SignInForm(): JSX.Element {
         </div>
         <Button
           type="submit"
-          className="py-3.5 rounded-10pxr gap-2.5 text-sm mt-40pxr inline-flex h-50pxr w-402pxr cursor-pointer items-center justify-center bg-zinc-900 px-182pxr text-center font-semibold leading-snug text-gray-50"
+          className="py-3.5 rounded-10pxr gap-2.5 mt-40pxr inline-flex h-50pxr w-402pxr cursor-pointer items-center justify-center bg-zinc-900 px-182pxr text-center text-gray-50 font-title-02"
         >
           로그인
         </Button>
@@ -131,7 +128,7 @@ function SignInForm(): JSX.Element {
         <div className="mt-16pxr flex justify-end">
           <Link
             href="hi"
-            className="text-xs text-zinc-90 cursor-pointer font-medium leading-none"
+            className="text-body-01 cursor-pointer text-[#1E1F20]"
           >
             비밀번호 찾기
           </Link>
@@ -139,7 +136,7 @@ function SignInForm(): JSX.Element {
 
         <div className="gap-6 mt-45pxr inline-flex h-17pxr w-400pxr items-center justify-center">
           <div className="h-0pxr w-113pxr border border-zinc-200" />
-          <div className="text-xs px-8pxr text-center font-medium leading-none text-zinc-200">
+          <div className="px-8pxr text-center text-[#DDDEE0] font-caption-02">
             또는
           </div>
           <div className="h-0pxr w-113pxr border border-zinc-200" />
@@ -148,17 +145,17 @@ function SignInForm(): JSX.Element {
         <div className="flex items-center justify-center">
           <Button
             type="button"
-            className="mt-20pxr h-50pxr cursor-pointer rounded-2xl border bg-yellow-400 px-100pxr text-center text-black"
+            className="mt-20pxr h-50pxr cursor-pointer rounded-2xl border bg-yellow-400 px-100pxr text-center text-[#000] font-title-02"
           >
             <Image src={kakaoTalk} alt="1" width={23} height={23} />
             카카오로 3초만에 시작하기
           </Button>
         </div>
 
-        <div className="text-sm align-center mt-82pxr flex justify-center pb-50pxr text-center font-medium leading-tight text-neutral-400">
+        <div className="align-center mt-82pxr flex justify-center pb-50pxr text-center text-[#9A9B9D] font-body-02">
           아직 브릭 회원이 아닌가요?
           <Link href="/signup">
-            <p className="text-sm cursor-pointer pl-9pxr font-medium leading-tight text-zinc-900 underline">
+            <p className="cursor-pointer pl-9pxr text-[#1E1F20] underline">
               회원가입
             </p>
           </Link>
