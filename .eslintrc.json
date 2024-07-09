@@ -35,6 +35,8 @@
         "devDependencies": true
       }
     ],
+    "jsx-a11y/click-events-have-key-events": "off", // 인터렉티브하지 않은 태그에 onClick 같은 것을 넣었을때 오류 뜨는 것 off
+    "jsx-a11y/no-static-element-interactions": "off", // 위와 동일
     "react/react-in-jsx-scope": "off", // react 17부턴 import 안해도돼서 기능 끔
     // 경고표시, 파일 확장자를 .ts나 .tsx 모두 허용함
     "react/jsx-filename-extension": ["warn", { "extensions": [".ts", ".tsx"] }],
