@@ -1,15 +1,18 @@
 'use client'
 
 import { Box, TextField } from '@radix-ui/themes'
-import { UseFormRegister, ValidationRule } from 'react-hook-form'
+import { UseFormRegister, Validate, ValidationRule } from 'react-hook-form'
 import { ILoginFormInputs } from './SignInForm'
-import { ISignUpFormInputs } from './SignUpForm'
+import { ISignUpFormInputs } from './SignUpEmail'
 
 interface InputProps extends React.ComponentProps<typeof TextField.Root> {
   maxWidth?: string
-  hookFormId?: 'nickname' | 'email' | 'password'
+  hookFormId?: 'name' | 'email' | 'password' | 'passwordCheck'
   hookFormRequire?: string
-  hookFormPattern?: ValidationRule<RegExp>
+  hookFormPattern?: ValidationRule<RegExp> | undefined
+  hookFormValidate?:
+    | Validate<string, ISignUpFormInputs | ILoginFormInputs>
+    | Record<string, Validate<string, ISignUpFormInputs | ILoginFormInputs>>
   hookFormMinLength?: ValidationRule<number>
   register?:
     | UseFormRegister<ILoginFormInputs>
@@ -21,6 +24,7 @@ function Input({
   hookFormRequire,
   hookFormPattern,
   hookFormMinLength,
+  hookFormValidate,
   register,
   maxWidth,
   ...props
@@ -35,6 +39,7 @@ function Input({
             required: hookFormRequire,
             pattern: hookFormPattern,
             minLength: hookFormMinLength,
+            validate: hookFormValidate,
           }),
           ...props,
         }
