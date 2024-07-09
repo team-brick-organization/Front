@@ -32,8 +32,12 @@ function SignUpEmail(): JSX.Element {
     console.log('회원가입', data)
   }
 
-  const passwordCheckValidate = (value: string) =>
-    password !== value && '패스워드가 일치하지않습니다.'
+  const passwordCheckValidate = (value: string) => {
+    if (value !== password) {
+      return '비밀번호가 일치하지 않습니다.'
+    }
+    return true
+  }
 
   return (
     <div className="flex h-full w-full items-center justify-center bg-gray-100 py-20pxr">
