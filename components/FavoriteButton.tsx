@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import starYellow from '@/public/images/svgs/starYellow.svg'
-import starGray from '@/public/images/svgs/starGray.svg'
+import heartBlack from '@/public/images/svgs/heartBlack.svg'
+import heart from '@/public/images/svgs/heart.svg'
 
 interface IFavoriteButtonProps {
   isFavoriteClicked: boolean
@@ -11,11 +11,11 @@ function FavoriteButton({
   isFavoriteClicked,
   onFavoriteClick,
 }: IFavoriteButtonProps) {
-  const getStarImagePath = isFavoriteClicked ? starYellow : starGray
+  const getStarImagePath = isFavoriteClicked ? heartBlack : heart
 
   return (
     <button
-      className="group text-30pxr text-yellow-500"
+      className="group"
       type="button"
       onClick={onFavoriteClick}
       title="Dibs this item"
@@ -24,7 +24,7 @@ function FavoriteButton({
         width={24}
         height={24}
         src={getStarImagePath}
-        alt={`${isFavoriteClicked ? 'yellow' : 'gray'} star image`}
+        alt={`${isFavoriteClicked ? 'black' : 'gray'} heart image`}
         className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50"
       />
     </button>
