@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatedProgress } from '..'
+import { AnimatedProgress } from '.'
 
 interface PeopleCounterProps {
   current: number
