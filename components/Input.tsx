@@ -2,8 +2,8 @@
 
 import { Box, TextField } from '@radix-ui/themes'
 import { UseFormRegister, Validate, ValidationRule } from 'react-hook-form'
-import { ILoginFormInputs } from './SignInForm'
 import { ISignUpFormInputs } from './SignUpEmail'
+import { ILoginFormInputs } from './SignInForm'
 
 interface InputProps extends React.ComponentProps<typeof TextField.Root> {
   maxWidth?: string

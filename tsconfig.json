@@ -27,7 +27,8 @@
       "@/utils/*": ["./utils/*"],
       "@/apis/*": ["./apis/*"],
       "@/public/*": ["./public/*"],
-      "@/constants/*": ["./constants/*"]
+      "@/constants/*": ["./constants/*"],
+      "@/stores/*": ["./stores/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
