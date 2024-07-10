@@ -102,4 +102,5 @@ function Search() {
     </main>
   )
 }
+
 export default Search

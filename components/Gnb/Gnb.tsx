@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useEffect } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
-import { Search } from '.'
+import { Search } from '../index'
 
 /**
  * GNB컴포넌트
