@@ -1,22 +1,43 @@
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 
 interface ITabProps {
   tabNames: string[]
   activeTab: number
   onTabClick: (index: number) => void
+  maxHeight: number
+  children: ReactNode
 }
 
-function Tab({ tabNames, activeTab, onTabClick }: ITabProps) {
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 })
+const TAB_UNDERLINE_WIDTH = 64
 
-  const isActiveTab = (index: number) => activeTab === index
+function Tab({
+  tabNames,
+  activeTab,
+  onTabClick,
+  maxHeight,
+  children,
+}: ITabProps) {
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const [underlineStyle, setUnderlineStyle] = useState({
+    width: 0,
+    left: 0,
+    offsetWidth: 0,
+  })
+
+  const tabVerticalCenter =
+    underlineStyle.left +
+    underlineStyle.offsetWidth / 2 -
+    TAB_UNDERLINE_WIDTH / 2
 
   useEffect(() => {
     const updateUnderlineStyle = () => {
       if (tabRefs.current[activeTab]) {
-        const { offsetWidth, offsetLeft } = tabRefs.current[activeTab]!
-        setUnderlineStyle({ width: offsetWidth, left: offsetLeft })
+        const { offsetLeft, offsetWidth } = tabRefs.current[activeTab]!
+        setUnderlineStyle({
+          width: TAB_UNDERLINE_WIDTH,
+          left: offsetLeft,
+          offsetWidth,
+        })
       }
     }
 
@@ -24,12 +45,12 @@ function Tab({ tabNames, activeTab, onTabClick }: ITabProps) {
   }, [activeTab, tabRefs])
 
   return (
-    <div className="relative flex flex-col">
-      <ul className="flex gap-12pxr">
+    <div className="flex w-full flex-col gap-3pxr">
+      <ul className="relative flex h-34pxr w-full items-center justify-center gap-166pxr border-b border-[#DDDEE0]">
         {tabNames.map((tabName, index) => (
           <li key={tabName}>
             <button
-              className={`text-24pxr ${isActiveTab(index) ? 'font-bold' : 'font-medium'}`}
+              className="w-64pxr font-title-04"
               type="button"
               onClick={() => onTabClick(index)}
               ref={(el) => {
@@ -40,14 +61,22 @@ function Tab({ tabNames, activeTab, onTabClick }: ITabProps) {
             </button>
           </li>
         ))}
+        {(underlineStyle.left !== 0 || underlineStyle.width !== 0) && (
+          <li
+            style={{
+              width: `${TAB_UNDERLINE_WIDTH}px`,
+              transform: `translateX(${tabVerticalCenter}px)`,
+            }}
+            className="absolute -bottom-1pxr left-0pxr h-2pxr bg-[#1E1F20] transition-all duration-300"
+          />
+        )}
       </ul>
       <div
-        style={{
-          width: `${underlineStyle.width}px`,
-          transform: `translateX(${underlineStyle.left}px)`,
-        }}
-        className="absolute -bottom-3pxr h-4pxr border-2 border-black transition-all duration-300"
-      />
+        style={{ maxHeight: `${maxHeight}px` }}
+        className="w-full overflow-y-scroll"
+      >
+        {children}
+      </div>
     </div>
   )
 }
