@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import { useEffect, useState } from 'react'
 import * as Progress from '@radix-ui/react-progress'
 
 interface AnimatedProgressProps {
@@ -7,10 +9,10 @@ interface AnimatedProgressProps {
   current: number
 }
 function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
-  const [progress, setProgress] = React.useState(0)
+  const [progress, setProgress] = useState(0)
   const progressbarColor = current > min ? 'bg-green-600' : 'bg-slate-400'
 
-  React.useEffect(() => {
+  useEffect(() => {
     const value = (current / max) * 100
     const timer = setTimeout(() => setProgress(value), 500)
 
