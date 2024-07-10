@@ -2,9 +2,9 @@
 
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
-import useSearchStore from '@/store/useSearchStore'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useEffect } from 'react'
+import useSearchStore from '@/stores/useSearchStore'
 import Search from './Search'
 
 /**
@@ -27,14 +27,14 @@ function Gnb() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        handleClickOutside()
+        setOnSearch(false)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
+  }, [setOnSearch])
 
   return (
     <div className="relative w-full bg-gray-200">

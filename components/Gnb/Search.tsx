@@ -1,7 +1,7 @@
-import useSearchStore from '@/store/useSearchStore'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
 import { KeyboardEvent, useEffect, useState } from 'react'
+import useSearchStore from '@/stores/useSearchStore'
 
 /**
  * 돋보기 아이콘 눌렀을시 뜨는 검색창

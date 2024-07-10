@@ -150,6 +150,7 @@ function SignUpEmail(): JSX.Element {
                 }`}
               />
               <button
+                title="비밀번호 보이기/숨기기 버튼"
                 onClick={togglePasswordVisibility}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -202,6 +203,7 @@ function SignUpEmail(): JSX.Element {
                 }`}
               />
               <button
+                title="비밀번호 보이기/숨기기 버튼"
                 onClick={togglePasswordCheckVisibility}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
