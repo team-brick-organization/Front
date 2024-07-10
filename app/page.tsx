@@ -1,3 +1,9 @@
+import { CardRegistration } from '@/components'
+
 export default function Home() {
-  return <div>Hello world!</div>
+  return (
+    <div>
+      <CardRegistration />
+    </div>
+  )
 }
