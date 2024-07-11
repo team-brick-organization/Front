@@ -39,7 +39,7 @@ function GatheringCard({ data }: GatheringCardProps) {
       className="flex h-317pxr w-280pxr cursor-pointer flex-col gap-6pxr"
       onClick={handleCardClick}
     >
-      <section className="relative flex h-208pxr w-full items-center justify-center bg-slate-100">
+      <section className="relative flex h-208pxr w-full items-center justify-center rounded-[.3125rem] bg-slate-100">
         {data?.img && (
           <Image
             src={data.img}
