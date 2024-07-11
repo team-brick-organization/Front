@@ -27,6 +27,7 @@ export default function RootLayout({
         <Theme>
           {children}
           <ThemePanel defaultOpen={false} />
+          <div id="portal" />
         </Theme>
       </body>
     </html>
