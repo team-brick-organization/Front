@@ -11,7 +11,7 @@ function FavoriteButton({
   isFavoriteClicked,
   onFavoriteClick,
 }: IFavoriteButtonProps) {
-  const getStarImagePath = isFavoriteClicked ? heartBlack : heart
+  const getHeartImagePath = isFavoriteClicked ? heartBlack : heart
 
   return (
     <button
@@ -21,9 +21,9 @@ function FavoriteButton({
       title="Dibs this item"
     >
       <Image
-        width={24}
-        height={24}
-        src={getStarImagePath}
+        width={26}
+        height={26}
+        src={getHeartImagePath}
         alt={`${isFavoriteClicked ? 'black' : 'gray'} heart image`}
         className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50"
       />

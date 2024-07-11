@@ -21,6 +21,7 @@
     "paths": {
       "@/app/*": ["./app/*"],
       "@/components/*": ["./components/*"],
+      "@/components": ["./components/index"],
       "@/hooks/*": ["./hooks/*"],
       "@/cypress/*": ["./cypress/*"],
       "@/styles/*": ["./styles/*"],

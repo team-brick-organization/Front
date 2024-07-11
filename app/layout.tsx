@@ -31,6 +31,7 @@ export default function RootLayout({
           <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           {children}
           <ThemePanel defaultOpen={false} />
+          <div id="portal" />
         </Theme>
       </body>
     </html>

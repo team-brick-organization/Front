@@ -25,7 +25,7 @@ function NestingAvatar({ config, displayLimit }: INestingAvatarProps) {
           key={item.imageUrl}
           src={item.imageUrl}
           fallback={
-            <div className="h-29pxr w-29pxr content-center rounded-full bg-[#D9D9D9] text-center text-14pxr font-medium text-black">
+            <div className="h-29pxr w-29pxr content-center rounded-full bg-[#D9D9D9] text-center text-14pxr font-semibold text-[#1F2937]">
               {item.fallback}
             </div>
           }
@@ -33,7 +33,7 @@ function NestingAvatar({ config, displayLimit }: INestingAvatarProps) {
       ))}
       <div
         style={{ transform: `translateX(${displayLimit * -10}px)` }}
-        className="h-29pxr w-29pxr content-center rounded-full bg-[#D9D9D9] text-center text-14pxr font-medium text-black"
+        className="h-29pxr w-29pxr content-center rounded-full bg-[#D9D9D9] text-center text-14pxr font-semibold text-[#1F2937]"
       >
         +{config.length - displayLimit}
       </div>

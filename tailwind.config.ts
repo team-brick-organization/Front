@@ -114,15 +114,21 @@ const config = {
         },
 
         '.font-caption-01': {
+          fontSize: pxToRem(8),
+          lineHeight: '120%',
+          fontWeight: '500',
+        },
+
+        '.font-caption-02': {
           fontSize: pxToRem(10),
           lineHeight: '140%',
           fontWeight: '500',
         },
 
-        '.font-caption-02': {
+        '.font-caption-03': {
           fontSize: pxToRem(12),
           lineHeight: '140%',
-          fontWeight: '500',
+          fontWeight: '400',
         },
       }
 
