@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatedProgress } from '../index'
+import { AnimatedProgress } from '@/components'
 
 interface PeopleCounterProps {
   current: number
