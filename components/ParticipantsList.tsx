@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { ParticipantsInfo } from './index'
+import { Participants } from './index'
 
-interface IParticipantsInfoProps {
+interface IParticipantsListProps {
   participants: {
     profileImage: string
     name: string
@@ -12,7 +12,7 @@ interface IParticipantsInfoProps {
   }[]
 }
 
-function ParticipantsInfoList({ participants }: IParticipantsInfoProps) {
+function ParticipantsList({ participants }: IParticipantsListProps) {
   const [offset, setOffset] = useState(10)
 
   const sliceParticipants = participants.slice(0, offset)
@@ -31,7 +31,7 @@ function ParticipantsInfoList({ participants }: IParticipantsInfoProps) {
           const { profileImage, name, description, role } = participant
           return (
             <li key={profileImage}>
-              <ParticipantsInfo
+              <Participants
                 profileImage={profileImage}
                 name={name}
                 description={description}
@@ -52,4 +52,4 @@ function ParticipantsInfoList({ participants }: IParticipantsInfoProps) {
   )
 }
 
-export default ParticipantsInfoList
+export default ParticipantsList

@@ -1,18 +1,18 @@
 import { Avatar } from '@radix-ui/themes'
 
-interface IParticipantsInfoProps {
+interface IParticipantsProps {
   profileImage: string
   name: string
   description: string
   role: 'host' | 'participant'
 }
 
-function ParticipantsInfo({
+function Participants({
   profileImage,
   name,
   description,
   role,
-}: IParticipantsInfoProps) {
+}: IParticipantsProps) {
   return (
     <div className="flex gap-16pxr">
       <Avatar
@@ -39,4 +39,4 @@ function ParticipantsInfo({
   )
 }
 
-export default ParticipantsInfo
+export default Participants

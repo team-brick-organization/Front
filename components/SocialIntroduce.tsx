@@ -1,4 +1,4 @@
-import { LocationMap, ParticipantsInfoList, SocialDescription } from './index'
+import { LocationMap, ParticipantsList, SocialDescription } from './index'
 
 interface ISocialIntroduceProps {
   description: string
@@ -30,7 +30,7 @@ function SocialIntroduce({
         <LocationMap location={location} lat={lat} lng={lng} />
       </section>
       <section className="mt-57pxr">
-        <ParticipantsInfoList participants={participants} />
+        <ParticipantsList participants={participants} />
       </section>
     </div>
   )
