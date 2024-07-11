@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import React from 'react'
 
-function CardRegistration() {
+function CardRegistrationPage() {
   return (
     <div className="relative min-h-screen w-screen items-center justify-center bg-[#F9FAFC]">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -38,4 +37,4 @@ function CardRegistration() {
   )
 }
 
-export default CardRegistration
+export default CardRegistrationPage
