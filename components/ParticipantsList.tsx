@@ -29,6 +29,7 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
       <ul className="mt-20pxr flex flex-col gap-16pxr">
         {sliceParticipants.map((participant) => {
           const { profileImage, name, description, role } = participant
+
           return (
             <li key={profileImage}>
               <Participants

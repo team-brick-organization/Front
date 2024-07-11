@@ -1,4 +1,4 @@
-import { TagBadge } from '@/components'
+import { CustomBadge } from '@/components/index'
 
 interface ITagBadgeListProps {
   tags: string[]
@@ -9,7 +9,7 @@ function TagBadgeList({ tags }: ITagBadgeListProps) {
     <ul className="flex gap-4pxr">
       {tags.map((tag) => (
         <li key={tag}>
-          <TagBadge>{tag}</TagBadge>
+          <CustomBadge type="tag">{tag}</CustomBadge>
         </li>
       ))}
     </ul>
