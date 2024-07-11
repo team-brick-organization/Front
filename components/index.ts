@@ -19,4 +19,3 @@ export { default as IconLabel } from './CrewGatheringInfo/IconLabel'
 export { default as TagBadge } from './TagBadge/TagBadge'
 export { default as TagBadgeList } from './TagBadge/TagBadgeList'
 export { default as ParticipantsInfo } from './ParticipantsInfo'
-
