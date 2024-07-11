@@ -3,6 +3,7 @@ import { Theme, ThemePanel } from '@radix-ui/themes'
 import localFont from 'next/font/local'
 import '@radix-ui/themes/styles.css'
 import '@/styles/globals.css'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,6 +17,8 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 })
 
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false&libraries=services`
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +28,7 @@ export default function RootLayout({
     <html lang="ko" className={`${pretendard.variable}`}>
       <body className={pretendard.className}>
         <Theme>
+          <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           {children}
           <ThemePanel defaultOpen={false} />
         </Theme>
