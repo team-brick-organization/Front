@@ -32,8 +32,6 @@ function ImageViewer() {
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
     usePortal()
 
-  const sliceImages = mockImages.slice(1, 5)
-
   return (
     <div className="flex gap-20pxr">
       <Box className="h-400pxr w-680pxr">
@@ -43,10 +41,11 @@ function ImageViewer() {
           width={680}
           height={400}
           className="h-400pxr w-680pxr object-cover"
+          onClick={() => setIsPortalOpen(true)}
         />
       </Box>
       <Box className="grid h-400pxr w-480pxr grid-cols-2 grid-rows-2 gap-10pxr">
-        {sliceImages.map((image) => (
+        {mockImages.slice(1).map((image) => (
           <Image
             key={image.id}
             src={image.src}
@@ -66,7 +65,8 @@ function ImageViewer() {
         className="h-635pxr w-full max-w-1180pxr"
       >
         <ImageViewerModal
-          images={sliceImages}
+          images={mockImages}
+          initialIndex={0}
           onClose={() => setIsPortalOpen(false)}
         />
       </Portal>

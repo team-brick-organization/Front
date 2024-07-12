@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import closeIcon from '@/public/images/svgs/close.svg'
 import chevronleftIcon from '@/public/images/svgs/chevronleft.svg'
 import chevronrightIcon from '@/public/images/svgs/chevronright.svg'
@@ -11,11 +11,20 @@ interface IImageViewerModalProps {
     id: number
     src: string
   }[]
+  initialIndex: number
   onClose: () => void
 }
 
-function ImageViewerModal({ images, onClose }: IImageViewerModalProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+function ImageViewerModal({
+  images,
+  initialIndex,
+  onClose,
+}: IImageViewerModalProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(initialIndex)
+
+  useEffect(() => {
+    setCurrentImageIndex(initialIndex)
+  }, [initialIndex])
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
