@@ -1,11 +1,7 @@
 import { PasswordFindForm } from '@/components'
 
 function passwordfind() {
-  return (
-    <div>
-      <PasswordFindForm />
-    </div>
-  )
+  return <PasswordFindForm />
 }
 
 export default passwordfind

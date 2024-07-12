@@ -31,138 +31,124 @@ function SignInForm(): JSX.Element {
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
 
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center bg-gray-100 pb-149pxr pt-20pxr">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="rounded-10pxr relative h-auto w-480pxr flex-col justify-start bg-gray-50 px-39pxr py-50pxr shadow-2xl"
-      >
-        <h1 className="pb-47pxr pt-50pxr text-center text-zinc-900 font-headline-03">
-          로그인
-        </h1>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="relative w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
+    >
+      <h1 className="text-center text-gray-10 font-headline-03">로그인</h1>
 
-        <div>
-          <label
-            htmlFor="email"
-            className="w-402pxr text-zinc-900 font-title-02"
-          >
-            이메일
-          </label>
+      <div className="mt-47pxr">
+        <label htmlFor="email" className="text-gray-10 font-title-02">
+          이메일
+        </label>
+        <Input
+          id="email"
+          register={register}
+          hookFormId="email"
+          hookFormRequire="이메일은 필수 입력입니다."
+          hookFormPattern={emailPattern}
+          type="email"
+          placeholder="이메일을 입력해 주세요."
+          className={`mt-4pxr rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
+            errors.email ? 'ring-1 ring-error' : ''
+          }`}
+          color="gray"
+        />
+
+        {errors.email && (
+          <small className="mt-4pxr text-error font-caption-02" role="alert">
+            {errors.email.message}
+          </small>
+        )}
+      </div>
+
+      <div className="mt-24pxr">
+        <label htmlFor="password" className="text-gray-10 font-title-02">
+          비밀번호
+        </label>
+        <div className="relative mt-4pxr">
           <Input
-            size="3"
-            id="email"
+            id="password"
             register={register}
-            hookFormId="email"
-            hookFormRequire="이메일은 필수 입력입니다."
-            hookFormPattern={emailPattern}
-            type="email"
-            placeholder="이메일을 입력해 주세요."
-            className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
-              errors.email ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
+            hookFormId="password"
+            hookFormRequire="비밀번호는 필수 입력입니다."
+            hookFormMinLength={passwordMinLength}
+            type={showPassword ? 'text' : 'password'}
+            placeholder="비밀번호를 입력해주세요."
+            className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
+              errors.password ? 'ring-1 ring-error' : ''
             }`}
-            variant="soft"
-            color="gray"
           />
-
-          {errors.email && (
-            <small className="-pt-10pxr text-red-500" role="alert">
-              {errors.email.message}
-            </small>
-          )}
-
-          <div>
-            <label
-              htmlFor="password"
-              className="w-402pxr pt-24pxr text-zinc-900 font-title-02"
-            >
-              비밀번호
-            </label>
-            <div className="relative">
-              <Input
-                size="3"
-                id="password"
-                register={register}
-                hookFormId="password"
-                hookFormRequire="비밀번호는 필수 입력입니다."
-                hookFormMinLength={passwordMinLength}
-                type={showPassword ? 'text' : 'password'}
-                placeholder="비밀번호를 입력해주세요."
-                variant="soft"
-                color="gray"
-                className={`mb-8pxr mt-8pxr cursor-pointer p-12pxr outline-none font-caption-02 ${
-                  errors.password ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
-                }`}
-              />
-              <button
-                title="비밀번호 보이기/숨기기 버튼"
-                onClick={togglePasswordVisibility}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    togglePasswordVisibility()
-                  }
-                }}
-                type="button"
-                tabIndex={0}
-                className="w-5 h-5 absolute right-16pxr top-1/2 -translate-y-1/2 cursor-pointer"
-              >
-                <Image
-                  src={showPassword ? visibility : visibilityOff}
-                  alt="비밀번호 켜고 꺼지게"
-                  width={20}
-                  height={20}
-                />
-              </button>
-            </div>
-            {errors.password && (
-              <small className="-pt-10pxr text-[#DC2626]" role="alert">
-                {errors.password.message}
-              </small>
-            )}
-          </div>
-        </div>
-        <Button
-          type="submit"
-          className="py-3.5 rounded-10pxr gap-2.5 mt-40pxr inline-flex h-50pxr w-402pxr cursor-pointer items-center justify-center bg-zinc-900 px-182pxr text-center text-gray-50 font-title-02"
-        >
-          로그인
-        </Button>
-
-        <div className="mt-16pxr flex justify-end">
-          <Link
-            href="hi"
-            className="text-body-01 cursor-pointer text-[#1E1F20]"
-          >
-            비밀번호 찾기
-          </Link>
-        </div>
-
-        <div className="gap-6 mt-45pxr inline-flex h-17pxr w-400pxr items-center justify-center">
-          <div className="h-0pxr w-113pxr border border-zinc-200" />
-          <div className="px-8pxr text-center text-[#DDDEE0] font-caption-02">
-            또는
-          </div>
-          <div className="h-0pxr w-113pxr border border-zinc-200" />
-        </div>
-
-        <div className="flex items-center justify-center">
-          <Button
+          <button
+            title="비밀번호 보이기/숨기기 버튼"
+            onClick={togglePasswordVisibility}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                togglePasswordVisibility()
+              }
+            }}
             type="button"
-            className="mt-20pxr h-50pxr cursor-pointer rounded-2xl border bg-yellow-400 px-100pxr text-center text-[#000] font-title-02"
+            tabIndex={0}
+            className="absolute right-16pxr top-1/2 -translate-y-1/2 cursor-pointer"
           >
-            <Image src={kakaoTalk} alt="1" width={23} height={23} />
-            카카오로 3초만에 시작하기
-          </Button>
+            <Image
+              src={showPassword ? visibility : visibilityOff}
+              alt="비밀번호 켜고 꺼지게"
+              width={17}
+              height={17}
+            />
+          </button>
         </div>
+        {errors.password && (
+          <small className="mt-4pxr text-error font-caption-02" role="alert">
+            {errors.password.message}
+          </small>
+        )}
+      </div>
 
-        <div className="align-center mt-82pxr flex justify-center pb-50pxr text-center text-[#9A9B9D] font-body-02">
-          아직 브릭 회원이 아닌가요?
-          <Link href="/signup">
-            <p className="cursor-pointer pl-9pxr text-[#1E1F20] underline">
-              회원가입
-            </p>
-          </Link>
+      <Button
+        type="submit"
+        className="mt-40pxr h-50pxr w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
+      >
+        로그인
+      </Button>
+
+      <div className="mt-16pxr flex justify-end">
+        <Link
+          href="/password-find"
+          className="cursor-pointer text-gray-10 font-body-01"
+        >
+          비밀번호 찾기
+        </Link>
+      </div>
+
+      <div className="mt-45pxr flex w-400pxr items-center justify-center gap-24pxr">
+        <div className="h-1pxr w-126pxr bg-gray-04" />
+        <div className="px-8pxr text-center text-gray-04 font-caption-03">
+          또는
         </div>
-      </form>
-    </div>
+        <div className="h-1pxr w-126pxr bg-gray-04" />
+      </div>
+
+      <div className="mt-20pxr flex items-center justify-center">
+        <Button
+          type="button"
+          className="h-full w-fit cursor-pointer gap-8pxr rounded-full border bg-[#FEE500] px-70pxr py-12pxr text-center text-gray-10 font-title-02"
+        >
+          <Image src={kakaoTalk} alt="1" width={24} height={22} />
+          카카오로 3초만에 시작하기
+        </Button>
+      </div>
+
+      <div className="mt-60pxr text-center text-gray-06 font-body-02">
+        아직 브릭 회원이 아닌가요?
+        <Link href="/signup">
+          <span className="pl-8pxr text-gray-10 underline underline-offset-2">
+            회원가입
+          </span>
+        </Link>
+      </div>
+    </form>
   )
 }
 

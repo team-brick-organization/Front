@@ -22,54 +22,44 @@ function PasswordFindForm(): JSX.Element {
   }
 
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center bg-gray-100 pb-149pxr pt-20pxr">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="rounded-10pxr relative h-auto w-480pxr flex-col items-center justify-start bg-gray-50 px-39pxr py-50pxr shadow-2xl"
-      >
-        <div className="flex flex-col items-center gap-16pxr">
-          <h1 className="text-center text-22pxr text-[#1E1F20] font-headline-03">
-            비밀번호를 잊으셨나요?
-          </h1>
-          <p className="w-full text-center text-[#9A9B9D] font-body-02">
-            가입한 이메일을 입력하면
-            <br />
-            암호를 재설정할 수 있는 링크를 이메일로 보내드릴게요.
-          </p>
-          <div className="relative w-402pxr">
-            <Input
-              size="3"
-              register={register}
-              hookFormId="email"
-              hookFormRequire="이메일은 필수 입력입니다."
-              hookFormPattern={emailPattern}
-              type="email"
-              placeholder="이메일을 입력해 주세요."
-              className={`mb-8pxr mt-31pxr w-full cursor-pointer p-12pxr outline-none font-caption-02 ${
-                errors.email ? '-mb-1pxr ring-1 ring-[#DC2626]' : ''
-              }`}
-              variant="soft"
-              color="gray"
-            />
-            {errors.email && (
-              <small
-                className="absolute -bottom-14pxr text-[#DC2626] font-caption-02"
-                role="alert"
-              >
-                {errors.email.message}
-              </small>
-            )}
-          </div>
-        </div>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="relative w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
+    >
+      <h1 className="text-center text-gray-10 font-headline-03">
+        비밀번호를 잊으셨나요?
+      </h1>
+      <p className="mt-16pxr text-center text-[#9A9B9D] font-body-02">
+        가입한 이메일을 입력하면
+        <br />
+        암호를 재설정할 수 있는 링크를 이메일로 보내드릴게요.
+      </p>
+      <div className="relative mt-46pxr w-full">
+        <Input
+          register={register}
+          hookFormId="email"
+          hookFormRequire="이메일은 필수 입력입니다."
+          hookFormPattern={emailPattern}
+          type="email"
+          placeholder="이메일을 입력해 주세요."
+          className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
+            errors.email ? 'ring-1 ring-error' : ''
+          }`}
+        />
+        {errors.email && (
+          <small className="mt-4pxr text-error font-caption-02" role="alert">
+            {errors.email.message}
+          </small>
+        )}
+      </div>
 
-        <Button
-          type="submit"
-          className="py-3.5 rounded-10pxr gap-2.5 mt-40pxr inline-flex h-50pxr w-full cursor-pointer items-center justify-center bg-[#1E1F20] text-center font-title-04"
-        >
-          확인
-        </Button>
-      </form>
-    </div>
+      <Button
+        type="submit"
+        className="mt-40pxr h-50pxr w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
+      >
+        확인
+      </Button>
+    </form>
   )
 }
 

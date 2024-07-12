@@ -1,13 +1,12 @@
 'use client'
 
-import { Box, TextField } from '@radix-ui/themes'
 import { UseFormRegister, Validate, ValidationRule } from 'react-hook-form'
-import { ISignUpFormInputs } from './SignUpEmail'
+import { HTMLProps } from 'react'
+import { ISignUpFormInputs } from './SignUpEmailForm'
 import { ILoginFormInputs } from './SignInForm'
 import { IPasswordFindFormInputs } from './PasswordFindForm'
 
-interface InputProps extends React.ComponentProps<typeof TextField.Root> {
-  maxWidth?: string
+interface InputProps extends HTMLProps<HTMLInputElement> {
   hookFormId?: 'name' | 'email' | 'password' | 'passwordCheck'
   hookFormRequire?: string
   hookFormPattern?: ValidationRule<RegExp> | undefined
@@ -19,6 +18,7 @@ interface InputProps extends React.ComponentProps<typeof TextField.Root> {
     | UseFormRegister<ILoginFormInputs>
     | UseFormRegister<ISignUpFormInputs>
     | UseFormRegister<IPasswordFindFormInputs>
+  className?: string
 }
 
 function Input({
@@ -28,7 +28,7 @@ function Input({
   hookFormMinLength,
   hookFormValidate,
   register,
-  maxWidth,
+  className,
   ...props
 }: InputProps) {
   // input이 hookform 쓰이지않는 경우도 있기에 register로 조건부사용
@@ -48,9 +48,7 @@ function Input({
       : props
 
   return (
-    <Box maxWidth={maxWidth}>
-      <TextField.Root {...inputProps} />
-    </Box>
+    <input {...inputProps} className={`w-full outline-none ${className}`} />
   )
 }
 
