@@ -3,6 +3,7 @@
 import { Avatar } from '@radix-ui/themes'
 import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
+import Link from 'next/link'
 import TagBadgeList from './CustomBadge/TagBadgeList'
 import CustomBadge from './CustomBadge/CustomBadge'
 
@@ -30,32 +31,33 @@ type GatheringCardProps = {
 
 function GatheringCard({ data }: GatheringCardProps) {
   return (
-    <div
-      className="flex h-317pxr w-280pxr cursor-pointer flex-col gap-6pxr"
-      onClick={handleCardClick}
-    >
-      <section className="relative flex h-208pxr w-full items-center justify-center rounded-[.3125rem] bg-slate-100">
-        {data?.img && (
-          <Image
-            src={data.img}
-            alt="모임사진"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        )}
-        <CustomBadge
-          type="primary"
-          size="large"
-          className="absolute left-16pxr top-16pxr"
-        >
-          모집 마감
-        </CustomBadge>
-      </section>
-      <section className="flex h-22pxr flex-row gap-5pxr">
-        <TagBadgeList tags={data.tags} />
-      </section>
-      <section className="flex flex-col gap-6pxr">
-        <h4 className="font-title-04">{data.title}</h4>
+    <Link href={`/social/${data.id}`}>
+      <button
+        type="button"
+        className="flex h-317pxr w-280pxr cursor-pointer flex-col gap-6pxr"
+      >
+        <section className="relative flex h-208pxr w-full items-center justify-center rounded-[.3125rem] bg-slate-100">
+          {data?.img && (
+            <Image
+              src={data.img}
+              alt="모임사진"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          )}
+          <CustomBadge
+            type="primary"
+            size="large"
+            className="absolute left-16pxr top-16pxr"
+          >
+            모집 마감
+          </CustomBadge>
+        </section>
+        <section className="flex h-22pxr flex-row gap-5pxr">
+          <TagBadgeList tags={data.tags} />
+        </section>
+        <section className="flex flex-col gap-6pxr">
+          <h4 className="font-title-04">{data.title}</h4>
 
           <p className="text-left font-body-01">{data.place}</p>
 
