@@ -83,7 +83,9 @@ function Gnb() {
               />
             ) : ( */}
             <Link href="/signin">
-              <p className="text-[#1E1F20] font-title-04">로그인</p>
+              <button type="button" className="text-[#1E1F20] font-title-04">
+                로그인
+              </button>
             </Link>
             {/* )} */}
           </div>
