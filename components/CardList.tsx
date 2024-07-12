@@ -1,7 +1,6 @@
 'use client'
 
 import { GatheringCard } from '@/components'
-import useCardListSort from '@/hooks/useCardListSort'
 
 interface Data {
   id: number
@@ -19,13 +18,31 @@ interface Data {
 interface CardListProps {
   data: Data[]
 }
+
+interface TargetObject {
+  data: Data[]
+  chunkSize: number
+}
+
+const sortingObject = (target: TargetObject) => {
+  const result = []
+  if (target.data !== undefined) {
+    for (let i = 0; i < target.data.length; i += target.chunkSize) {
+      result.push(target.data.slice(i, i + target.chunkSize))
+    }
+    return result
+  }
+  return undefined
+}
+
 /**
  * 카드 리스트 컴포넌트
  * @param param0 데이터 배열
  */
 
 function CardList({ data }: CardListProps) {
-  const sortedData = useCardListSort(data, 4)
+  const targetObject = { data, chunkSize: 4 }
+  const sortedData = sortingObject(targetObject)
 
   return (
     <div className="flex flex-col gap-40pxr">
