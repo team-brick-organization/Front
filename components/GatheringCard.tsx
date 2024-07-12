@@ -1,7 +1,6 @@
 'use client'
 
 import { Avatar } from '@radix-ui/themes'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
 import TagBadgeList from './CustomBadge/TagBadgeList'
@@ -30,12 +29,6 @@ type GatheringCardProps = {
  */
 
 function GatheringCard({ data }: GatheringCardProps) {
-  const router = useRouter()
-
-  const handleCardClick = () => {
-    router.push(`/social/${data.id}`)
-  }
-
   return (
     <div
       className="flex h-317pxr w-280pxr cursor-pointer flex-col gap-6pxr"
@@ -64,27 +57,28 @@ function GatheringCard({ data }: GatheringCardProps) {
       <section className="flex flex-col gap-6pxr">
         <h4 className="font-title-04">{data.title}</h4>
 
-        <p className="font-body-01">{data.place}</p>
+          <p className="text-left font-body-01">{data.place}</p>
 
-        <div className="flex flex-row gap-16pxr">
-          <div className="font-Title-04 flex flex-row items-center gap-4pxr">
-            <Avatar
-              size="1"
-              className="h-20pxr w-20pxr"
-              src={data.userProfileImg}
-              radius="full"
-              fallback={data.userName.charAt(0)}
-            />
-            <p className="font-caption-03">{data.userName}</p>
-          </div>
+          <div className="flex flex-row gap-16pxr">
+            <div className="font-Title-04 flex flex-row items-center gap-4pxr">
+              <Avatar
+                size="1"
+                className="h-20pxr w-20pxr"
+                src={data.userProfileImg}
+                radius="full"
+                fallback={data.userName?.charAt(0)}
+              />
+              <p className="font-caption-03">{data.userName}</p>
+            </div>
 
-          <div className="flex flex-row items-center gap-4pxr">
-            <PersonIcon width={20} height={20} />
-            <p className="font-caption-03">{`${data.current}/${data.max}`}</p>
+            <div className="flex flex-row items-center gap-4pxr">
+              <PersonIcon width={20} height={20} />
+              <p className="font-caption-03">{`${data.current}/${data.max}`}</p>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </button>
+    </Link>
   )
 }
 
