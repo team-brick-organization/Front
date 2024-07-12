@@ -50,26 +50,28 @@ function Gnb() {
             </Link>
             <section className="flex flex-row gap-24pxr">
               <Link href="/my">
-                <p className="font-16pxr">모집중</p>
+                <button type="button" className="text-[#1E1F20] font-title-04">
+                  모집중
+                </button>
               </Link>
               <Link href="/my">
-                <p className="font-16pxr">모집마감</p>
+                <button type="button" className="text-[#1E1F20] font-title-04">
+                  모집마감
+                </button>
               </Link>
               <Link href="/my">
-                <p className="font-16pxr">찜한 소셜</p>
+                <button type="button" className="text-[#1E1F20] font-title-04">
+                  찜한 소셜
+                </button>
               </Link>
             </section>
           </div>
           <div className="flex flex-row items-center gap-16pxr">
-            <div className="cursor-pointer">
-              <MagnifyingGlassIcon
-                width="30"
-                height="30"
-                onClick={handleOnSearch}
-              />
-            </div>
+            <button type="button" onClick={handleOnSearch}>
+              <MagnifyingGlassIcon width="30" height="30" />
+            </button>
             <Link href="/등록하기">
-              <Button className="h-32pxr w-77pxr cursor-pointer rounded-full bg-slate-500">
+              <Button className="cursor-pointer rounded-full bg-slate-500 font-title-02">
                 등록하기
               </Button>
             </Link>
@@ -81,7 +83,7 @@ function Gnb() {
               />
             ) : ( */}
             <Link href="/signin">
-              <p className="font-16pxr">로그인</p>
+              <p className="text-[#1E1F20] font-title-04">로그인</p>
             </Link>
             {/* )} */}
           </div>
