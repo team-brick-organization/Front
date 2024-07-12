@@ -1,3 +1,9 @@
+import { ImageViewer } from '@/components/index'
+
 export default function Home() {
-  return <div>Hello world!</div>
+  return (
+    <div>
+      <ImageViewer />
+    </div>
+  )
 }
