@@ -42,16 +42,15 @@ function SignInForm(): JSX.Element {
           이메일
         </label>
         <Input
+          variant="border"
           id="email"
-          register={register}
-          hookFormId="email"
-          hookFormRequire="이메일은 필수 입력입니다."
-          hookFormPattern={emailPattern}
+          {...register('email', {
+            required: '이메일은 필수 입력입니다.',
+            pattern: emailPattern,
+          })}
           type="email"
           placeholder="이메일을 입력해 주세요."
-          className={`mt-4pxr rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-            errors.email ? 'ring-1 ring-error' : ''
-          }`}
+          className={`mt-4pxr ${errors.email ? 'ring-1 ring-error' : ''}`}
           color="gray"
         />
 
@@ -68,16 +67,15 @@ function SignInForm(): JSX.Element {
         </label>
         <div className="relative mt-4pxr">
           <Input
+            variant="border"
             id="password"
-            register={register}
-            hookFormId="password"
-            hookFormRequire="비밀번호는 필수 입력입니다."
-            hookFormMinLength={passwordMinLength}
+            {...register('password', {
+              required: '비밀번호는 필수 입력입니다.',
+              minLength: passwordMinLength,
+            })}
             type={showPassword ? 'text' : 'password'}
             placeholder="비밀번호를 입력해주세요."
-            className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-              errors.password ? 'ring-1 ring-error' : ''
-            }`}
+            className={`${errors.password ? 'ring-1 ring-error' : ''}`}
           />
           <button
             title="비밀번호 보이기/숨기기 버튼"

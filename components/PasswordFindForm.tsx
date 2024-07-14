@@ -36,15 +36,14 @@ function PasswordFindForm(): JSX.Element {
       </p>
       <div className="relative mt-46pxr w-full">
         <Input
-          register={register}
-          hookFormId="email"
-          hookFormRequire="이메일은 필수 입력입니다."
-          hookFormPattern={emailPattern}
+          variant="border"
+          {...register('email', {
+            required: '이메일은 필수 입력입니다.',
+            pattern: emailPattern,
+          })}
           type="email"
           placeholder="이메일을 입력해 주세요."
-          className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-            errors.email ? 'ring-1 ring-error' : ''
-          }`}
+          className={`${errors.email ? 'ring-1 ring-error' : ''}`}
         />
         {errors.email && (
           <small className="mt-4pxr text-error font-caption-02" role="alert">

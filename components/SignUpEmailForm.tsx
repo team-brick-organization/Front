@@ -65,16 +65,15 @@ function SignUpEmailForm(): JSX.Element {
             이름
           </label>
           <Input
+            variant="border"
             id="name"
-            register={register}
-            hookFormId="name"
-            hookFormRequire="이름은 필수 입력입니다."
-            hookFormPattern={namePattern}
+            {...register('name', {
+              required: '이름은 필수 입력입니다.',
+              pattern: namePattern,
+            })}
             type="text"
             placeholder="이름을 입력해 주세요."
-            className={`mt-8pxr rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-              errors.name ? 'ring-1 ring-error' : ''
-            }`}
+            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
           />
 
           {errors.name && (
@@ -89,16 +88,16 @@ function SignUpEmailForm(): JSX.Element {
             이메일
           </label>
           <Input
+            variant="border"
             id="email"
-            register={register}
-            hookFormId="email"
-            hookFormRequire="이메일은 필수 입력입니다."
-            hookFormPattern={emailPattern}
+            {...register('email', {
+              required: '이메일은 필수 입력입니다.',
+              pattern: emailPattern,
+            })}
             type="email"
             placeholder="이메일을 입력해 주세요."
-            className={`mt-8pxr rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-              errors.email ? 'ring-1 ring-error' : ''
-            }`}
+            className={`mt-8pxr ${errors.email ? 'ring-1 ring-error' : ''}`}
+            autoComplete="username"
           />
 
           {errors.email && (
@@ -117,16 +116,16 @@ function SignUpEmailForm(): JSX.Element {
           </label>
           <div className="relative mt-8pxr">
             <Input
+              variant="border"
               id="password"
-              register={register}
-              hookFormId="password"
-              hookFormRequire="비밀번호는 필수 입력입니다."
-              hookFormMinLength={passwordMinLength}
+              {...register('password', {
+                required: '비밀번호는 필수 입력입니다.',
+                minLength: passwordMinLength,
+              })}
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력해주세요."
-              className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-                errors.password ? 'ring-1 ring-error' : ''
-              }`}
+              className={`${errors.password ? 'ring-1 ring-error' : ''}`}
+              autoComplete="password"
             />
             <button
               title="비밀번호 보이기/숨기기 버튼"
@@ -164,17 +163,17 @@ function SignUpEmailForm(): JSX.Element {
           </label>
           <div className="relative mt-8pxr">
             <Input
+              variant="border"
               id="passwordCheck"
-              register={register}
-              hookFormId="passwordCheck"
-              hookFormRequire="비밀번호가 일치하지 않습니다."
-              hookFormMinLength={passwordMinLength}
-              hookFormValidate={passwordCheckValidate}
+              {...register('passwordCheck', {
+                required: '비밀번호 확인은 필수 입력입니다.',
+                minLength: passwordMinLength,
+                validate: passwordCheckValidate,
+              })}
               type={showPasswordCheck ? 'text' : 'password'}
               placeholder="비밀번호를 다시 한번 입력해주세요."
-              className={`rounded-[0.625rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-06 font-caption-03 ${
-                errors.passwordCheck ? 'ring-1 ring-error' : ''
-              }`}
+              className={`${errors.passwordCheck ? 'ring-1 ring-error' : ''}`}
+              autoComplete="new-password"
             />
             <button
               title="비밀번호 보이기/숨기기 버튼"
