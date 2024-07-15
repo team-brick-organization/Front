@@ -1,9 +1,9 @@
-import { ImageViewer } from '@/components/index'
+import { SocialRegistrationForm } from '@/components/index'
 
 export default function Home() {
   return (
-    <div>
-      <ImageViewer />
+    <div className="bg-gray-02">
+      <SocialRegistrationForm />
     </div>
   )
 }

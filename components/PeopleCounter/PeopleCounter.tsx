@@ -17,7 +17,7 @@ interface PeopleCounterProps {
 
 function PeopleCounter({ current, min, max }: PeopleCounterProps) {
   return (
-    <div className="flex h-fit w-432pxr flex-col justify-center gap-8pxr">
+    <div className="flex h-fit w-full flex-col justify-center gap-8pxr tb:gap-24pxr">
       <AnimatedProgress
         min={min}
         current={current}
@@ -25,8 +25,8 @@ function PeopleCounter({ current, min, max }: PeopleCounterProps) {
         key="프로그레스바"
       />
       <div className="flex justify-between">
-        <p className="font-caption-02">최소인원 {min}명</p>
-        <p className="font-caption-02">최대인원 {max}명</p>
+        <p className="font-caption-03">최소인원 {min}명</p>
+        <p className="font-caption-03">최대인원 {max}명</p>
       </div>
     </div>
   )

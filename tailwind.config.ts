@@ -40,6 +40,21 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        error: '#DC2626',
+        white: '#FFFFFF',
+        black: '#000000',
+        'gray-01': '#F9FAFC',
+        'gray-02': '#F3F4F6',
+        'gray-03': '#EBECEE',
+        'gray-04': '#DDDEE0',
+        'gray-05': '#B9BABC',
+        'gray-06': '#9A9B9D',
+        'gray-07': '#717274',
+        'gray-08': '#5E5E60',
+        'gray-09': '#3F4041',
+        'gray-10': '#1E1F20',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
@@ -53,6 +68,10 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      screens: {
+        mb: { max: '479px' },
+        tb: { max: '1199px' },
       },
     },
   },
