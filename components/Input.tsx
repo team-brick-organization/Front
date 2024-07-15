@@ -1,57 +1,27 @@
 'use client'
 
-import { Box, TextField } from '@radix-ui/themes'
-import { UseFormRegister, Validate, ValidationRule } from 'react-hook-form'
-import { ISignUpFormInputs } from './SignUpEmail'
-import { ILoginFormInputs } from './SignInForm'
-import { IPasswordFindFormInputs } from './PasswordFindForm'
+import { forwardRef, HTMLProps } from 'react'
 
-interface InputProps extends React.ComponentProps<typeof TextField.Root> {
-  maxWidth?: string
-  hookFormId?: 'name' | 'email' | 'password' | 'passwordCheck'
-  hookFormRequire?: string
-  hookFormPattern?: ValidationRule<RegExp> | undefined
-  hookFormValidate?:
-    | Validate<string, ISignUpFormInputs | ILoginFormInputs>
-    | Record<string, Validate<string, ISignUpFormInputs | ILoginFormInputs>>
-  hookFormMinLength?: ValidationRule<number>
-  register?:
-    | UseFormRegister<ILoginFormInputs>
-    | UseFormRegister<ISignUpFormInputs>
-    | UseFormRegister<IPasswordFindFormInputs>
+interface InputProps extends HTMLProps<HTMLInputElement> {
+  variant?: 'default' | 'border'
+  className?: string
 }
 
-function Input({
-  hookFormId,
-  hookFormRequire,
-  hookFormPattern,
-  hookFormMinLength,
-  hookFormValidate,
-  register,
-  maxWidth,
-  ...props
-}: InputProps) {
-  // input이 hookform 쓰이지않는 경우도 있기에 register로 조건부사용
-  const inputProps =
-    register && hookFormId
-      ? {
-          ...(
-            register as UseFormRegister<ILoginFormInputs | ISignUpFormInputs>
-          )(hookFormId, {
-            required: hookFormRequire,
-            pattern: hookFormPattern,
-            minLength: hookFormMinLength,
-            validate: hookFormValidate,
-          }),
-          ...props,
-        }
-      : props
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ variant = 'default', className, ...props }, ref) => {
+    const typeOfInputClassName =
+      variant === 'default'
+        ? 'rounded-[0.625rem] bg-gray-01 p-14pxr font-body-02 placeholder:text-gray-04 text-gray-10'
+        : 'rounded-[0.3125rem] border border-gray-04 bg-gray-01 px-16pxr py-12pxr text-gray-10 placeholder:text-gray-06 font-caption-03'
+    return (
+      <input
+        ref={ref}
+        {...props}
+        className={`w-full outline-none ${typeOfInputClassName} ${className}`}
+      />
+    )
+  },
+)
 
-  return (
-    <Box maxWidth={maxWidth}>
-      <TextField.Root {...inputProps} />
-    </Box>
-  )
-}
-
+Input.displayName = 'Input'
 export default Input

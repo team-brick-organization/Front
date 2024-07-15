@@ -53,7 +53,7 @@ function CrewGatheringInfo({
               isFavoriteClicked={isFavoriteClicked}
               onFavoriteClick={handleFavoriteClick}
             />
-            <button type="button">
+            <button title="공유 버튼" type="button">
               <UploadIcon className="h-26pxr w-26pxr" />
             </button>
           </div>
