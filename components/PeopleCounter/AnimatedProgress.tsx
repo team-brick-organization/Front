@@ -10,7 +10,7 @@ interface AnimatedProgressProps {
 }
 function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
   const [progress, setProgress] = useState(0)
-  const progressbarColor = current >= min ? 'bg-[#F64A19]' : 'bg-[#F64A19]'
+  const progressbarColor = current >= min ? 'bg-[#F64A19]' : 'bg-black'
 
   useEffect(() => {
     const value = (current / max) * 100
@@ -28,7 +28,7 @@ function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
       value={progress}
     >
       <Progress.Indicator
-        className={`${progressbarColor} ease-[cubic-bezier(0.65, 0, 0.35, 1)] h-full w-full transition-transform duration-[660ms]`}
+        className={`${progressbarColor} ease-[cubic-bezier(0.65, 0, 0.35, 1)] h-full w-full rounded-full transition-transform duration-[660ms]`}
         style={{ transform: `translateX(-${100 - progress}%)` }}
       />
     </Progress.Root>
