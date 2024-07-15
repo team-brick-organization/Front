@@ -10,7 +10,7 @@ interface AnimatedProgressProps {
 }
 function AnimatedProgress({ current, max, min }: AnimatedProgressProps) {
   const [progress, setProgress] = useState(0)
-  const progressbarColor = current > min ? 'bg-green-600' : 'bg-slate-400'
+  const progressbarColor = current >= min ? 'bg-[#F64A19]' : 'bg-[#F64A19]'
 
   useEffect(() => {
     const value = (current / max) * 100
