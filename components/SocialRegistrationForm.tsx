@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useImageFiles from '@/hooks/useImageFiles'
 import validateAndAdjustInputNumber from '@/utils/validateAndAdjustInputNumber'
@@ -16,7 +16,13 @@ export interface ISocialRegistrationInputs {
   socialDues: number
 }
 
-function SocialRegistrationForm() {
+interface ISocialRegistrationFormProps {
+  registrationRef: RefObject<HTMLButtonElement>
+}
+
+function SocialRegistrationForm({
+  registrationRef,
+}: ISocialRegistrationFormProps) {
   const [address, setAddress] = useState<{
     address: string | null
     isError: boolean
@@ -205,6 +211,7 @@ function SocialRegistrationForm() {
         </div>
       </div>
       <button
+        ref={registrationRef}
         type="submit"
         className="hidden"
         onClick={() => {
