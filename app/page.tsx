@@ -1,3 +1,9 @@
+import { SocialRegistrationForm } from '@/components/index'
+
 export default function Home() {
-  return <div>Hello world!</div>
+  return (
+    <div className="bg-gray-02">
+      <SocialRegistrationForm />
+    </div>
+  )
 }

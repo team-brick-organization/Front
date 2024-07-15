@@ -3,6 +3,8 @@ import { Theme, ThemePanel } from '@radix-ui/themes'
 import localFont from 'next/font/local'
 import '@radix-ui/themes/styles.css'
 import '@/styles/globals.css'
+import Script from 'next/script'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -25,6 +27,7 @@ export default function RootLayout({
     <html lang="ko" className={`${pretendard.variable}`}>
       <body className={pretendard.className}>
         <Theme>
+          <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
           {children}
           <ThemePanel defaultOpen={false} />
           <div id="portal" />
