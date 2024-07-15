@@ -6,19 +6,12 @@ interface ITabProps {
   tabNames: string[]
   activeTab: number
   onTabClick: (index: number) => void
-  maxHeight: number
   children: ReactNode
 }
 
 const TAB_UNDERLINE_WIDTH = 64
 
-function Tab({
-  tabNames,
-  activeTab,
-  onTabClick,
-  maxHeight,
-  children,
-}: ITabProps) {
+function Tab({ tabNames, activeTab, onTabClick, children }: ITabProps) {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const [underlineStyle, setUnderlineStyle] = useState({
     width: 0,
@@ -73,10 +66,7 @@ function Tab({
           />
         )}
       </ul>
-      <div
-        style={{ maxHeight: `${maxHeight}px` }}
-        className="w-full overflow-y-scroll"
-      >
+      <div className="flex w-full flex-col items-center px-16pxr">
         {children}
       </div>
     </div>

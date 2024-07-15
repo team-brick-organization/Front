@@ -18,6 +18,8 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 })
 
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_KEY}&autoload=false&libraries=services`
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body className={pretendard.className}>
         <Theme>
           <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
+          <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           {children}
           <ThemePanel defaultOpen={false} />
           <div id="portal" />

@@ -4,6 +4,8 @@ import { Avatar } from '@radix-ui/themes'
 import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
+import TagBadgeList from './CustomBadge/TagBadgeList'
+import CustomBadge from './CustomBadge/CustomBadge'
 
 interface Data {
   id: number
@@ -43,13 +45,19 @@ function GatheringCard({ data }: GatheringCardProps) {
               style={{ objectFit: 'contain' }}
             />
           )}
+          <CustomBadge
+            type="primary"
+            size="large"
+            className="absolute left-16pxr top-16pxr"
+          >
+            모집 마감
+          </CustomBadge>
         </section>
         <section className="flex h-22pxr flex-row gap-5pxr">
-          {data &&
-            data.tags?.map((item, i) => <p key={`${i + 1}번태그`}>{item}</p>)}
+          <TagBadgeList tags={data.tags} />
         </section>
-        <section className="flex flex-col justify-start gap-6pxr">
-          <h4 className="text-left font-title-04">{data.title}</h4>
+        <section className="flex flex-col gap-6pxr">
+          <h4 className="font-title-04">{data.title}</h4>
 
           <p className="text-left font-body-01">{data.place}</p>
 
