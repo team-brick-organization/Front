@@ -56,7 +56,7 @@ const config = {
       },
       screens: {
         mb: { max: '479px' },
-        tb: { max: '1199px' },
+        tb: { max: '1199px', min: '480px' },
       },
     },
   },
