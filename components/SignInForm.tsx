@@ -33,7 +33,7 @@ function SignInForm(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
+      className="relative h-fit w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
     >
       <h1 className="text-center text-gray-10 font-headline-03">로그인</h1>
 

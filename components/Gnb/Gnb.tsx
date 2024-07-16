@@ -82,6 +82,7 @@ function Gnb() {
             </section>
           </div>
           <button
+            title="메뉴"
             type="button"
             className="hidden mb:block"
             onClick={handleSideMenuBar}
@@ -89,7 +90,7 @@ function Gnb() {
             <HamburgerMenuIcon width="24" height="24" />
           </button>
           <div className="flex w-197pxr flex-row items-center gap-16pxr mb:hidden">
-            <button type="button" onClick={handleOnSearch}>
+            <button title="검색" type="button" onClick={handleOnSearch}>
               <MagnifyingGlassIcon width="30" height="30" />
             </button>
             <Link href="/등록하기">
@@ -116,7 +117,7 @@ function Gnb() {
           </div>
         </div>
       </main>
-      <div className="absolute top-0pxr -translate-x-[80px] transform mb:-translate-x-[20px] tb:-translate-x-[20px]">
+      <div className="absolute top-0pxr z-50 -translate-x-[80px] transform mb:-translate-x-[20px] tb:-translate-x-[20px]">
         {onSearch ? (
           <>
             <Search />

@@ -10,6 +10,7 @@ function useDate({ timeIntervals = 30 }: IUseDateProps) {
 
   if (currentDate.getMinutes() < timeIntervals) {
     initialDate.setMinutes(timeIntervals)
+    initialDate.setSeconds(0)
   } else {
     initialDate.setHours(currentDate.getHours() + 1)
     initialDate.setMinutes(0)
