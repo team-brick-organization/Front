@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 function SignUpStartForm() {
   return (
-    <div className="relative flex h-710pxr w-480pxr flex-col items-center rounded-[10px] bg-gray-01 px-39pxr py-50pxr pt-139pxr">
+    <div className="relative mx-auto flex h-710pxr w-480pxr flex-col items-center rounded-[10px] bg-gray-01 px-39pxr py-50pxr pt-139pxr">
       <div className="w-156pxr text-center">
         <h1 className="text-22pxr text-gray-10 font-headline-03">반가워요!</h1>
         <p className="mt-16pxr text-gray-06 font-body-02">
