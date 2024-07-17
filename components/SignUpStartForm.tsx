@@ -10,7 +10,9 @@ function SignUpStartForm() {
   const windowWidth = useWindowWidth()
 
   const kakaoButtonText =
-    windowWidth <= 400 ? '카카오로 시작하기' : '카카오로 3초만에 시작하기'
+    windowWidth && windowWidth <= 400
+      ? '카카오로 시작하기'
+      : '카카오로 3초만에 시작하기'
   return (
     <div className="relative flex w-full max-w-480pxr flex-col items-center rounded-[.625rem] bg-gray-01 px-39pxr py-50pxr pt-139pxr mb:px-19pxr">
       <div className="w-156pxr text-center">

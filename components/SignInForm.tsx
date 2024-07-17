@@ -33,7 +33,9 @@ function SignInForm(): JSX.Element {
   const windowWidth = useWindowWidth()
 
   const kakaoButtonText =
-    windowWidth <= 400 ? '카카오로 시작하기' : '카카오로 3초만에 시작하기'
+    windowWidth && windowWidth <= 400
+      ? '카카오로 시작하기'
+      : '카카오로 3초만에 시작하기'
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
