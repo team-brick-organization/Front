@@ -1,29 +1,17 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Avatar } from '@radix-ui/themes'
 import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
+import useFavorite from '@/hooks/useFavorite'
 import TagBadgeList from './CustomBadge/TagBadgeList'
 import CustomBadge from './CustomBadge/CustomBadge'
 import FavoriteButton from './FavoriteButton'
-
-interface Data {
-  id: number
-  userName: string
-  userProfileImg: string
-  img: string
-  tags: string[]
-  title: string
-  place: string
-  liked: boolean
-  current: number
-  max: number
-}
+import { Social } from './MypageCards/MypageCard'
 
 type GatheringCardProps = {
-  data: Data
+  data: Social
 }
 
 /**
@@ -33,44 +21,7 @@ type GatheringCardProps = {
  */
 
 function GatheringCard({ data }: GatheringCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
-
-  const handleFavoriteClick = () => {
-    const favoriteSocials = localStorage.getItem('favoriteSocials')
-
-    if (isFavorite) {
-      if (favoriteSocials) {
-        const filteredIds = JSON.parse(favoriteSocials).filter(
-          (id: number) => id !== data.id,
-        )
-        localStorage.setItem('favoriteSocials', JSON.stringify(filteredIds))
-        setIsFavorite(false)
-      }
-    } else {
-      if (favoriteSocials) {
-        const favoriteIds = JSON.parse(favoriteSocials)
-        favoriteIds.push(data.id)
-        localStorage.setItem(
-          'favoriteSocials',
-          JSON.stringify(favoriteIds.sort()),
-        )
-      }
-      setIsFavorite(true)
-    }
-  }
-
-  useEffect(() => {
-    const favoriteSocials = localStorage.getItem('favoriteSocials')
-
-    if (favoriteSocials) {
-      const localData = JSON.parse(favoriteSocials)
-      const favorite = localData.includes(data.id)
-      setIsFavorite(favorite)
-    } else {
-      localStorage.setItem('favoriteSocials', JSON.stringify([]))
-      setIsFavorite(false)
-    }
-  }, [data.id])
+  const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
   return (
     <div className="relative w-fit">
@@ -80,22 +31,36 @@ function GatheringCard({ data }: GatheringCardProps) {
           className="relative flex h-310pxr w-280pxr cursor-pointer flex-col gap-8pxr mb:h-256pxr mb:w-212pxr tb:h-382pxr tb:w-376pxr"
         >
           <section className="relative flex h-208pxr w-full items-center justify-center rounded-[.3125rem] bg-slate-100 tb:h-280pxr">
-            {data?.img && (
+            {data?.imageUrl && (
               <Image
-                src={data.img}
+                src={data.imageUrl}
                 alt="모임사진"
                 fill
                 style={{ objectFit: 'contain' }}
               />
             )}
-            {data.current === data.max && (
+            {false && (
               <CustomBadge
                 type="primary"
                 size="large"
                 className="absolute left-16pxr top-16pxr tb:left-24pxr tb:top-24pxr"
               >
-                모집 마감
+                마감 임박
               </CustomBadge>
+            )}
+            {(new Date(data.gatheringDate) < new Date() ||
+              data.participantCount.currentPeople ===
+                data.participantCount.maxPeople) && (
+              <>
+                <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
+                <CustomBadge
+                  type="primary"
+                  size="large"
+                  className="absolute left-16pxr top-16pxr tb:left-24pxr tb:top-24pxr"
+                >
+                  모집 마감
+                </CustomBadge>
+              </>
             )}
           </section>
           <div className="flex flex-col gap-4pxr">
@@ -103,7 +68,7 @@ function GatheringCard({ data }: GatheringCardProps) {
               <TagBadgeList tags={data.tags} />
             </section>
             <section className="flex flex-col gap-4pxr">
-              <h4 className="text-left font-title-04">{data.title}</h4>
+              <h4 className="text-left font-title-04">{data.socialName}</h4>
               <div className="flex flex-row gap-4pxr">
                 <Image
                   src="/images/svgs/location.svg"
@@ -111,7 +76,7 @@ function GatheringCard({ data }: GatheringCardProps) {
                   width={15}
                   height={15}
                 />
-                <p className="text-left font-body-01">{data.place}</p>
+                <p className="text-left font-body-01">{data.address}</p>
               </div>
 
               <div className="flex flex-row gap-16pxr">
@@ -119,28 +84,30 @@ function GatheringCard({ data }: GatheringCardProps) {
                   <Avatar
                     size="1"
                     className="h-20pxr w-20pxr"
-                    src={data.userProfileImg}
+                    src={data.owner.profileImageUrl}
                     radius="full"
-                    fallback={data.userName?.charAt(0)}
+                    fallback={data.owner.name?.charAt(0)}
                   />
-                  <p className="font-caption-03">{data.userName}</p>
+                  <p className="font-caption-03">{data.owner.name}</p>
                 </div>
 
                 <div className="flex flex-row items-center gap-4pxr">
                   <PersonIcon width={20} height={20} />
-                  <p className="font-caption-03">{`${data.current}/${data.max}`}</p>
+                  <p className="font-caption-03">{`${data.participantCount.currentPeople}/${data.participantCount.maxPeople}`}</p>
                 </div>
               </div>
             </section>
           </div>
         </button>
       </Link>
-      <div className="absolute right-16pxr top-16pxr tb:right-24pxr tb:top-24pxr">
-        <FavoriteButton
-          isFavoriteClicked={isFavorite}
-          onFavoriteClick={handleFavoriteClick}
-        />
-      </div>
+      {(new Date(data.gatheringDate) > new Date() || isFavoriteClicked) && (
+        <div className="absolute right-16pxr top-16pxr tb:right-24pxr tb:top-24pxr">
+          <FavoriteButton
+            isFavoriteClicked={isFavoriteClicked}
+            onFavoriteClick={handleFavoriteClick}
+          />
+        </div>
+      )}
     </div>
   )
 }
