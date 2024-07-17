@@ -6,14 +6,11 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <div className="flex h-full min-h-screen flex-col">
       <Gnb />
-      <div
-        style={{ height: 'calc(100vh - 4.5rem)' }}
-        className="flex w-screen flex-col items-center justify-center bg-gray-02"
-      >
+      <div className="flex flex-grow items-center justify-center bg-gray-02">
         {children}
       </div>
-    </>
+    </div>
   )
 }
