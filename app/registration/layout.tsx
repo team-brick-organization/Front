@@ -1,14 +1,14 @@
 import { Gnb } from '@/components/index'
 
-export default function RegistrationLayout({
+function RegistrationLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <>
+    <div className="flex h-full min-h-screen flex-col">
       <Gnb />
       {children}
-    </>
+    </div>
   )
 }
+
+export default RegistrationLayout

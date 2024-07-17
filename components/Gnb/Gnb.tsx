@@ -93,7 +93,7 @@ function Gnb() {
             <button title="검색" type="button" onClick={handleOnSearch}>
               <MagnifyingGlassIcon width="30" height="30" />
             </button>
-            <Link href="/등록하기">
+            <Link href="/signup">
               <Button className="cursor-pointer text-nowrap rounded-full bg-slate-500 font-title-02">
                 등록하기
               </Button>

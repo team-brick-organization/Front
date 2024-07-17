@@ -10,12 +10,12 @@ export default function Home() {
           <SocialIntroduce
             description="sad"
             location="asdas"
-            lat={144}
-            lng={23}
+            lat={33.450701}
+            lng={126.570667}
             participants={[
               {
-                profileImage: 'asdasd',
-                name: 'asdasd',
+                profileImage: 'z',
+                name: 'z',
                 description: '하이',
                 role: 'host',
               },

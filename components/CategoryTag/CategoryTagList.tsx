@@ -12,7 +12,7 @@ function CategoryTagList({ className }: ICategoryListProps) {
   const { tags, setTags } = useSocialRegistrationStore()
   const handleTagClick = (tagName: string) => {
     if (tags.includes(tagName)) {
-      setTags(tags.filter((tag) => tag !== tagName))
+      setTags(tags.filter((tag: string) => tag !== tagName))
       return
     }
     setTags([...tags, tagName])
@@ -20,36 +20,13 @@ function CategoryTagList({ className }: ICategoryListProps) {
 
   return (
     <ul
-      className={`${className} flex flex-col items-center justify-center gap-8pxr px-40pxr`}
+      className={`flex max-w-1220pxr flex-wrap-reverse items-center justify-center gap-8pxr ${className}`}
     >
-      <li className="flex gap-8pxr">
-        {CATEGORIES.slice(0, 8).map((category) => (
-          <CategoryTag key={category} onTagClick={handleTagClick}>
-            {category}
-          </CategoryTag>
-        ))}
-      </li>
-      <li className="flex gap-8pxr">
-        {CATEGORIES.slice(9, 17).map((category) => (
-          <CategoryTag key={category} onTagClick={handleTagClick}>
-            {category}
-          </CategoryTag>
-        ))}
-      </li>
-      <li className="flex gap-8pxr">
-        {CATEGORIES.slice(19, 26).map((category) => (
-          <CategoryTag key={category} onTagClick={handleTagClick}>
-            {category}
-          </CategoryTag>
-        ))}
-      </li>
-      <li className="flex gap-8pxr">
-        {CATEGORIES.slice(27, 34).map((category) => (
-          <CategoryTag key={category} onTagClick={handleTagClick}>
-            {category}
-          </CategoryTag>
-        ))}
-      </li>
+      {CATEGORIES.map((category) => (
+        <li key={category}>
+          <CategoryTag onTagClick={handleTagClick}>{category}</CategoryTag>
+        </li>
+      ))}
     </ul>
   )
 }

@@ -109,7 +109,7 @@ function SocialRegistrationForm() {
         setError={setError}
       />
 
-      <div className="flex flex-col gap-40pxr">
+      <div className="flex flex-col gap-32pxr">
         <div className="flex flex-col gap-8pxr">
           <label className="text-gray-10 font-title-04" htmlFor="socialName">
             소셜 이름
@@ -279,6 +279,21 @@ function SocialRegistrationForm() {
               setValue('socialDues', value, { shouldValidate: true })
             }}
           />
+        </div>
+
+        <div className="flex flex-col gap-8pxr">
+          <label className="text-gray-10 font-title-04" htmlFor="socialDues">
+            모임 태그
+          </label>
+          <ul className="flex gap-8pxr">
+            {tags.map((tag) => (
+              <li key={tag}>
+                <div className="rounded-[0.3125rem] bg-gray-03 px-14pxr py-10pxr text-gray-06 font-body-02">
+                  {tag}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <button
