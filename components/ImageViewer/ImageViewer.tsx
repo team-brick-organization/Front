@@ -5,19 +5,27 @@ import Image from 'next/image'
 import usePortal from '@/hooks/usePortal'
 import { ImageViewerModal, Portal } from '@/components'
 import moreImgIcon from '@/public/images/svgs/moreImg.svg'
-import mockImages from './mockImages'
 
-function ImageViewer() {
+interface IImage {
+  id: number
+  src: string
+}
+
+interface ImageViewerProps {
+  images: IImage[]
+}
+
+function ImageViewer({ images }: ImageViewerProps) {
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
     usePortal()
 
-  const mobileRemainingImages = mockImages.length - 1
-  const remainingImages = mockImages.length - 5
+  const mobileRemainingImages = images.length - 1
+  const remainingImages = images.length - 5
   return (
     <div className="flex gap-20pxr">
       <Box className="relative h-400pxr w-680pxr cursor-pointer items-center overflow-hidden rounded-[10px] mb:h-200pxr mb:min-w-380pxr tb:h-301pxr tb:w-319pxr">
         <Image
-          src={mockImages[0].src}
+          src={images[0].src}
           alt="대표 이미지"
           fill
           className="h-400pxr w-680pxr object-cover mb:h-200pxr mb:w-full tb:h-301pxr tb:w-319pxr"
@@ -33,7 +41,7 @@ function ImageViewer() {
         )}
       </Box>
       <Box className="grid h-400pxr w-480pxr grid-cols-2 grid-rows-2 gap-10pxr mb:hidden tb:h-301pxr tb:w-319pxr">
-        {mockImages.slice(1, 5).map((image, index) => {
+        {images.slice(1, 5).map((image, index) => {
           return (
             <div
               className="relative cursor-pointer overflow-hidden rounded-[10px]"
@@ -67,7 +75,7 @@ function ImageViewer() {
         className="h-635pxr w-full max-w-1180pxr mb:h-183pxr mb:px-20pxr tb:h-354pxr tb:px-80pxr"
       >
         <ImageViewerModal
-          images={mockImages}
+          images={images}
           initialIndex={0}
           onClose={() => setIsPortalOpen(false)}
         />
