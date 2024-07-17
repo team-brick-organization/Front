@@ -47,6 +47,14 @@ interface MypageCardProps {
 
 function MypageCard({ data }: MypageCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
+
+  const isClosed =
+    new Date(data.gatheringDate) < new Date() ||
+    data.participantCount.currentPeople === data.participantCount.maxPeople
+
+  const isClickableFavorite =
+    new Date(data.gatheringDate) > new Date() || isFavoriteClicked
+
   const url = `/social/${data.id}`
   const participantProfileImagesConfig = data.participant.map((item) => ({
     imageUrl: item.userProfileImg,
@@ -66,7 +74,7 @@ function MypageCard({ data }: MypageCardProps) {
               fill
               style={{ objectFit: 'contain' }}
             />
-
+            {/* 회의때 정해서 값넣어주기(false 대신) */}
             {false && (
               <CustomBadge
                 type="primary"
@@ -76,9 +84,7 @@ function MypageCard({ data }: MypageCardProps) {
                 마감 임박
               </CustomBadge>
             )}
-            {(new Date(data.gatheringDate) < new Date() ||
-              data.participantCount.currentPeople ===
-                data.participantCount.maxPeople) && (
+            {isClosed && (
               <>
                 <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
                 <CustomBadge
@@ -91,7 +97,7 @@ function MypageCard({ data }: MypageCardProps) {
               </>
             )}
           </Link>
-          {(new Date(data.gatheringDate) > new Date() || isFavoriteClicked) && (
+          {isClickableFavorite && (
             <div className="absolute right-16pxr top-16pxr mb:right-16pxr mb:top-16pxr">
               <FavoriteButton
                 isFavoriteClicked={isFavoriteClicked}

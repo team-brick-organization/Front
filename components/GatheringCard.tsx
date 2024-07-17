@@ -23,6 +23,13 @@ type GatheringCardProps = {
 function GatheringCard({ data }: GatheringCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
+  const isClosed =
+    new Date(data.gatheringDate) < new Date() ||
+    data.participantCount.currentPeople === data.participantCount.maxPeople
+
+  const isClickableFavorite =
+    new Date(data.gatheringDate) > new Date() || isFavoriteClicked
+
   return (
     <div className="relative w-fit">
       <Link href={`/social/${data.id}`}>
@@ -39,6 +46,7 @@ function GatheringCard({ data }: GatheringCardProps) {
                 style={{ objectFit: 'contain' }}
               />
             )}
+            {/* 회의때 정해서 값넣어주기(false 대신) */}
             {false && (
               <CustomBadge
                 type="primary"
@@ -48,9 +56,7 @@ function GatheringCard({ data }: GatheringCardProps) {
                 마감 임박
               </CustomBadge>
             )}
-            {(new Date(data.gatheringDate) < new Date() ||
-              data.participantCount.currentPeople ===
-                data.participantCount.maxPeople) && (
+            {isClosed && (
               <>
                 <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
                 <CustomBadge
@@ -100,7 +106,7 @@ function GatheringCard({ data }: GatheringCardProps) {
           </div>
         </button>
       </Link>
-      {(new Date(data.gatheringDate) > new Date() || isFavoriteClicked) && (
+      {isClickableFavorite && (
         <div className="absolute right-16pxr top-16pxr tb:right-24pxr tb:top-24pxr">
           <FavoriteButton
             isFavoriteClicked={isFavoriteClicked}
