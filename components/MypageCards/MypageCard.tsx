@@ -45,6 +45,11 @@ interface MypageCardProps {
   data: Social
 }
 
+/**
+ * 마이 페이지 카드컴포넌트
+ * @param data 데이터 배열
+ */
+
 function MypageCard({ data }: MypageCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
