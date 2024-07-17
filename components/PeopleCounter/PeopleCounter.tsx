@@ -17,7 +17,7 @@ interface PeopleCounterProps {
 
 function PeopleCounter({ current, min, max }: PeopleCounterProps) {
   return (
-    <div className="flex h-fit w-full flex-col justify-center gap-8pxr tb:gap-24pxr">
+    <div className="flex h-fit w-full flex-col justify-center gap-8pxr">
       <AnimatedProgress
         min={min}
         current={current}

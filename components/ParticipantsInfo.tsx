@@ -17,7 +17,7 @@ function ParticipantsInfo({
   participantProfileImagesConfig,
 }: IParticipantsInfoProps) {
   return (
-    <div className="flex flex-col gap-24pxr pt-28pxr">
+    <div className="flex flex-col gap-8pxr">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-12pxr">
           <p className="font-body-02">모임 정원 {participantsCurrentCount}명</p>

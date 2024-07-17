@@ -10,6 +10,7 @@ import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
+import { useWindowWidth } from '@/hooks/useWindowWidth'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -29,11 +30,16 @@ function SignInForm(): JSX.Element {
   }
 
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
+  const windowWidth = useWindowWidth()
 
+  const kakaoButtonText =
+    windowWidth && windowWidth <= 400
+      ? '카카오로 시작하기'
+      : '카카오로 3초만에 시작하기'
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative h-fit w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
+      className="relative w-full max-w-480pxr justify-center rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr mb:px-19pxr"
     >
       <h1 className="text-center text-gray-10 font-headline-03">로그인</h1>
 
@@ -106,7 +112,7 @@ function SignInForm(): JSX.Element {
 
       <Button
         type="submit"
-        className="mt-40pxr h-50pxr w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
+        className="mt-40pxr h-50pxr w-full max-w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
       >
         로그인
       </Button>
@@ -120,21 +126,21 @@ function SignInForm(): JSX.Element {
         </Link>
       </div>
 
-      <div className="mt-45pxr flex w-400pxr items-center justify-center gap-24pxr">
-        <div className="h-1pxr w-126pxr bg-gray-04" />
-        <div className="px-8pxr text-center text-gray-04 font-caption-03">
+      <div className="mt-45pxr flex w-400pxr items-center justify-center gap-24pxr mb:w-full">
+        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
+        <div className="text-nowrap px-8pxr text-center text-gray-04 font-caption-03">
           또는
         </div>
-        <div className="h-1pxr w-126pxr bg-gray-04" />
+        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
       </div>
 
       <div className="mt-20pxr flex items-center justify-center">
         <Button
           type="button"
-          className="h-full w-fit cursor-pointer gap-8pxr rounded-full border bg-[#FEE500] px-70pxr py-12pxr text-center text-gray-10 font-title-02"
+          className="h-full w-fit cursor-pointer gap-8pxr rounded-full border bg-[#FEE500] px-70pxr py-12pxr text-center text-gray-10 font-title-02 mb:px-60pxr"
         >
           <Image src={kakaoTalk} alt="1" width={24} height={22} />
-          카카오로 3초만에 시작하기
+          {kakaoButtonText}
         </Button>
       </div>
 

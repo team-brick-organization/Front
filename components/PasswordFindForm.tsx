@@ -24,7 +24,7 @@ function PasswordFindForm(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr"
+      className="relative w-full max-w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr mb:px-19pxr"
     >
       <h1 className="text-center text-gray-10 font-headline-03">
         비밀번호를 잊으셨나요?
@@ -54,7 +54,7 @@ function PasswordFindForm(): JSX.Element {
 
       <Button
         type="submit"
-        className="mt-40pxr h-50pxr w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
+        className="mt-40pxr h-50pxr w-full max-w-402pxr cursor-pointer rounded-[0.625rem] bg-gray-10 text-center text-gray-01 font-title-04"
       >
         확인
       </Button>

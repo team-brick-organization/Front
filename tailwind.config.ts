@@ -44,6 +44,7 @@ const config = {
         error: '#DC2626',
         white: '#FFFFFF',
         black: '#000000',
+        primary: '#F64A19',
         'gray-01': '#F9FAFC',
         'gray-02': '#F3F4F6',
         'gray-03': '#EBECEE',
