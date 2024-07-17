@@ -43,7 +43,7 @@ function CustomBadge({
         return sizeClass()
 
       case 'tag':
-        return 'rounded-[0.3125rem] border border-[#DDDEE0] bg-transparent px-10pxr py-4pxr text-[#DDDEE0] font-caption-02'
+        return 'rounded-[0.3125rem] border border-[#DDDEE0] bg-transparent px-10pxr py-4pxr  mb:py-2pxr text-[#DDDEE0] font-caption-02'
 
       case 'search':
         return 'px-14pxr py-4pxr !bg-[#F3F4F6] flex gap-8pxr items-center w-fit rounded-full text-[#5E5E60]'

@@ -1,6 +1,4 @@
-import Image from 'next/image'
-import heartBlack from '@/public/images/svgs/heartBlack.svg'
-import heart from '@/public/images/svgs/heart.svg'
+import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 
 interface IFavoriteButtonProps {
   isFavoriteClicked: boolean
@@ -11,8 +9,6 @@ function FavoriteButton({
   isFavoriteClicked,
   onFavoriteClick,
 }: IFavoriteButtonProps) {
-  const getHeartImagePath = isFavoriteClicked ? heartBlack : heart
-
   return (
     <button
       className="group"
@@ -20,13 +16,17 @@ function FavoriteButton({
       onClick={onFavoriteClick}
       title="Dibs this item"
     >
-      <Image
-        width={26}
-        height={26}
-        src={getHeartImagePath}
-        alt={`${isFavoriteClicked ? 'black' : 'gray'} heart image`}
-        className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50"
-      />
+      <div className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50">
+        {isFavoriteClicked ? (
+          <HeartFilledIcon
+            width={26}
+            height={26}
+            style={{ color: '#F91880' }}
+          />
+        ) : (
+          <HeartIcon width={26} height={26} />
+        )}
+      </div>
     </button>
   )
 }
