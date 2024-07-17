@@ -26,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className={`${pretendard.variable}`}>
-      <body className={pretendard.className}>
-        <Theme>
+    <html lang="ko" className={`h-full ${pretendard.variable}`}>
+      <body className={`h-full ${pretendard.className}`}>
+        <Theme className="h-full">
           <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
           <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           {children}

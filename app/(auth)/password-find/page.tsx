@@ -1,7 +1,11 @@
 import { PasswordFindForm } from '@/components'
 
 function passwordfind() {
-  return <PasswordFindForm />
+  return (
+    <div className="flex justify-center">
+      <PasswordFindForm />
+    </div>
+  )
 }
 
 export default passwordfind
