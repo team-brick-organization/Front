@@ -37,37 +37,50 @@ function ImageViewerModal({
   }
 
   return (
-    <div className="relative h-full w-full rounded-[10px] bg-[#F9FAFC] object-contain p-20pxr">
+    <div className="relative h-full w-full overflow-hidden rounded-[.625rem] bg-[#F9FAFC] object-cover">
       <Image
         src={images[currentImageIndex].src}
         alt={images[currentImageIndex].id.toString()}
-        className="object-contain"
+        className="object-cover"
         fill
       />
+      <div className="absolute bottom-50pxr left-1/2 flex -translate-x-1/2 items-center gap-16pxr mb:bottom-16pxr tb:bottom-30pxr">
+        <div className="flex items-center gap-4pxr rounded-[.3125rem] bg-black px-8pxr py-3pxr">
+          <button type="button" onClick={prevImage} className="">
+            <Image
+              src={chevronleftIcon}
+              alt="leftIcon"
+              width={23}
+              height={23}
+            />
+          </button>
+          <button type="button" onClick={nextImage} className="">
+            <Image
+              src={chevronrightIcon}
+              alt="rightIcon"
+              width={23}
+              height={23}
+            />
+          </button>
+        </div>
+        <div className="rounded-full bg-black px-20pxr py-6pxr">
+          <span className="flex items-center gap-8pxr text-[#f9fafc] font-title-01">
+            {currentImageIndex + 1}
+            <div className="h-12pxr w-1pxr bg-[#f9fafc]" />
+            {images.length}
+          </span>
+        </div>
+      </div>
       <button
-        type="button"
-        onClick={prevImage}
-        className="absolute left-0pxr top-1/2 z-10 -translate-y-1/2 transform rounded-full p-2pxr"
-      >
-        <Image src={chevronleftIcon} alt="leftIcon" width={100} height={100} />
-      </button>
-      <button
-        type="button"
-        onClick={nextImage}
-        className="absolute right-0pxr top-1/2 z-10 -translate-y-1/2 transform rounded-full"
-      >
-        <Image src={chevronrightIcon} alt="leftIcon" width={100} height={100} />
-      </button>
-      <button
-        className="absolute -right-100pxr -top-100pxr rounded-full"
+        className="absolute right-50pxr top-50pxr rounded-full mb:right-16pxr mb:top-16pxr tb:right-30pxr tb:top-30pxr"
         type="button"
         onClick={onClose}
       >
         <Image
           src={closeIcon}
           alt="closeIcon"
-          width={100}
-          height={100}
+          width={50}
+          height={50}
           className="fill-white"
         />
       </button>

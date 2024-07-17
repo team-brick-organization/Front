@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Avatar } from '@radix-ui/themes'
 import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
