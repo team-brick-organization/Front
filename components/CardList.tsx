@@ -1,22 +1,10 @@
 'use client'
 
 import { GatheringCard } from '@/components'
-
-interface Data {
-  id: number
-  userName: string
-  userProfileImg: string
-  img: string
-  tags: string[]
-  title: string
-  place: string
-  liked: boolean
-  current: number
-  max: number
-}
+import { Social } from './MypageCards/MypageCard'
 
 interface CardListProps {
-  data: Data[]
+  data: Social[]
 }
 
 /**

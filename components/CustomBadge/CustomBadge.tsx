@@ -1,5 +1,4 @@
 import { Cross1Icon } from '@radix-ui/react-icons'
-import { Badge } from '@radix-ui/themes'
 import { ReactNode } from 'react'
 
 interface IBadgeProps {
@@ -54,14 +53,14 @@ function CustomBadge({
   }
 
   return (
-    <Badge className={`bg-[#1E1F20] ${typeClass()} ${className}`}>
+    <div className={`bg-[#1E1F20] ${typeClass()} ${className}`}>
       {children}
       {type === 'search' && (
         <button className="outline-none" type="button" onClick={onCrossClick}>
           <Cross1Icon width={15} height={15} />
         </button>
       )}
-    </Badge>
+    </div>
   )
 }
 

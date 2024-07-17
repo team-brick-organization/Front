@@ -17,6 +17,7 @@ import Link from 'next/link'
 import useFavorite from '@/hooks/useFavorite'
 
 interface ICrewGatheringInfoProps {
+  id: number
   tags: string[]
   title: string
   location: string
@@ -26,10 +27,10 @@ interface ICrewGatheringInfoProps {
   participantsCurrentCount: number
   participantsMinCount: number
   participantsMaxCount: number
-  isFavorite: boolean
 }
 
 function CrewGatheringInfo({
+  id,
   tags,
   title,
   location,
@@ -39,9 +40,8 @@ function CrewGatheringInfo({
   participantsCurrentCount,
   participantsMinCount,
   participantsMaxCount,
-  isFavorite,
 }: ICrewGatheringInfoProps) {
-  const { isFavoriteClicked, handleFavoriteClick } = useFavorite(isFavorite)
+  const { isFavoriteClicked, handleFavoriteClick } = useFavorite(id)
 
   return (
     <div className="w-480pxr rounded-[0.625rem] bg-[#F9FAFC] px-24pxr pb-19pxr pt-20pxr">
