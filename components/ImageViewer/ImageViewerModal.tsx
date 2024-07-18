@@ -46,7 +46,12 @@ function ImageViewerModal({
       />
       <div className="absolute bottom-50pxr left-1/2 flex -translate-x-1/2 items-center gap-16pxr mb:bottom-16pxr tb:bottom-30pxr">
         <div className="flex items-center gap-4pxr rounded-[.3125rem] bg-black px-8pxr py-3pxr">
-          <button type="button" onClick={prevImage} className="">
+          <button
+            title="left button"
+            type="button"
+            onClick={prevImage}
+            className=""
+          >
             <Image
               src={chevronleftIcon}
               alt="leftIcon"
@@ -54,7 +59,12 @@ function ImageViewerModal({
               height={23}
             />
           </button>
-          <button type="button" onClick={nextImage} className="">
+          <button
+            title="right button"
+            type="button"
+            onClick={nextImage}
+            className=""
+          >
             <Image
               src={chevronrightIcon}
               alt="rightIcon"
@@ -72,6 +82,7 @@ function ImageViewerModal({
         </div>
       </div>
       <button
+        title="close button"
         className="absolute right-50pxr top-50pxr rounded-full mb:right-16pxr mb:top-16pxr tb:right-30pxr tb:top-30pxr"
         type="button"
         onClick={onClose}

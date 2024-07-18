@@ -9,7 +9,8 @@ function useDate({ timeIntervals = 30 }: IUseDateProps) {
   const initialDate = new Date()
 
   if (currentDate.getMinutes() < timeIntervals) {
-    initialDate.setMinutes(timeIntervals)
+    initialDate.setMinutes(timeIntervals + 1)
+    initialDate.setSeconds(0)
   } else {
     initialDate.setHours(currentDate.getHours() + 1)
     initialDate.setMinutes(0)
