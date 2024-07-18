@@ -1,0 +1,3 @@
+interface IPostDuplicateEmailResponse {
+  duplicateEmail: boolean
+}

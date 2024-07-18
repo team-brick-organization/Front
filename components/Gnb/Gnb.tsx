@@ -1,11 +1,13 @@
 'use client'
 
-import { Button } from '@radix-ui/themes'
+import { Avatar, Button } from '@radix-ui/themes'
 import Link from 'next/link'
 import { HamburgerMenuIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useEffect } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
 import { Search } from '@/components'
+import getSignOut from '@/apis/getSignOut'
+import useUserStore from '@/stores/useUserStore'
 // import useGetProfileImg from '@/hooks/useGetProfileImg'
 
 /**
@@ -14,6 +16,8 @@ import { Search } from '@/components'
  */
 
 function Gnb() {
+  const { accessToken, setAccessToken, name, setName, setEmail } =
+    useUserStore()
   const { onSearch, setOnSearch } = useSearchStore()
   // const { userName, profileImg } = useGetProfileImg()
 
@@ -89,31 +93,49 @@ function Gnb() {
           >
             <HamburgerMenuIcon width="24" height="24" />
           </button>
-          <div className="flex w-197pxr flex-row items-center gap-16pxr mb:hidden">
+          <div className="flex w-197pxr flex-row items-center gap-24pxr mb:hidden">
             <button title="검색" type="button" onClick={handleOnSearch}>
               <MagnifyingGlassIcon width="30" height="30" />
             </button>
             <Link href="/signup">
-              <Button className="cursor-pointer text-nowrap rounded-full bg-slate-500 font-title-02">
+              <Button className="cursor-pointer text-nowrap rounded-[0.625rem] bg-gray-10 px-20pxr py-6pxr text-gray-01 font-title-02">
                 등록하기
               </Button>
             </Link>
-            {/* {userName ? (
+            {name ? (
               <Avatar
-                fallback={userName.charAt(0)}
-                src={profileImg}
+                fallback={
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
+                    {name.charAt(0)}
+                  </div>
+                }
+                src="api 변경되면 바꿔야함!!"
                 className="w-36 h-36 rounded-full"
               />
-            ) : ( */}
-            <Link href="/signin">
+            ) : (
+              <Link href="/signin">
+                <button
+                  type="button"
+                  className="text-nowrap text-gray-10 font-title-04 tb:font-title-02"
+                >
+                  로그인
+                </button>
+              </Link>
+            )}
+            {accessToken && ( // 추후에 지워야함
               <button
                 type="button"
-                className="text-nowrap text-[#1E1F20] font-title-04 tb:font-title-02"
+                className="text-nowrap text-gray-10 font-title-04 tb:font-title-02"
+                onClick={async () => {
+                  await getSignOut({ accessToken })
+                  setAccessToken('')
+                  setName('')
+                  setEmail('')
+                }}
               >
-                로그인
+                로그아웃
               </button>
-            </Link>
-            {/* )} */}
+            )}
           </div>
         </div>
       </main>
