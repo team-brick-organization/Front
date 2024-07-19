@@ -4,6 +4,8 @@ import localFont from 'next/font/local'
 import '@radix-ui/themes/styles.css'
 import '@/styles/globals.css'
 import Script from 'next/script'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
 export const metadata: Metadata = {
@@ -29,6 +31,7 @@ export default function RootLayout({
     <html lang="ko" className={`h-full ${pretendard.variable}`}>
       <body className={`h-full ${pretendard.className}`}>
         <Theme className="h-full">
+          <ToastContainer className="w-auto bg-none p-0pxr opacity-100 shadow-none" />
           <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
           <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           {children}
