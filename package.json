@@ -65,12 +65,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint",
-      "git add"
+      "eslint"
     ],
     "*.+json|css|md": [
-      "eslint",
-      "git add"
+      "eslint"
     ]
   }
 }
