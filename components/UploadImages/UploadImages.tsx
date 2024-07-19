@@ -30,7 +30,7 @@ function UploadImages({
 
   return (
     <div
-      className={`flex h-363pxr w-780pxr flex-col justify-between overflow-hidden rounded-[0.625rem] bg-gray-01 ${error ? 'border border-error' : ''}`}
+      className={`flex h-540pxr w-full max-w-980pxr flex-col justify-between overflow-hidden rounded-[0.625rem] bg-gray-01 mb:h-205pxr ${error ? 'border border-error' : ''}`}
     >
       <input
         className="hidden"
@@ -53,10 +53,16 @@ function UploadImages({
           type="button"
           onClick={handleUploadButtonClick}
         >
-          <Image src={ImageIcon} width={100} height={100} alt="이미지 아이콘" />
+          <Image
+            className="mb-h-60pxr mb:w-60pxr"
+            src={ImageIcon}
+            width={100}
+            height={100}
+            alt="이미지 아이콘"
+          />
           <div>
             <h2 className="font-title-04">
-              이미지 (최대 10장)을 업로드해 주세요
+              이미지 (최대 10장)을 업로드해 주세요.
             </h2>
             <p className="text-gray-05 font-body-01">
               최대 10MB의 JPEG, PNG, WEBP 이미지 파일
