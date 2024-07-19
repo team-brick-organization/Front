@@ -1,12 +1,9 @@
+'use client'
+
 import Image from 'next/image'
 import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
-import {
-  emailPattern,
-  introduceOneLinePattern,
-  namePattern,
-  nicknamePattern,
-} from '@/constants/RegExr'
+import { introduceOneLinePattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
 import useProfileImageStore from '@/stores/useProfileImageStore'
 import DatePicker from 'react-datepicker'
@@ -33,7 +30,6 @@ function ManagingMyInfo({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<IProfileFormInputs>({ mode: 'onChange' })
 
@@ -46,12 +42,7 @@ function ManagingMyInfo({
     console.log('정보 변경 데이터', data)
   }
 
-  const watchAllFields = watch() // 전체 관찰
-
-  // 단 하나라도 필드가 채워졌는지 확인하는 로직
-  const isAnyFieldFilled = Object.values(watchAllFields).some(
-    (value) => value !== undefined && value !== '',
-  )
+  const hasErrors = !!errors.introduceOneLine || !!errors.nickname
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -97,13 +88,11 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="name"
-            {...register('name', {
-              required: '이름은 필수 입력입니다.',
-              pattern: namePattern,
-            })}
+            readOnly
             type="text"
             placeholder="김OO"
-            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
+            className="mt-8pxr bg-gray-03"
+            // defaultValue={}
           />
         </div>
 
@@ -133,14 +122,12 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="email"
-            {...register('email', {
-              required: '이메일은 필수 입력입니다.',
-              pattern: emailPattern,
-            })}
+            readOnly
             type="email"
             placeholder="User@gmail.com"
-            className={`mt-4pxr ${errors.email ? 'ring-1 ring-error' : ''}`}
+            className="mt-8pxr bg-gray-03"
             color="gray"
+            // defaultValue={}
           />
         </div>
 
@@ -164,9 +151,7 @@ function ManagingMyInfo({
           />
         </div>
         <div className="mt-40pxr flex flex-col">
-          <label htmlFor="birth" className="mb-8pxr text-gray-10 font-title-02">
-            생년월일
-          </label>
+          <label className="mb-8pxr text-gray-10 font-title-02">생년월일</label>
           <DatePicker
             className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02"
             shouldCloseOnSelect
@@ -192,11 +177,11 @@ function ManagingMyInfo({
         </div>
       </div>
 
-      <div className="mb-165pxr mt-192pxr flex justify-center">
+      <div className="mt-192pxr flex justify-center">
         <Button
           type="submit"
-          className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${isAnyFieldFilled ? 'bg-gray-10 text-gray-01' : 'bg-gray-04 text-gray-01'}`}
-          disabled={!isAnyFieldFilled}
+          className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${!hasErrors ? 'bg-gray-10 text-gray-01' : 'bg-gray-04 text-gray-01'}`}
+          disabled={hasErrors}
         >
           저장하기
         </Button>

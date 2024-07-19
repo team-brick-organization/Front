@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 import Image from 'next/image'
 import closeIcon from '@/public/images/svgs/close.svg'
