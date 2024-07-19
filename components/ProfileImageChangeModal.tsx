@@ -84,7 +84,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
-            style={{ display: 'none' }}
+            className="hidden"
             ref={fileInputRef}
             onChange={handleFileChange}
           />

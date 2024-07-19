@@ -169,7 +169,6 @@ function ManagingMyInfo({
             popperPlacement="bottom-start"
             dateFormatCalendar="yyyy년 M월"
             locale="ko"
-            timeCaption="시간"
             showYearDropdown
             scrollableYearDropdown
             yearDropdownItemNumber={100}
