@@ -68,7 +68,7 @@
       "eslint",
       "git add"
     ],
-    "*.+{json|css|md}": [
+    "*.+{json,css,md}": [
       "eslint",
       "git add"
     ]
