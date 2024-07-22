@@ -19,14 +19,6 @@ const mockImages = [
     id: 5,
     src: 'https://cdn.pixabay.com/photo/2023/12/04/16/12/leaf-8429779_1280.jpg',
   },
-  {
-    id: 6,
-    src: 'https://cdn.pixabay.com/photo/2024/01/02/13/28/gecko-8483282_1280.png',
-  },
-  {
-    id: 7,
-    src: 'https://cdn.pixabay.com/photo/2023/12/04/16/12/leaf-8429779_1280.jpg',
-  },
 ]
 
 export default mockImages

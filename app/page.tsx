@@ -1,9 +1,10 @@
-import { SocialDetailPageTab } from '@/components'
+import { ImageViewer } from '@/components'
+import mockImages from '@/components/ImageViewer/mockImages'
 
 export default function Home() {
   return (
-    <div className="w-full max-w-680pxr">
-      <SocialDetailPageTab />
+    <div className="">
+      <ImageViewer images={mockImages} />
     </div>
   )
 }

@@ -20,7 +20,7 @@ function ImageViewer({ images }: ImageViewerProps) {
     usePortal()
 
   const mobileRemainingImages = images.length - 1
-  const remainingImages = images.length - 5
+  // const remainingImages = images.length - 5
   return (
     <div className="flex gap-20pxr">
       <Box className="relative h-400pxr w-680pxr cursor-pointer items-center overflow-hidden rounded-[10px] mb:h-200pxr mb:min-w-380pxr tb:h-301pxr tb:w-319pxr">
@@ -41,7 +41,8 @@ function ImageViewer({ images }: ImageViewerProps) {
         )}
       </Box>
       <Box className="grid h-400pxr w-480pxr grid-cols-2 grid-rows-2 gap-10pxr mb:hidden tb:h-301pxr tb:w-319pxr">
-        {images.slice(1, 5).map((image, index) => {
+        {images.slice(1, 5).map((image) => {
+          // 만약 리펙토링했을때 이미지수 늘린다면 image moreIcon받을시 index 넣어주기
           return (
             <div
               className="relative cursor-pointer overflow-hidden rounded-[10px]"
@@ -55,14 +56,14 @@ function ImageViewer({ images }: ImageViewerProps) {
                 className="h-195pxr w-235pxr object-cover"
                 onClick={() => setIsPortalOpen(true)}
               />
-              {index === 3 && remainingImages > 0 && (
+              {/* {index === 3 && remainingImages > 0 && (
                 <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center">
                   <Image src={moreImgIcon} alt="icon" width={40} height={40} />
                   <span className="text-center text-[#F9FAFC] font-headline-03">
                     +{remainingImages}
                   </span>
                 </div>
-              )}
+              )} */}
             </div>
           )
         })}
