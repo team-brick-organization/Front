@@ -23,16 +23,16 @@ function CustomBadge({
   const sizeClass = () => {
     switch (size) {
       case 'small':
-        return 'font-caption-01 px-8pxr py-2pxr rounded-full text-[#F9FAFC]'
+        return 'font-caption-01 px-8pxr py-2pxr rounded-full text-gray-01'
 
       case 'medium':
-        return 'font-caption-02 px-8pxr py-2pxr rounded-full text-[#F9FAFC]'
+        return 'font-caption-02 px-8pxr py-2pxr rounded-full text-gray-01'
 
       case 'large':
-        return 'font-body-01 px-12pxr py-4pxr rounded-full text-[#F9FAFC]'
+        return 'font-body-01 px-12pxr py-4pxr rounded-full text-gray-01'
 
       default:
-        return 'font-caption-02 px-8pxr py-2pxr rounded-full text-[#F9FAFC]'
+        return 'font-caption-02 px-8pxr py-2pxr rounded-full text-gray-01'
     }
   }
 
@@ -42,10 +42,10 @@ function CustomBadge({
         return sizeClass()
 
       case 'tag':
-        return 'rounded-[0.3125rem] border border-[#DDDEE0] bg-transparent px-10pxr py-4pxr  mb:py-2pxr text-[#DDDEE0] font-caption-02'
+        return 'rounded-[0.3125rem] border border-gray-04 bg-transparent px-10pxr py-4pxr  mb:py-2pxr text-gray-04 font-caption-02'
 
       case 'search':
-        return 'px-14pxr py-4pxr !bg-[#F3F4F6] flex gap-8pxr items-center w-fit rounded-full text-[#5E5E60]'
+        return 'px-14pxr py-4pxr !bg-gray-02 flex gap-8pxr items-center w-fit rounded-full text-gray-08'
 
       default:
         return sizeClass()
@@ -53,10 +53,15 @@ function CustomBadge({
   }
 
   return (
-    <div className={`bg-[#1E1F20] ${typeClass()} ${className}`}>
+    <div className={`bg-gray-10 ${typeClass()} ${className}`}>
       {children}
       {type === 'search' && (
-        <button className="outline-none" type="button" onClick={onCrossClick}>
+        <button
+          title="뱃지 삭제 버튼"
+          className="outline-none"
+          type="button"
+          onClick={onCrossClick}
+        >
           <Cross1Icon width={15} height={15} />
         </button>
       )}
