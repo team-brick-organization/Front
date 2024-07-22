@@ -84,7 +84,7 @@ function Search() {
             autoFocus
             value={searchValue}
             onChange={handleOnchange}
-            onKeyDown={onKeyDown}
+            onKeyUp={onKeyDown}
             variant="soft"
             color="gray"
             className="h-40pxr w-full rounded-[.3125rem] border-[#DDDEE0] bg-[#F9FAFC] outline-none ring-1 ring-[#DDDEE0] focus:ring-black"
