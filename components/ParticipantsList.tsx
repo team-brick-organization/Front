@@ -42,13 +42,15 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
           )
         })}
       </ul>
-      <button
-        className="mt-24pxr text-[#717274] font-body-02"
-        type="button"
-        onClick={handleLoadMoreClick}
-      >
-        더보기
-      </button>
+      {offset < participants.length && (
+        <button
+          className="mt-24pxr text-[#717274] font-body-02"
+          type="button"
+          onClick={handleLoadMoreClick}
+        >
+          더보기
+        </button>
+      )}
     </div>
   )
 }

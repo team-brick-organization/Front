@@ -10,7 +10,7 @@ import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
-import { useWindowWidth } from '@/hooks/useWindowWidth'
+import useWindowWidth from '@/hooks/useWindowWidth'
 import Input from './Input'
 
 export interface ILoginFormInputs {
