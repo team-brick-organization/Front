@@ -8,6 +8,8 @@ interface IUserStoreProps {
   setEmail: (email: string) => void
   name: string
   setName: (name: string) => void
+  profileImageUrl: string
+  setProfileImageUrl: (name: string) => void
 }
 
 const useUserStore = create(
@@ -24,6 +26,10 @@ const useUserStore = create(
       name: '',
       setName: (name) => {
         set({ name })
+      },
+      profileImageUrl: '',
+      setProfileImageUrl: (profileImageUrl) => {
+        set({ profileImageUrl })
       },
     }),
     { name: 'user-store', storage: createJSONStorage(() => localStorage) },
