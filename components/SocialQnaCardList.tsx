@@ -56,7 +56,7 @@ function SocialQnaCardList({ contents }: ISocialQnaCardListProps) {
       <div className="mt-80pxr flex justify-center">
         <Pagination
           currentPage={currentPage}
-          totalPages={3}
+          totalPages={1}
           onPageChange={handlePageChange}
         />
       </div>

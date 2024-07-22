@@ -2,7 +2,6 @@
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useForm } from 'react-hook-form'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Avatar } from '@radix-ui/themes'
 import shortFormatDate from '@/utils/shortFormatDate'
 import { DotsDropDownMenu } from '.'
@@ -36,13 +35,13 @@ function QnaDetailModal({
 
   const menuItems = [
     {
-      menuItem: '수정',
+      menuItem: '게시글 수정',
       onClick: () => {
-        // 수정 모달 띄우기
+        // 수정 기능
       },
     },
     {
-      menuItem: '삭제',
+      menuItem: '게시글 삭제',
       onClick: () => {
         // 삭제 기능
       },
@@ -120,7 +119,7 @@ function CommentForm({
         </h3>
         <div className="flex flex-col items-end gap-8pxr">
           <textarea
-            className="h-150pxr w-full resize-none rounded-[0.625rem] bg-gray-01 p-24pxr text-gray-10 outline-none placeholder:text-gray-04"
+            className="h-150pxr w-full resize-none rounded-[0.625rem] bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
             {...register('comment', {
               required: '답변은 필수 입력입니다.',
             })}
@@ -140,6 +139,21 @@ function CommentForm({
 }
 
 function CommentList({ comments }: { comments: ISocialQnaComment[] }) {
+  const menuItems = [
+    {
+      menuItem: '댓글 수정',
+      onClick: () => {
+        // 수정 기능
+      },
+    },
+    {
+      menuItem: '댓글 삭제',
+      onClick: () => {
+        // 삭제 기능
+      },
+    },
+  ]
+
   return (
     <ul className="bg:px-24pxr flex flex-col gap-40pxr px-48pxr">
       {comments.map((comment) => {
@@ -171,15 +185,11 @@ function CommentList({ comments }: { comments: ISocialQnaComment[] }) {
                       {commentFormattedDate}
                     </span>
                   </div>
-                  <button
-                    title="메뉴 버튼"
-                    type="button"
-                    onClick={() => {
-                      // 드롭다운 만들야함
-                    }}
-                  >
-                    <DotsHorizontalIcon width={22} height={22} fill="#1E1F20" />
-                  </button>
+                  {/* // qna 댓글 생성한 유저에게만 보여야함 */}
+                  <DotsDropDownMenu
+                    direction="horizontal"
+                    menuItems={menuItems}
+                  />
                 </div>
                 <p className="text-gray-08 font-body-01">{commentContent}</p>
               </div>

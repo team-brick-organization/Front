@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
+import { notify } from './ToastMessageTrigger'
 
 interface IQnaWriteFormInputs {
   title: string
@@ -16,6 +17,7 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
 
   const onSubmit = (data: IQnaWriteFormInputs) => {
     console.log(data)
+    notify('게시글 작성이 완료되었습니다.')
     onClose()
   }
 
