@@ -68,7 +68,27 @@ export const namePattern = {
   // },
 }
 
+export const nicknamePattern = {
+  value: /^[가-힣a-zA-Z0-9]{2,8}$/,
+  message: '닉네임을 입력해 주세요.',
+}
+
+export const birthPattern = {
+  value: /^[0-9]{6}$/,
+  message: '생년월일을 입력해 주세요.',
+}
+
+export const phoneNumberPattern = {
+  value: /^[0-9]{11}$/,
+  message: '전화번호를 입력해 주세요.',
+}
+
 export const passwordMinLength = {
   value: 8,
   message: '8자리 이상 비밀번호를 입력하세요.',
+}
+
+export const introduceOneLinePattern = {
+  value: /^.{1,80}$/,
+  message: '',
 }

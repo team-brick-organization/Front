@@ -1,5 +1,5 @@
 {
-  "name": "dalem",
+  "name": "brick",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -67,12 +67,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint",
-      "git add"
+      "eslint"
     ],
-    "*.+{json|css|md}": [
-      "eslint",
-      "git add"
+    "*.+json|css|md": [
+      "eslint"
     ]
   }
 }
