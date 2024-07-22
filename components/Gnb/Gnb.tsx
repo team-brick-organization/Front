@@ -32,6 +32,9 @@ function Gnb() {
   const path = usePathname()
   const onlyLogo = !(path === '/registration' || path.includes('/edit'))
   const opacityClassName = onSearch ? 'opacity-0 pointer-events-none' : ''
+  const isSocials = path === '/liked' || path === '/socials?type=imminent'
+  const isImminent = path === '/socials' || path === '/liked'
+  const isLiked = path === '/socials?type=imminent' || path === '/socials'
 
   const handleOpenSideMenu = () => {
     setSideMenu(true)
@@ -74,7 +77,7 @@ function Gnb() {
                 <Link href="/socials">
                   <button
                     type="button"
-                    className={`${path === '/liked' || path === '/socials?type=imminent' ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
+                    className={`${isSocials ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
                   >
                     모집 중
                   </button>
@@ -82,7 +85,7 @@ function Gnb() {
                 <Link href="/socials?type=imminent">
                   <button
                     type="button"
-                    className={`${path === '/socials' || path === '/liked' ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
+                    className={`${isImminent ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
                   >
                     모집 마감
                   </button>
@@ -90,7 +93,7 @@ function Gnb() {
                 <Link href="/liked">
                   <button
                     type="button"
-                    className={`${path === '/socials?type=imminent' || path === '/socials' ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
+                    className={`${isLiked ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
                   >
                     찜한 소셜
                   </button>
