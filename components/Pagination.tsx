@@ -1,8 +1,7 @@
 'use client'
 
-import chevronLeftIcon from '@/public/images/svgs/chevronleft.svg'
-import chevronrightIcon from '@/public/images/svgs/chevronright.svg'
-import Image from 'next/image'
+import ChevronLeft from '@/public/images/svgs/chevronleft'
+import ChevronRight from '@/public/images/svgs/chevronright'
 import { useMemo } from 'react'
 
 interface IPaginationProps {
@@ -94,8 +93,9 @@ function Pagination({
           if (currentPage === 1) return
           handlePageChange(currentPage - 1)
         }}
+        disabled={currentPage === 1}
       >
-        <Image src={chevronLeftIcon} alt="Previous" />
+        <ChevronLeft fill={currentPage === 1 ? '#9A9B9D' : '#1E1F20'} />
       </button>
       <ul
         className={`flex items-center ${renderPageNumbers.length <= 5 ? 'gap-24pxr' : ''}`}
@@ -126,8 +126,11 @@ function Pagination({
           if (currentPage === totalPages) return
           handlePageChange(currentPage + 1)
         }}
+        disabled={currentPage === totalPages}
       >
-        <Image src={chevronrightIcon} alt="Next" />
+        <ChevronRight
+          fill={currentPage === totalPages ? '#9A9B9D' : '#1E1F20'}
+        />
       </button>
     </div>
   )
