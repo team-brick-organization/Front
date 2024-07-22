@@ -34,7 +34,7 @@ function ProfileCard({
       </p>
 
       {type === 'user' && (
-        <Link className="w-full rounded-[0.625rem]" href="/mypage/profile/edit">
+        <Link className="w-full rounded-[0.625rem]" href="/mypage/edit-profile">
           <button
             className="mt-40pxr w-full rounded-[0.625rem] bg-gray-10 py-9pxr text-gray-01 font-body-01"
             type="button"
