@@ -36,6 +36,7 @@ export const notify = (text: string, type: 'error' | 'default' = 'default') => {
       draggable: false,
       progress: undefined,
       theme: 'night',
+      closeButton: false,
       transition: Bounce,
     },
   )

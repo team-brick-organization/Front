@@ -21,13 +21,13 @@ const config = {
   ],
   theme: {
     spacing: {
-      ...range(0, 2000).reduce((acc: AccType, px: number) => {
+      ...range(0, 1600).reduce((acc: AccType, px: number) => {
         acc[`${px}pxr`] = pxToRem(px)
         return acc
       }, {}),
     },
     fontSize: {
-      ...range(0, 2000).reduce((acc: AccType, px: number) => {
+      ...range(0, 200).reduce((acc: AccType, px: number) => {
         acc[`${px}pxr`] = pxToRem(px)
         return acc
       }, {}),

@@ -82,6 +82,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
             <h1>사진 선택하기</h1>
           </Button>
           <input
+            title="프로필 사진 선택"
             type="file"
             accept="image/jpeg,image/png,image/webp"
             className="hidden"
@@ -91,6 +92,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
         </div>
       </div>
       <button
+        title="닫기 버튼"
         className="absolute right-24pxr top-24pxr rounded-full"
         type="button"
         onClick={onClose}
