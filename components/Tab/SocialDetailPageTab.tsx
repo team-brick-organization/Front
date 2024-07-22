@@ -1,18 +1,9 @@
 'use client'
 
-import { ReactNode } from 'react'
 import createTabStore from '@/stores/createTabStore'
-import { Tab } from '../index'
+import { SocialIntroduce, SocialQna, Tab } from '@/components'
 
-interface ISocialDetailPageTabProps {
-  tabContent1: ReactNode
-  tabContent2: ReactNode
-}
-
-function SocialDetailPageTab({
-  tabContent1,
-  tabContent2,
-}: ISocialDetailPageTabProps) {
+function SocialDetailPageTab() {
   const tabStore = createTabStore()
   const tabs = [{ tabName: '소개' }, { tabName: 'Q&A' }]
 
@@ -26,10 +17,27 @@ function SocialDetailPageTab({
         ))}
       </Tab.List>
       <Tab.Panel index={0} store={tabStore}>
-        {tabContent1}
+        <div className="mt-40pxr w-full">
+          <SocialIntroduce
+            description="sad"
+            location="asdas"
+            lat={33.450701}
+            lng={126.570667}
+            participants={[
+              {
+                profileImage: 'z',
+                name: 'z',
+                description: '하이',
+                role: 'host',
+              },
+            ]}
+          />
+        </div>
       </Tab.Panel>
       <Tab.Panel index={1} store={tabStore}>
-        {tabContent2}
+        <div className="mt-40pxr w-full">
+          <SocialQna />
+        </div>
       </Tab.Panel>
     </Tab.Provider>
   )

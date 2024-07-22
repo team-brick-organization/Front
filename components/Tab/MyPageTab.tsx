@@ -1,15 +1,9 @@
 'use client'
 
-import { ReactNode } from 'react'
 import createTabStore from '@/stores/createTabStore'
 import { Tab } from '../index'
 
-interface IMyPageTabProps {
-  tabContent1: ReactNode
-  tabContent2: ReactNode
-}
-
-function MyPageTab({ tabContent1, tabContent2 }: IMyPageTabProps) {
+function MyPageTab() {
   const tabStore = createTabStore()
 
   const tabs = [
@@ -38,10 +32,10 @@ function MyPageTab({ tabContent1, tabContent2 }: IMyPageTabProps) {
         ))}
       </Tab.List>
       <Tab.Panel index={0} store={tabStore}>
-        {tabContent1}
+        tabContent1
       </Tab.Panel>
       <Tab.Panel index={1} store={tabStore}>
-        {tabContent2}
+        tabContent2
       </Tab.Panel>
     </Tab.Provider>
   )

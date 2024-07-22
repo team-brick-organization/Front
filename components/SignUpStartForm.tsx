@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { Button } from '@radix-ui/themes'
 import kakaoTalk from '@/public/images/svgs/kakaoTalk.svg'
-import { useWindowWidth } from '@/hooks/useWindowWidth'
+import useWindowWidth from '@/hooks/useWindowWidth'
 import Link from 'next/link'
 
 function SignUpStartForm() {
