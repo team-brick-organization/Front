@@ -13,6 +13,9 @@ import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Image from 'next/image'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
+import postDuplicateEmail from '@/apis/postDuplicateEmail'
+import postSignUp from '@/apis/postSignUp'
+import { useRouter } from 'next/navigation'
 import Input from './Input'
 
 export interface ISignUpFormInputs {
@@ -23,17 +26,59 @@ export interface ISignUpFormInputs {
 }
 
 function SignUpEmailForm(): JSX.Element {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
+    setError,
   } = useForm<ISignUpFormInputs>({ mode: 'onChange' })
 
   const password = watch('password')
 
-  const onSubmit = (data: ISignUpFormInputs) => {
-    console.log('회원가입', data)
+  const fetchIsDuplicateEmail = async (email: string) => {
+    const response = await postDuplicateEmail({
+      body: {
+        email,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('이메일 중복 확인에 실패했습니다.')
+    }
+
+    const data: IPostDuplicateEmailResponse = await response.json()
+
+    return data.duplicateEmail
+  }
+
+  const onSubmit = async (data: ISignUpFormInputs) => {
+    const { email, password: dataPassword, name } = data
+
+    const isDuplicateEmail = await fetchIsDuplicateEmail(email)
+
+    if (isDuplicateEmail) {
+      setError('email', {
+        type: 'validate',
+        message: '이미 가입된 이메일입니다.',
+      })
+      return
+    }
+
+    const signUpResponse = await postSignUp({
+      body: {
+        email,
+        password: dataPassword,
+        name,
+      },
+    })
+
+    if (!signUpResponse.ok) {
+      return
+    }
+
+    router.push('/signin')
   }
 
   const passwordCheckValidate = (value: string) => {
@@ -93,6 +138,20 @@ function SignUpEmailForm(): JSX.Element {
             {...register('email', {
               required: '이메일은 필수 입력입니다.',
               pattern: emailPattern,
+              onBlur: async (e) => {
+                const email = e.target.value
+
+                if (!email) return
+
+                const isDuplicateEmail = await fetchIsDuplicateEmail(email)
+
+                if (isDuplicateEmail) {
+                  setError('email', {
+                    type: 'validate',
+                    message: '이미 가입된 이메일입니다.',
+                  })
+                }
+              },
             })}
             type="email"
             placeholder="이메일을 입력해 주세요."

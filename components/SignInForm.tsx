@@ -11,6 +11,10 @@ import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import { useWindowWidth } from '@/hooks/useWindowWidth'
+import postSignIn from '@/apis/postSignIn'
+import { useRouter } from 'next/navigation'
+import useUserStore from '@/stores/useUserStore'
+import getUser from '@/apis/getUser'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -19,14 +23,46 @@ export interface ILoginFormInputs {
 }
 
 function SignInForm(): JSX.Element {
+  const router = useRouter()
+  const { setAccessToken, setEmail, setName } = useUserStore()
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<ILoginFormInputs>({ mode: 'onChange' })
 
-  const onSubmit = (data: ILoginFormInputs) => {
-    console.log('로그인', data)
+  const onSubmit = async (data: ILoginFormInputs) => {
+    const { email, password } = data
+
+    const postSignInResponse = await postSignIn({ body: { email, password } })
+
+    if (!postSignInResponse.ok) {
+      setError('email', {
+        type: 'manual',
+        message: '이메일 또는 비밀번호가 일치하지 않습니다.',
+      })
+
+      setError('password', {
+        type: 'manual',
+        message: '이메일 또는 비밀번호가 일치하지 않습니다.',
+      })
+      return
+    }
+    const { accessToken } =
+      (await postSignInResponse.json()) as IPostSignInResponse
+
+    setAccessToken(accessToken)
+
+    const getUserResponse = await getUser({ accessToken })
+
+    const { email: getUserEmail, name: getUserName } =
+      (await getUserResponse.json()) as IGetUserResponse
+
+    setEmail(getUserEmail)
+    setName(getUserName)
+
+    router.push('/')
   }
 
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
