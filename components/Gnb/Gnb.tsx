@@ -32,9 +32,24 @@ function Gnb() {
   const path = usePathname()
   const onlyLogo = !(path === '/registration' || path.includes('/edit'))
   const opacityClassName = onSearch ? 'opacity-0 pointer-events-none' : ''
-  const isSocials = path === '/liked' || path === '/socials?type=imminent'
-  const isImminent = path === '/socials' || path === '/liked'
-  const isLiked = path === '/socials?type=imminent' || path === '/socials'
+
+  const menus = [
+    {
+      name: '모집 중',
+      link: '/socials',
+      pathName: path === '/liked' || path === '/socials?type=imminent',
+    },
+    {
+      name: '모집 마감',
+      link: '/socials?type=imminent',
+      pathName: path === '/socials' || path === '/liked',
+    },
+    {
+      name: '찜한 소셜',
+      link: '/liked',
+      pathName: path === '/socials?type=imminent' || path === '/socials',
+    },
+  ]
 
   const handleOpenSideMenu = () => {
     setSideMenu(true)
@@ -74,30 +89,16 @@ function Gnb() {
             </Link>
             {onlyLogo && (
               <section className="flex flex-row justify-between gap-24pxr mb:hidden">
-                <Link href="/socials">
-                  <button
-                    type="button"
-                    className={`${isSocials ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
-                  >
-                    모집 중
-                  </button>
-                </Link>
-                <Link href="/socials?type=imminent">
-                  <button
-                    type="button"
-                    className={`${isImminent ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
-                  >
-                    모집 마감
-                  </button>
-                </Link>
-                <Link href="/liked">
-                  <button
-                    type="button"
-                    className={`${isLiked ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
-                  >
-                    찜한 소셜
-                  </button>
-                </Link>
+                {menus.map((menu, index) => (
+                  <Link href={menu.link} key={`menu-${index + 0}`}>
+                    <button
+                      type="button"
+                      className={`${menu.pathName ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
+                    >
+                      {menu.name}
+                    </button>
+                  </Link>
+                ))}
               </section>
             )}
           </div>

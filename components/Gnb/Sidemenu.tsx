@@ -8,6 +8,20 @@ interface SidemenuProps {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+const menus = [
+  {
+    name: '모집 중',
+    link: '/socials',
+  },
+  {
+    name: '모집 마감',
+    link: '/socials?type=imminent',
+  },
+  {
+    name: '찜한 소셜',
+    link: '/liked',
+  },
+]
 
 function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
   const {
@@ -19,11 +33,10 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
     profileImageUrl,
     setProfileImageUrl,
   } = useUserStore()
+
   const handleOnClose = () => {
     setIsOpen(false)
   }
-
-  const imgUrl = profileImageUrl === '' ? undefined : profileImageUrl
 
   return (
     <div
@@ -33,7 +46,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
         <div className="flex flex-row items-center gap-16pxr">
           {accessToken && (
             <Avatar
-              src={imgUrl}
+              src={profileImageUrl}
               fallback={name?.slice(0, 1)}
               className="rounded-full"
             />
@@ -57,25 +70,15 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
         </button>
       </section>
       <section className="flex flex-col gap-40pxr px-20pxr pt-40pxr">
-        <Link
-          href="/socials"
-          className="text-left text-gray-10 font-headline-02"
-        >
-          모집중
-        </Link>
-        <Link
-          href="/socials?type=imminent"
-          className="text-left text-gray-10 font-headline-02"
-        >
-          모집마감
-        </Link>
-        <Link
-          href="/liked"
-          type="button"
-          className="text-left text-gray-10 font-headline-02"
-        >
-          찜한 소셜
-        </Link>
+        {menus.map((menu, index) => (
+          <Link
+            href={menu.link}
+            className="text-left text-gray-10 font-headline-02"
+            key={`menu-${index + 0}`}
+          >
+            {menu.name}
+          </Link>
+        ))}
       </section>
       {name && (
         <button
