@@ -1,5 +1,6 @@
 'use client'
 
+import useWindowWidth from '@/hooks/useWindowWidth'
 import createTabStore from '@/stores/createTabStore'
 import { ReactNode, useEffect } from 'react'
 
@@ -17,7 +18,7 @@ function Provider({
   children,
 }: ITabProviderProps) {
   const { activeTab, setActiveTab, tabRefs, setUnderlineStyle } = store()
-
+  const windowWidth = useWindowWidth()
   useEffect(() => {
     const updateUnderlineStyle = () => {
       if (tabRefs.current[activeTab]) {
@@ -37,6 +38,7 @@ function Provider({
     tabUnderlineWidthFit,
     tabRefs,
     setUnderlineStyle,
+    windowWidth,
   ])
 
   useEffect(() => {
