@@ -23,8 +23,9 @@ interface PasswordResetVerifierProps {
 function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
   const [isInputFolded, setIsInputFolded] = useState(false)
   const [isPasswordInputFolded, setIsPassWordInputFolded] = useState(false)
-  const [inputType, setInputType] = useState('password')
-  const [input2Type, setInput2Type] = useState('password')
+  const [newPasswordInputType, setNewPasswordInputType] = useState('password')
+  const [confirmPasswordInputType, setConfirmPasswordInputType] =
+    useState('password')
   const [timeLeft, setTimeLeft] = useState(300)
   const [hideResendButton, setHideResendButton] = useState('')
   const [passwordLengthMessage, setPasswordLengthMessage] = useState(false)
@@ -58,11 +59,15 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
   }
 
   const handleEyeClick1 = () => {
-    setInputType(inputType === 'password' ? 'text' : 'password')
+    setNewPasswordInputType(
+      newPasswordInputType === 'password' ? 'text' : 'password',
+    )
   }
 
   const handleEyeClick2 = () => {
-    setInput2Type(input2Type === 'password' ? 'text' : 'password')
+    setConfirmPasswordInputType(
+      confirmPasswordInputType === 'password' ? 'text' : 'password',
+    )
   }
 
   const resetVerificationNum = () => {
@@ -255,7 +260,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                   ref={newPasswordInputRef}
                   placeholder="비밀번호를 입력해 주세요."
                   className={`pr-32pxr ${passwordLengthMessage ? 'ring-[1px] ring-error' : ''}`}
-                  type={inputType}
+                  type={newPasswordInputType}
                   onChange={() => {
                     handlePasswordIncorrectMessage()
                     handlePasswordLengthMessage()
@@ -265,7 +270,11 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                   width={17}
                   height={17}
                   alt="eye1"
-                  src={inputType === 'password' ? visibilityOff : visibility}
+                  src={
+                    newPasswordInputType === 'password'
+                      ? visibilityOff
+                      : visibility
+                  }
                   className="absolute right-16pxr top-12pxr"
                   onClick={handleEyeClick1}
                 />
@@ -288,14 +297,18 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                   ref={passwordConfirmInputRef}
                   placeholder="비밀번호를 다시 한 번 입력해 주세요."
                   className={`${passwordIncorrectMessage ? 'ring-[1px] ring-error' : ''} pr-32pxr`}
-                  type={input2Type}
+                  type={confirmPasswordInputType}
                   onChange={handlePasswordIncorrectMessage}
                 />
                 <Image
                   width={17}
                   height={17}
                   alt="eye2"
-                  src={input2Type === 'password' ? visibilityOff : visibility}
+                  src={
+                    confirmPasswordInputType === 'password'
+                      ? visibilityOff
+                      : visibility
+                  }
                   className="absolute right-16pxr top-12pxr"
                   onClick={handleEyeClick2}
                 />

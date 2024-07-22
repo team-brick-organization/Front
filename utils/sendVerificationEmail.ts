@@ -13,15 +13,14 @@ async function sendVerificationEmail(
       certificationNumber: verificationNumber,
     }
 
-    const result = await emailjs.send(
-      'service_ozt7pgs',
-      'template_tt1911s',
-      template,
-      'AAlg370Dpl8P-srAe',
-    )
+    const serviceKey = process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_KEY
+    const templateKey = process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_KEY
+    const publicKey = process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY
 
+    if (!serviceKey || !templateKey || !publicKey) return
+
+    await emailjs.send(serviceKey, templateKey, template, publicKey)
     notify('이메일 전송 완료!')
-    return result
   } catch (error) {
     notify(`전송 실패: ${error}`)
 
