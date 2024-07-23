@@ -5,9 +5,11 @@ import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
 import { introduceOneLinePattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
+import checkedIcon from '@/public/images/svgs/checked.svg'
 import useProfileImageStore from '@/stores/useProfileImageStore'
 import DatePicker from 'react-datepicker'
 import useDate from '@/hooks/useDate'
+import personIcon from '@/public/images/svgs/person.svg'
 import Input from './Input'
 import SocialDateTimeButton from './SocialDateTimeButton'
 
@@ -63,9 +65,16 @@ function ManagingMyInfo({
             src={profileImage || ''}
             alt="profileImg"
             fallback={
-              <div className="h-80pxr w-80pxr rounded-full bg-gray-06" />
+              <div className="h-80pxr w-80pxr rounded-full bg-gray-04">
+                <Image
+                  src={personIcon}
+                  alt="Person"
+                  className="px-10pxr py-10pxr"
+                  fill
+                />
+              </div>
             }
-            className="h-80pxr w-80pxr rounded-full bg-gray-06"
+            className="h-80pxr w-80pxr rounded-full bg-gray-04"
             onClick={() => setIsPortalOpen(true)}
           />
         </button>
@@ -80,21 +89,57 @@ function ManagingMyInfo({
         </button>
       </div>
 
-      <div className="mt-32pxr">
-        <div>
-          <label htmlFor="name" className="mb-8pxr text-gray-10 font-title-02">
-            이름
-          </label>
-          <Input
-            variant="border"
-            id="name"
-            readOnly
-            type="text"
-            placeholder="김OO"
-            className="mt-8pxr bg-gray-03"
-            // defaultValue={}
-          />
-        </div>
+      <div className="mt-40pxr">
+        <label
+          htmlFor="nickname"
+          className="mb-8pxr text-gray-10 font-title-02"
+        >
+          닉네임
+        </label>
+        <Input
+          variant="border"
+          id="nickname"
+          {...register('nickname', {
+            required: '닉네임은 필수 입력입니다.',
+            pattern: nicknamePattern,
+          })}
+          type="text"
+          placeholder="User123"
+          className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
+        />
+        {!errors.nickname && (
+          <div className="mt-4pxr inline-flex">
+            <div className="flex gap-16pxr">
+              <div className="flex gap-2pxr">
+                <Image
+                  src={checkedIcon}
+                  alt="checked 아이콘"
+                  width={14}
+                  height={14}
+                />
+                <span className="font-caption-02">2-8자 이하</span>
+              </div>
+              <div className="flex gap-2pxr">
+                <Image
+                  src={checkedIcon}
+                  alt="checked 아이콘"
+                  width={14}
+                  height={14}
+                />
+                <span className="font-caption-02">한글/영어/숫자 가능</span>
+              </div>
+              <div className="flex gap-2pxr">
+                <Image
+                  src={checkedIcon}
+                  alt="checked 아이콘"
+                  width={14}
+                  height={14}
+                />
+                <span className="font-caption-02">공백 불가</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mt-40pxr">
           <label
@@ -131,25 +176,6 @@ function ManagingMyInfo({
           />
         </div>
 
-        <div className="mt-40pxr">
-          <label
-            htmlFor="nickname"
-            className="mb-8pxr text-gray-10 font-title-02"
-          >
-            닉네임
-          </label>
-          <Input
-            variant="border"
-            id="nickname"
-            {...register('nickname', {
-              required: '닉네임은 필수 입력입니다.',
-              pattern: nicknamePattern,
-            })}
-            type="text"
-            placeholder="User123"
-            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
-          />
-        </div>
         <div className="mt-40pxr flex flex-col">
           <label className="mb-8pxr text-gray-10 font-title-02">생년월일</label>
           <DatePicker
