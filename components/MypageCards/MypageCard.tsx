@@ -66,11 +66,11 @@ function MypageCard({ data }: MypageCardProps) {
     fallback: item.userName,
   }))
 
-  const formatedDate = formatDate(new Date(data.gatheringDate))
+  const formattedDate = formatDate(new Date(data.gatheringDate))
 
   return (
     <div className="relative w-fit">
-      <div className="flex h-208pxr w-full min-w-768pxr max-w-780pxr flex-row gap-20pxr mb:h-260pxr mb:w-212pxr mb:min-w-0pxr mb:max-w-1920pxr mb:flex-col mb:gap-8pxr">
+      <div className="mb:max-w-1920pxr flex h-208pxr w-full min-w-768pxr max-w-780pxr flex-row gap-20pxr mb:h-260pxr mb:w-212pxr mb:min-w-0pxr mb:flex-col mb:gap-8pxr">
         <section className="relative h-full w-280pxr shrink-0 rounded-[.3125rem] bg-gray-01 mb:h-158pxr mb:w-full">
           <Link href={url} className="h-fit w-fit">
             <Image
@@ -127,7 +127,7 @@ function MypageCard({ data }: MypageCardProps) {
                 height={15}
               />
               <p className="text-nowrap text-left text-gray-08 font-body-01">
-                {data.address} | {formatedDate}
+                {data.address} | {formattedDate}
               </p>
             </div>
             <div className="flex flex-row gap-8pxr">
