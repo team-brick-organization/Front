@@ -8,11 +8,11 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, IButtonProps>(
   ({ className, size, disabled, ...props }, ref) => {
     const sizeClasses = {
-      L: 'w-auto min-w-400pxr py-12pxr px-16pxr font-title-04',
-      M: 'w-full min-w-232pxr py-10pxr px-16pxr font-title-02',
-      S: 'w-full min-w-120pxr py-10pxr px-16pxr font-title-02',
-      XS: 'w-full min-w-78pxr py-8pxr px-16pxr font-body-01',
-      FAB: 'w-full min-w-48pxr !rounded-full h-full min-h-48pxr font-body-01',
+      L: 'w-full max-w-400pxr py-12pxr px-16pxr font-title-04',
+      M: 'w-full max-w-232pxr py-10pxr px-16pxr font-title-02',
+      S: 'w-full max-w-120pxr py-10pxr px-16pxr font-title-02',
+      XS: 'w-full max-w-78pxr py-8pxr px-16pxr font-body-01',
+      FAB: 'w-full max-w-48pxr !rounded-full h-full min-h-48pxr font-body-01',
     }
     const defaultClasses = 'text-gray-01 bg-gray-10 rounded-[10px]'
     const hoverClasses = 'hover:bg-gray-08'

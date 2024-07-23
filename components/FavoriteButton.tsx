@@ -19,12 +19,12 @@ function FavoriteButton({
       <div className="transition-all duration-150 ease-in-out group-hover:scale-125 group-active:scale-50">
         {isFavoriteClicked ? (
           <HeartFilledIcon
-            width={26}
-            height={26}
+            width={24}
+            height={24}
             style={{ color: '#F91880' }}
           />
         ) : (
-          <HeartIcon width={26} height={26} />
+          <HeartIcon width={24} height={24} />
         )}
       </div>
     </button>
