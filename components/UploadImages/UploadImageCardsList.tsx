@@ -10,6 +10,7 @@ interface IUploadImageCardsListProps {
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
   onImageFilesChange: (files: FileList | null) => void
+  onThumbnailChange: (index: number) => void
   onImageDelete: (index: number) => void
   onUploadButtonClick: () => void
   setError: (error: boolean) => void
@@ -19,6 +20,7 @@ function UploadImageCardsList({
   inputRef,
   imageUrls,
   onImageFilesChange: handleImageFilesChange,
+  onThumbnailChange: handleThumbnailChange,
   onImageDelete: handleImageDelete,
   onUploadButtonClick: handleUploadButtonClick,
   setError,
@@ -44,20 +46,28 @@ function UploadImageCardsList({
             }}
           />
           <button
-            className="flex h-99pxr w-99pxr flex-col items-center justify-center gap-4pxr rounded-[0.3125rem] border border-dashed border-gray-08"
+            className="flex h-100pxr w-100pxr flex-col items-center justify-center gap-4pxr rounded-[0.3125rem] border border-dashed border-gray-08 mb:h-64pxr mb:w-64pxr"
             type="button"
             onClick={handleUploadButtonClick}
           >
-            <Image src={ImageIcon} width={49} height={49} alt="이미지 아이콘" />
-            <p className="text-gray-08 font-caption-02">
-              {imageUrls.length}/10
-            </p>
+            <Image
+              className="mb:h-30pxr mb:w-30pxr"
+              src={ImageIcon}
+              width={49}
+              height={49}
+              alt="이미지 아이콘"
+            />
+            <p className="text-gray-08 font-caption-02">{imageUrls.length}/5</p>
           </button>
         </li>
         {imageUrls.map((imageUrl, index) => (
           <li key={imageUrl}>
             <UploadImageCard
+              type={index === 0 ? 'thumbnail' : undefined}
               imageUrl={imageUrl}
+              onThumbnailChange={() => {
+                handleThumbnailChange(index)
+              }}
               onImageDelete={() => {
                 if (inputRef && inputRef.current) {
                   const currentInputRef = inputRef.current
