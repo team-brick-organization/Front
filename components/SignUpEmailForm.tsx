@@ -4,22 +4,26 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
   emailPattern,
-  namePattern,
+  nicknamePattern,
   passwordMinLength,
 } from '@/constants/RegExr'
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
 import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
+import checkedIcon from '@/public/images/svgs/checked.svg'
 import Image from 'next/image'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import postDuplicateEmail from '@/apis/postDuplicateEmail'
 import postSignUp from '@/apis/postSignUp'
 import { useRouter } from 'next/navigation'
+import type { A, B } from 'types/types'
 import Input from './Input'
 
+type C = B | A
+
 export interface ISignUpFormInputs {
-  name: string
+  nickname: string
   email: string
   password: string
   passwordCheck: string
@@ -37,11 +41,12 @@ function SignUpEmailForm(): JSX.Element {
 
   const password = watch('password')
 
-  const fetchIsDuplicateEmail = async (email: string) => {
-    const response = await postDuplicateEmail({
-      body: {
-        email,
-      },
+  async function fetchIsDuplicated<BodyType extends C>(
+    text: BodyType,
+    fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
+  ) {
+    const response = await fetcher({
+      body: text,
     })
 
     if (!response.ok) {
@@ -54,9 +59,12 @@ function SignUpEmailForm(): JSX.Element {
   }
 
   const onSubmit = async (data: ISignUpFormInputs) => {
-    const { email, password: dataPassword, name } = data
+    const { email, password: dataPassword, nickname } = data
 
-    const isDuplicateEmail = await fetchIsDuplicateEmail(email)
+    const isDuplicateEmail = await fetchIsDuplicated<A>(
+      { email },
+      postDuplicateEmail,
+    )
 
     if (isDuplicateEmail) {
       setError('email', {
@@ -70,7 +78,7 @@ function SignUpEmailForm(): JSX.Element {
       body: {
         email,
         password: dataPassword,
-        name,
+        nickname,
       },
     })
 
@@ -98,7 +106,7 @@ function SignUpEmailForm(): JSX.Element {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative w-full max-w-480pxr rounded-[0.625rem] bg-gray-01 px-39pxr py-50pxr mb:px-19pxr"
+      className="relative w-full max-w-476pxr rounded-[0.625rem] bg-gray-01 px-38pxr py-50pxr mb:px-19pxr"
     >
       <h1 className="text-center text-gray-10 font-headline-03">
         이메일로 가입하기
@@ -106,24 +114,57 @@ function SignUpEmailForm(): JSX.Element {
 
       <div className="mt-47pxr">
         <div>
-          <label htmlFor="name" className="text-gray-10 font-title-02">
-            이름
+          <label htmlFor="nickname" className="text-gray-10 font-title-02">
+            닉네임
           </label>
           <Input
             variant="border"
-            id="name"
-            {...register('name', {
-              required: '이름은 필수 입력입니다.',
-              pattern: namePattern,
+            id="nickname"
+            {...register('nickname', {
+              required: '닉네임은 필수 입력입니다.',
+              pattern: nicknamePattern,
             })}
             type="text"
-            placeholder="이름을 입력해 주세요."
-            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
+            placeholder="닉네임을 입력해 주세요."
+            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
           />
+          {!errors.nickname && (
+            <div className="mt-4pxr inline-flex">
+              <div className="flex gap-16pxr">
+                <div className="flex gap-2pxr">
+                  <Image
+                    src={checkedIcon}
+                    alt="checked 아이콘"
+                    width={14}
+                    height={14}
+                  />
+                  <span className="font-caption-02">2-8자 이하</span>
+                </div>
+                <div className="flex gap-2pxr">
+                  <Image
+                    src={checkedIcon}
+                    alt="checked 아이콘"
+                    width={14}
+                    height={14}
+                  />
+                  <span className="font-caption-02">한글/영어/숫자 가능</span>
+                </div>
+                <div className="flex gap-2pxr">
+                  <Image
+                    src={checkedIcon}
+                    alt="checked 아이콘"
+                    width={14}
+                    height={14}
+                  />
+                  <span className="font-caption-02">공백 불가</span>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {errors.name && (
+          {errors.nickname && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">
-              {errors.name.message}
+              {errors.nickname.message}
             </small>
           )}
         </div>
@@ -143,7 +184,10 @@ function SignUpEmailForm(): JSX.Element {
 
                 if (!email) return
 
-                const isDuplicateEmail = await fetchIsDuplicateEmail(email)
+                const isDuplicateEmail = await fetchIsDuplicated(
+                  { email },
+                  postDuplicateEmail,
+                )
 
                 if (isDuplicateEmail) {
                   setError('email', {

@@ -1,14 +1,7 @@
+import type { A } from 'types/types'
 import BASE_URL from './apiConfig'
 
-interface IPostDuplicateEmailProps {
-  body: {
-    email: string
-  }
-}
-
-async function postDuplicateEmail({
-  body,
-}: IPostDuplicateEmailProps): Promise<Response> {
+async function postDuplicateEmail({ body }: { body: A }): Promise<Response> {
   const response = await fetch(`${BASE_URL}/auth/users/duplicate-email`, {
     method: 'POST',
     headers: {

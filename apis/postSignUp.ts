@@ -4,7 +4,7 @@ interface IPostSignUpProps {
   body: {
     email: string
     password: string
-    name: string
+    nickname: string
   }
 }
 
