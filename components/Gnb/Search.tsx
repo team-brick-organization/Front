@@ -4,12 +4,13 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import CustomBadge from '../CustomBadge/CustomBadge'
 
 /**
  * 돋보기 아이콘 눌렀을시 뜨는 검색창
- * @todo  검색하는 함수 넣기, url 파라미터 받기
+ *
  */
 
 function Search() {
@@ -18,6 +19,7 @@ function Search() {
   const [isFolded, setIsFolded] = useState(true)
   const path = usePathname()
   const searchRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value)
@@ -47,21 +49,15 @@ function Search() {
 
   const handleSearch = () => {
     if (searchValue) {
-      /* 나중에 검색하는 함수 넣기 */
-
       let updatedSearches = [...recentSearch]
-      if (searchValue.length > 7) {
-        const value = `${searchValue.slice(0, 7)}...`
-        updatedSearches.unshift(value)
-      } else {
+      if (recentSearch[0] !== searchValue) {
         updatedSearches.unshift(searchValue)
+        if (updatedSearches.length > 7) {
+          updatedSearches = updatedSearches.slice(0, 7)
+        }
+        localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
       }
-
-      if (updatedSearches.length > 7) {
-        updatedSearches = updatedSearches.slice(0, 7)
-      }
-      setRecentSearch(updatedSearches)
-      localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
+      router.push(`/search/${encodeURIComponent(searchValue)}`)
     }
   }
 
@@ -96,7 +92,8 @@ function Search() {
 
   useEffect(() => {
     if (path.split('/')[1] === 'search' && path.split('/')[2]) {
-      setSearchValue(path.split('/')[2])
+      const searchParam = decodeURIComponent(path.split('/')[2])
+      setSearchValue(searchParam)
     }
   }, [path, setSearchValue])
 
@@ -107,7 +104,7 @@ function Search() {
         className="absolute left-1/2 top-0pxr z-10 h-fit w-full max-w-540pxr -translate-x-1/2 transform rounded-b-[.625rem] bg-white opacity-100"
       >
         <div className="flex flex-col">
-          <section className="p-16pxr">
+          <section className="p-15pxr">
             <TextField.Root
               value={searchValue}
               onChange={handleOnchange}
@@ -145,15 +142,22 @@ function Search() {
 
             <div className="inline-flex flex-wrap gap-5pxr">
               {recentSearch.map((item, index) => (
-                <CustomBadge
-                  onCrossClick={() => {
-                    handleDeleteSearchItem({ searchItems: recentSearch, index })
-                  }}
-                  type="search"
+                <Link
+                  href={`/search/${encodeURIComponent(item)}`}
                   key={`recent-${1 + index}`}
                 >
-                  {item}
-                </CustomBadge>
+                  <CustomBadge
+                    onCrossClick={() => {
+                      handleDeleteSearchItem({
+                        searchItems: recentSearch,
+                        index,
+                      })
+                    }}
+                    type="search"
+                  >
+                    {item.length > 7 ? `${item.slice(0, 7)}...` : item}
+                  </CustomBadge>
+                </Link>
               ))}
             </div>
           </section>
@@ -162,8 +166,8 @@ function Search() {
       {!isFolded && path.includes('search') && (
         <div onClick={handleFold} className="relative h-full w-full">
           <div
-            className="absolute left-0pxr top-72pxr w-full cursor-default bg-black opacity-30"
-            style={{ height: 'calc(100% - 72px)' }}
+            className="absolute left-0pxr top-70pxr w-full cursor-default bg-black opacity-30"
+            style={{ height: 'calc(100% - 70px)' }}
           />
         </div>
       )}
