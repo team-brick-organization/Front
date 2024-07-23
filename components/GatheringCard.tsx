@@ -31,8 +31,8 @@ function GatheringCard({ data }: GatheringCardProps) {
     new Date(data.gatheringDate) > new Date() || isFavoriteClicked
 
   return (
-    <div className="relative w-fit">
-      <Link href={`/social/${data.id}`}>
+    <div className="relative w-fit overflow-hidden">
+      <Link href={`/socials/${data.id}`}>
         <button
           type="button"
           className="relative flex h-310pxr w-280pxr cursor-pointer flex-col gap-8pxr mb:h-256pxr mb:w-212pxr tb:h-382pxr tb:w-376pxr"
@@ -69,12 +69,14 @@ function GatheringCard({ data }: GatheringCardProps) {
               </>
             )}
           </section>
-          <div className="flex flex-col gap-4pxr">
+          <div className="flex w-280pxr flex-col gap-4pxr mb:w-212pxr tb:w-376pxr">
             <section>
               <TagBadgeList tags={data.tags} />
             </section>
             <section className="flex flex-col gap-4pxr">
-              <h4 className="text-left font-title-04">{data.socialName}</h4>
+              <h4 className="truncate whitespace-nowrap text-left font-title-04">
+                {data.socialName}
+              </h4>
               <div className="flex flex-row gap-4pxr">
                 <Image
                   src="/images/svgs/location.svg"
@@ -82,7 +84,9 @@ function GatheringCard({ data }: GatheringCardProps) {
                   width={15}
                   height={15}
                 />
-                <p className="text-left font-body-01">{data.address}</p>
+                <p className="truncate whitespace-nowrap text-left font-body-01">
+                  {data.address}
+                </p>
               </div>
 
               <div className="flex flex-row gap-16pxr">
