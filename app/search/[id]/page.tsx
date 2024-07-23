@@ -10,7 +10,7 @@ import getSearchResult from '@/apis/getSearchResult'
 import useSearchStore from '@/stores/useSearchStore'
 
 /** search 페이지
- * @todo api 나오면 총 개수 넣어주기, 인기순 최신순 정렬 넣어주기, 페이지네이션 적용
+ * @todo api 나오면 총 개수 넣어주기, 인기순 최신순 정렬 넣어주기,  페이지네이션 적용
  */
 
 function SearchPage() {
