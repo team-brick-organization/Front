@@ -1,11 +1,11 @@
 'use client'
 
-import { Avatar, Button } from '@radix-ui/themes'
+import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
 import { HamburgerMenuIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
-import { Search, Sidemenu } from '@/components'
+import { Button, Search, Sidemenu } from '@/components'
 import getSignOut from '@/apis/getSignOut'
 import useUserStore from '@/stores/useUserStore'
 import { usePathname } from 'next/navigation'
@@ -80,7 +80,7 @@ function Gnb() {
   return (
     <div className="relative w-full px-80pxr mb:px-20pxr tb:px-20pxr">
       <main
-        className={`${opacityClassName} mx-auto h-72pxr w-full max-w-1180pxr`}
+        className={`${opacityClassName} mx-auto h-70pxr w-full max-w-1180pxr`}
       >
         <div className="flex h-full flex-row items-center justify-between">
           <div className="flex w-full max-w-370pxr flex-row items-center justify-between">
@@ -103,14 +103,14 @@ function Gnb() {
             )}
           </div>
           {onlyLogo && (
-            <button
-              title="메뉴"
-              type="button"
-              className="hidden mb:block"
-              onClick={handleOpenSideMenu}
-            >
-              <HamburgerMenuIcon width="24" height="24" />
-            </button>
+            <div className="hidden flex-row gap-16pxr mb:flex">
+              <button title="검색" type="button" onClick={handleOnSearch}>
+                <MagnifyingGlassIcon width="30" height="30" />
+              </button>
+              <button title="메뉴" type="button" onClick={handleOpenSideMenu}>
+                <HamburgerMenuIcon width="24" height="24" />
+              </button>
+            </div>
           )}
           {onlyLogo && (
             <div className="flex flex-row items-center gap-24pxr mb:hidden">
@@ -118,7 +118,10 @@ function Gnb() {
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
               <Link href="/registration">
-                <Button className="cursor-pointer text-nowrap rounded-[0.625rem] bg-gray-10 px-20pxr py-6pxr text-gray-01 font-title-02">
+                <Button
+                  size="S"
+                  className="cursor-pointer text-nowrap rounded-[0.625rem] bg-gray-10 px-20pxr py-6pxr text-gray-01 font-title-02"
+                >
                   등록하기
                 </Button>
               </Link>
@@ -170,8 +173,8 @@ function Gnb() {
               className="relative h-screen w-screen"
             >
               <div
-                className="absolute left-0pxr top-72pxr w-full cursor-default bg-black opacity-30"
-                style={{ height: 'calc(100% - 72px)' }}
+                className="absolute left-0pxr top-70pxr w-full cursor-default bg-black opacity-30"
+                style={{ height: 'calc(100% - 70px)' }}
               />
             </div>
           </>
