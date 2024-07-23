@@ -17,10 +17,10 @@ import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import postDuplicateEmail from '@/apis/postDuplicateEmail'
 import postSignUp from '@/apis/postSignUp'
 import { useRouter } from 'next/navigation'
-import type { A, B } from 'types/types'
+import type { TypeEmail, TypeNickname } from 'types/types'
 import Input from './Input'
 
-type C = B | A
+type TypeDuplicateBody = TypeNickname | TypeEmail
 
 export interface ISignUpFormInputs {
   nickname: string
@@ -41,7 +41,7 @@ function SignUpEmailForm(): JSX.Element {
 
   const password = watch('password')
 
-  async function fetchIsDuplicated<BodyType extends C>(
+  async function fetchIsDuplicated<BodyType extends TypeDuplicateBody>(
     text: BodyType,
     fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
   ) {
@@ -61,7 +61,7 @@ function SignUpEmailForm(): JSX.Element {
   const onSubmit = async (data: ISignUpFormInputs) => {
     const { email, password: dataPassword, nickname } = data
 
-    const isDuplicateEmail = await fetchIsDuplicated<A>(
+    const isDuplicateEmail = await fetchIsDuplicated<TypeEmail>(
       { email },
       postDuplicateEmail,
     )

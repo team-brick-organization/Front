@@ -1,2 +1,2 @@
-export type A = { email: string }
-export type B = { nickname: string }
+export type TypeEmail = { email: string }
+export type TypeNickname = { nickname: string }
