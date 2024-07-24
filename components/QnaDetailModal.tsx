@@ -119,7 +119,7 @@ function CommentForm({
         </h3>
         <div className="flex flex-col items-end gap-8pxr">
           <textarea
-            className="h-150pxr w-full resize-none rounded-[0.625rem] bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
+            className="h-150pxr w-full resize-none bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
             {...register('comment', {
               required: '답변은 필수 입력입니다.',
               maxLength: { value: 600, message: '600자 이내로 작성해 주세요.' },

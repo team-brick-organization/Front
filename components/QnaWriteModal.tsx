@@ -18,7 +18,7 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
 
   const onSubmit = (data: IQnaWriteFormInputs) => {
     console.log(data)
-    notify('게시글 작성이 완료되었습니다.')
+    notify('질문 등록이 완료되었어요.')
     onClose()
   }
 
@@ -54,7 +54,7 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
                   message: '600자 이내로 작성해 주세요.',
                 },
               })}
-              className="w-full grow resize-none rounded-[0.625rem] border-none bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
+              className="w-full grow resize-none border-none p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04 mb:p-0pxr"
               placeholder="질문 내용을 작성해 주세요."
               maxLength={600}
             />
