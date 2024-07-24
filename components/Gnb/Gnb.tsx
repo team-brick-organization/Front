@@ -30,7 +30,11 @@ function Gnb() {
   const { onSearch, setOnSearch } = useSearchStore()
   const [sideMenu, setSideMenu] = useState(false)
   const path = usePathname()
-  const onlyLogo = !(path === '/registration' || path.includes('/edit'))
+  const pathArray = path.split('/')
+  const onlyLogo = !(
+    path === '/registration' || pathArray[pathArray.length - 1] === 'edit'
+  )
+
   const opacityClassName = onSearch ? 'opacity-0 pointer-events-none' : ''
 
   const menus = [
