@@ -4,7 +4,9 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import closeIcon from '@/public/images/svgs/close.svg'
 import { Button } from '@radix-ui/themes'
+import personIcon from '@/public/images/svgs/person.svg'
 import useProfileImageStore from '@/stores/useProfileImageStore'
+import { notify } from './ToastMessageTrigger'
 
 interface IProfileImageChangeModalProps {
   onClose: () => void
@@ -42,6 +44,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
       const reader = new FileReader()
       reader.onload = () => {
         setProfileImage(reader.result as string)
+        notify('프로필 이미지가 성공적으로 변경되었습니다.', 'default')
       }
       reader.readAsDataURL(file)
     }
@@ -65,7 +68,15 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
               onClick={() => setProfileImage('')}
             />
           ) : (
-            <div className="mb-24pxr mt-40pxr h-80pxr w-80pxr rounded-full bg-[#9A9B9D]" />
+            <div className="mb-24pxr mt-40pxr flex h-80pxr w-80pxr rounded-full bg-gray-04">
+              <Image
+                src={personIcon}
+                alt="Person"
+                className="ml-10pxr"
+                width={60}
+                height={60}
+              />
+            </div>
           )}
         </div>
         <div className="text-center">
