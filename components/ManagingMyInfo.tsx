@@ -2,19 +2,22 @@
 
 import Image from 'next/image'
 import '@/styles/SocialDateTimePicker.css'
+import DatePicker, { registerLocale } from 'react-datepicker'
+import { ko } from 'date-fns/locale/ko'
 import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
 import { introduceOneLinePattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
 import checkedIcon from '@/public/images/svgs/checked.svg'
 import useProfileImageStore from '@/stores/useProfileImageStore'
-import DatePicker from 'react-datepicker'
 import useDate from '@/hooks/useDate'
 import personIcon from '@/public/images/svgs/person.svg'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
+
+registerLocale('ko', ko)
 
 interface IManagingMyInfoProps {
   setIsPortalOpen: (value: boolean) => void
