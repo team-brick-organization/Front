@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import '@/styles/SocialDateTimePicker.css'
 import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
 import { introduceOneLinePattern, nicknamePattern } from '@/constants/RegExr'
