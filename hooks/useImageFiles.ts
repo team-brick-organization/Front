@@ -45,6 +45,14 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
     }
   }
 
+  const handleThumbnailChange = (index: number) => {
+    const thumbnail = imageUrls[index]
+    setImageUrls((prevFiles) => [
+      thumbnail,
+      ...prevFiles.filter((_, i) => i !== index),
+    ])
+  }
+
   const handleImageDelete = (index: number) => {
     URL.revokeObjectURL(imageUrls[index])
     setImageUrls((prevFiles) => prevFiles.filter((_, i) => i !== index))
@@ -54,6 +62,7 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
     inputRef,
     imageUrls,
     handleImageFilesChange,
+    handleThumbnailChange,
     handleImageDelete,
     error,
     setError,

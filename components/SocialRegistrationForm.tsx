@@ -37,10 +37,11 @@ function SocialRegistrationForm() {
     inputRef,
     imageUrls,
     handleImageFilesChange,
+    handleThumbnailChange,
     handleImageDelete,
     error,
     setError,
-  } = useImageFiles({ imageLimit: 10 })
+  } = useImageFiles({ imageLimit: 5 })
   const {
     register,
     handleSubmit,
@@ -104,6 +105,7 @@ function SocialRegistrationForm() {
         inputRef={inputRef}
         imageUrls={imageUrls}
         onImageFilesChange={handleImageFilesChange}
+        onThumbnailChange={handleThumbnailChange}
         onImageDelete={handleImageDelete}
         error={error}
         setError={setError}
