@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Input } from '@/components'
+import { Button, Input } from '@/components'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Image from 'next/image'
 import visibility from '@/public/images/svgs/visibility.svg'
@@ -98,7 +98,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
     setHideResendButton('hidden')
     setTimeLeft(300)
     const verifyNum = resetVerificationNum()
-    await sendVerificationEmail(name, email, verifyNum)
+    await sendVerificationEmail(name, email, verifyNum, true)
     setTimeout(() => {
       setHideResendButton('')
     }, 5000)
@@ -115,7 +115,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
     const passwordConfirm = passwordConfirmInputRef.current
     if (newPassword?.value === passwordConfirm?.value) {
       // 비밀번호 변경 api 호출
-      notify('비밀번호 재설정이 완료되었습니다.')
+      notify('비밀번호 재설정이 완료되었어요.')
     } else {
       // 토스트 띄워주기
       notify('비밀번호가 일치하지 않습니다.')
@@ -132,7 +132,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
     if (verifierTimerId && timeLeft <= 0) {
       clearInterval(verifierTimerId)
       if (!isPasswordInputFolded) {
-        notify('제한 시간이 만료되었습니다.', 'error')
+        notify('제한 시간이 만료됐어요.', 'error')
       }
     }
 
@@ -163,13 +163,9 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                 value={email}
               />
 
-              <button
-                className="h-fit text-nowrap rounded-[10px] bg-gray-10 px-16pxr py-6pxr text-gray-01 font-body-01 disabled:bg-gray-04 disabled:text-gray-01"
-                type="button"
-                onClick={handleSendEmail}
-              >
-                인증번호 보내기
-              </button>
+              <Button size="XS" type="button" onClick={handleSendEmail}>
+                인증하기
+              </Button>
             </section>
           </div>
           {/* isInputFolded 테스트 끝나면 넣어주기 */}
@@ -193,14 +189,14 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                       }
                     }}
                   />
-                  <button
-                    className="h-fit text-nowrap rounded-[10px] bg-gray-10 px-16pxr py-6pxr text-gray-01 font-body-01 disabled:bg-gray-04 disabled:text-gray-01"
+                  <Button
+                    size="XS"
                     type="button"
                     onClick={handleVerification}
                     disabled={disableCertificationButton}
                   >
-                    인증하기
-                  </button>
+                    확인
+                  </Button>
                 </section>
               </div>
               <section className="mr-140pxr flex w-full max-w-468pxr flex-row justify-between pr-98pxr pt-4pxr">
@@ -313,14 +309,14 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                   onClick={handleEyeClick2}
                 />
               </div>
-              <button
-                className="h-fit text-nowrap rounded-[10px] bg-gray-10 px-16pxr py-6pxr text-gray-01 font-body-01 disabled:bg-gray-04 disabled:text-gray-01"
+              <Button
+                size="XS"
                 type="button"
                 disabled={passwordIncorrectMessage || passwordLengthMessage}
                 onClick={handlePasswordChange}
               >
-                변경
-              </button>
+                확인
+              </Button>
             </section>
             <label
               htmlFor="passwordConfirm"
