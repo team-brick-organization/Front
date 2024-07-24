@@ -113,13 +113,13 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
   const handlePasswordChange = () => {
     const newPassword = newPasswordInputRef.current
     const passwordConfirm = passwordConfirmInputRef.current
-    if (newPassword?.value === passwordConfirm?.value) {
-      // 비밀번호 변경 api 호출
-      notify('비밀번호 재설정이 완료되었어요.')
-    } else {
-      // 토스트 띄워주기
+
+    if (!(newPassword?.value === passwordConfirm?.value)) {
       notify('비밀번호가 일치하지 않습니다.')
+      return
     }
+    // 비밀번호 변경 api 호출
+    notify('비밀번호 재설정이 완료되었어요.')
   }
 
   useEffect(() => {
