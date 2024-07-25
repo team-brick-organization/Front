@@ -4,10 +4,19 @@ import { MyPageTab } from '@/components/index'
 import ProfileCard from '@/components/ProfileCard'
 import createTabStore from '@/stores/createTabStore'
 import useUserStore from '@/stores/useUserStore'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 function MyPage() {
-  const { name, profileImageUrl, description } = useUserStore()
+  const { accessToken, name, profileImageUrl, description } = useUserStore()
   const tabStore = createTabStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (accessToken === '') {
+      router.back()
+    }
+  }, [accessToken, router])
 
   return (
     <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row gap-16pxr px-20pxr mb:mt-40pxr mb:flex-col mb:gap-32pxr mb:px-0pxr">
