@@ -5,6 +5,7 @@ async function sendVerificationEmail(
   name: string,
   email: string,
   verificationNumber: number,
+  isResend: boolean = false,
 ) {
   try {
     const template = {
@@ -20,7 +21,11 @@ async function sendVerificationEmail(
     if (!serviceKey || !templateKey || !publicKey) return
 
     await emailjs.send(serviceKey, templateKey, template, publicKey)
-    notify('이메일 전송 완료!')
+    if (!isResend) {
+      notify('인증번호가 전송되었어요.')
+    } else {
+      notify('인증번호가 다시 전송되었어요.')
+    }
   } catch (error) {
     notify(`전송 실패: ${error}`)
 
