@@ -17,15 +17,15 @@ interface ToastMessageProps {
 
 export const notify = (text: string, type: 'error' | 'default' = 'default') => {
   toast(
-    <div className="flex flex-row items-center justify-center gap-16pxr rounded-[.3125rem] bg-black px-80pxr py-12pxr">
+    <div className="flex w-full max-w-400pxr flex-row items-center justify-center gap-16pxr rounded-[.3125rem] bg-black px-10pxr py-12pxr">
       {type === 'error' && (
         <ExclamationTriangleIcon
           width={18}
           height={18}
-          className="text-error"
+          className="shrink-0 text-error"
         />
       )}
-      <p className="text-nowrap text-gray-01 font-body-02"> {text}</p>
+      <p className="text-gray-01 font-body-02 mb:text-pretty">{text}</p>
     </div>,
     {
       position: 'top-center',

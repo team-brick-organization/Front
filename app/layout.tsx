@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="ko" className={`h-full ${pretendard.variable}`}>
       <body className={`h-full ${pretendard.className}`}>
         <Theme className="h-full">
-          <ToastContainer className="w-auto bg-none p-0pxr opacity-100 shadow-none" />
+          <ToastContainer className="!w-full max-w-400pxr bg-none p-0pxr opacity-100 shadow-none" />
           <Script src={DAUM_POST_CODE_URL} />
           <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           <KakaoScript />
