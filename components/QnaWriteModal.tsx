@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { notify } from './ToastMessageTrigger'
+import DisplayMaxLength from './DisplayMaxLength'
 
 interface IQnaWriteFormInputs {
   title: string
@@ -17,14 +18,14 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
 
   const onSubmit = (data: IQnaWriteFormInputs) => {
     console.log(data)
-    notify('게시글 작성이 완료되었습니다.')
+    notify('질문 등록이 완료되었어요.')
     onClose()
   }
 
   const disabled = !watch('title') || !watch('content')
 
   return (
-    <div className="h-full w-full rounded-[0.3125rem] bg-white px-24pxr py-80pxr mb:py-40pxr">
+    <div className="h-full w-full overflow-y-scroll rounded-[0.3125rem] bg-white px-24pxr py-80pxr mb:py-40pxr">
       <form
         className="flex h-full flex-col gap-40pxr mb:gap-24pxr"
         onSubmit={handleSubmit(onSubmit)}
@@ -34,7 +35,9 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
           placeholder="질문을 입력해 주세요"
           {...register('title', {
             required: '제목은 필수 입력입니다.',
+            maxLength: { value: 40, message: '40자 이내로 작성해 주세요.' },
           })}
+          maxLength={40}
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
         />
@@ -42,13 +45,26 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
         <div className="h-1pxr shrink-0 grow-0 bg-gray-04" />
 
         <div className="flex w-full grow flex-col items-end gap-24pxr px-24pxr mb:px-0pxr">
-          <textarea
-            {...register('content', {
-              required: '내용은 필수 입력입니다.',
-            })}
-            className="w-full grow resize-none rounded-[0.625rem] border-none bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
-            placeholder="질문 내용을 작성해 주세요."
-          />
+          <div className="flex w-full grow flex-col">
+            <textarea
+              {...register('content', {
+                required: '내용은 필수 입력입니다.',
+                maxLength: {
+                  value: 600,
+                  message: '600자 이내로 작성해 주세요.',
+                },
+              })}
+              className="w-full grow resize-none border-none p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04 mb:p-0pxr"
+              placeholder="질문 내용을 작성해 주세요."
+              maxLength={600}
+            />
+            <div className="mt-4pxr">
+              <DisplayMaxLength
+                currentLength={watch('content') ? watch('content').length : 0}
+                maxLength={600}
+              />
+            </div>
+          </div>
 
           <button
             className={`rounded-[0.625rem] bg-gray-10 px-40pxr py-8pxr text-gray-01 font-title-04 ${disabled ? '!bg-gray-04' : ''}`}
