@@ -10,6 +10,8 @@ interface IUserStoreProps {
   setName: (name: string) => void
   profileImageUrl: string
   setProfileImageUrl: (name: string) => void
+  description: string
+  setDescription: (name: string) => void
 }
 
 const useUserStore = create(
@@ -30,6 +32,10 @@ const useUserStore = create(
       profileImageUrl: '',
       setProfileImageUrl: (profileImageUrl) => {
         set({ profileImageUrl })
+      },
+      description: '',
+      setDescription: (description) => {
+        set({ description })
       },
     }),
     { name: 'user-store', storage: createJSONStorage(() => localStorage) },
