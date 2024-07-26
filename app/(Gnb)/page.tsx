@@ -1,4 +1,4 @@
-import { SocialDetailPageTab } from '../components'
+import { SocialDetailPageTab } from '@/components'
 
 export default function Home() {
   return (
