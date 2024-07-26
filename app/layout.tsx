@@ -23,7 +23,7 @@ const pretendard = localFont({
 
 const DAUM_POST_CODE_URL =
   '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js'
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY}&autoload=false&libraries=services`
+const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`
 
 export default function RootLayout({
   children,

@@ -1,25 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface IUseDateProps {
   timeIntervals?: number
 }
 
 function useDate({ timeIntervals = 30 }: IUseDateProps) {
-  const currentDate = new Date()
-  const initialDate = new Date()
+  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null)
 
-  if (currentDate.getMinutes() < timeIntervals) {
-    initialDate.setMinutes(timeIntervals + 1)
-    initialDate.setSeconds(0)
-  } else {
+  useEffect(() => {
+    if (selectedDateTime) return
+
+    const currentDate = new Date()
+    const initialDate = new Date()
+
+    if (currentDate.getMinutes() < timeIntervals) {
+      initialDate.setMinutes(timeIntervals + 1)
+      initialDate.setSeconds(0)
+    }
+
     initialDate.setHours(currentDate.getHours() + 1)
     initialDate.setMinutes(0)
     initialDate.setSeconds(0)
-  }
 
-  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(
-    initialDate,
-  )
+    setSelectedDateTime(initialDate)
+  }, [selectedDateTime, timeIntervals])
 
   return { selectedDateTime, setSelectedDateTime }
 }

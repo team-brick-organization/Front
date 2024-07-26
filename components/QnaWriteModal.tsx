@@ -54,7 +54,7 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
                   message: '600자 이내로 작성해 주세요.',
                 },
               })}
-              className="w-full grow resize-none border-none p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04 mb:p-0pxr"
+              className="w-full grow resize-none border-none text-gray-10 outline-none font-body-02 placeholder:text-gray-04 mb:p-0pxr"
               placeholder="질문 내용을 작성해 주세요."
               maxLength={600}
             />

@@ -11,16 +11,18 @@ registerLocale('ko', ko)
 interface ISocialDateProps {
   selectedDateTime: Date | null
   onSelectedDateTime: (date: Date | null) => void
+  disabled?: boolean
 }
 
 function SocialDateTime({
   selectedDateTime,
   onSelectedDateTime: handleSelectedDateTime,
+  disabled = false,
 }: ISocialDateProps) {
   return (
     <div className="flex gap-8pxr">
       <DatePicker
-        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02"
+        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
         shouldCloseOnSelect
         minDate={new Date()}
         selected={selectedDateTime}
@@ -36,10 +38,10 @@ function SocialDateTime({
         popperPlacement="bottom-start"
         dateFormatCalendar="yyyy년 M월"
         locale="ko"
-        timeCaption="시간"
+        disabled={disabled}
       />
       <DatePicker
-        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02"
+        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
         shouldCloseOnSelect
         minDate={new Date()}
         selected={selectedDateTime}
@@ -60,6 +62,7 @@ function SocialDateTime({
         dateFormatCalendar="yyyy년 M월"
         locale="ko"
         timeCaption="시간"
+        disabled={disabled}
       />
     </div>
   )
