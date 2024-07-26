@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import useFavorite from '@/hooks/useFavorite'
-import TagBadgeList from './CustomBadge/TagBadgeList'
-import CustomBadge from './CustomBadge/CustomBadge'
-import FavoriteButton from './FavoriteButton'
-import { Social } from './MypageCards/MypageCard'
+import TagBadgeList from '../CustomBadge/TagBadgeList'
+import CustomBadge from '../CustomBadge/CustomBadge'
+import FavoriteButton from '../FavoriteButton'
+import { Social } from '../MypageCards/MypageCard'
 
 type GatheringCardProps = {
   data: Social
@@ -29,6 +29,8 @@ function GatheringCard({ data }: GatheringCardProps) {
 
   const isClickableFavorite =
     new Date(data.gatheringDate) > new Date() || isFavoriteClicked
+
+  const formattedAddress = data.address.split(' ')[1]
 
   return (
     <div className="relative w-fit overflow-hidden">
@@ -85,7 +87,7 @@ function GatheringCard({ data }: GatheringCardProps) {
                   height={15}
                 />
                 <p className="truncate whitespace-nowrap text-left font-body-01">
-                  {data.address}
+                  {formattedAddress}
                 </p>
               </div>
 
