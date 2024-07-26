@@ -1,5 +1,6 @@
 import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
+import Button from './Button'
 
 interface IProfileCardProps {
   type: 'user' | 'anotherUser'
@@ -25,18 +26,18 @@ function ProfileCard({
 
       <h1 className="mt-16pxr text-gray-10 font-headline-02">{name}</h1>
 
-      <p className="mt-16pxr line-clamp-2 h-28pxr w-full text-ellipsis text-wrap text-center text-gray-08 font-body-01 tb:mt-12pxr">
+      <p className="mb-40pxr mt-16pxr line-clamp-2 w-full text-ellipsis text-wrap text-center text-gray-08 font-body-01 tb:mt-12pxr">
         {description}
       </p>
 
       {type === 'user' && (
-        <Link className="w-full rounded-[0.625rem]" href="/mypage/edit-profile">
-          <button
-            className="mt-40pxr w-full rounded-[0.625rem] bg-gray-10 py-9pxr text-gray-01 font-body-01"
-            type="button"
-          >
+        <Link
+          className="flex w-full justify-center rounded-[0.625rem]"
+          href="/mypage/edit-profile"
+        >
+          <Button size="M" type="button">
             프로필 편집
-          </button>
+          </Button>
         </Link>
       )}
     </div>
