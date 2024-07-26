@@ -1,21 +1,28 @@
 'use client'
 
 import Image from 'next/image'
+import useUserStore from '@/stores/useUserStore'
 import '@/styles/SocialDateTimePicker.css'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import { ko } from 'date-fns/locale/ko'
 import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
-import { introduceOneLinePattern, nicknamePattern } from '@/constants/RegExr'
+import { detailPattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
 import checkedIcon from '@/public/images/svgs/checked.svg'
-import useProfileImageStore from '@/stores/useProfileImageStore'
+import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import personIcon from '@/public/images/svgs/person.svg'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
+import postDuplicateNickname from '@/apis/postDuplicateCheck'
+import postEditUserInfo from '@/apis/postEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { TypeNickname } from 'types/types'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
+// import MyInfoSideMenu from './MyInfoSideMenu'
 
 registerLocale('ko', ko)
 
@@ -23,29 +30,53 @@ interface IManagingMyInfoProps {
   setIsPortalOpen: (value: boolean) => void
 }
 
+// name 추후 nickname으로 수정
 interface IProfileFormInputs {
-  name: string
-  introduceOneLine: string
+  detail: string
   email: string
-  phoneNumber: number
-  nickname: string
-  birth: number
+  name: string
 }
-
 function ManagingMyInfo({
   setIsPortalOpen,
-}: IManagingMyInfoProps): JSX.Element {
+}: IManagingMyInfoProps): JSX.Element | null {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<IProfileFormInputs>({ mode: 'onChange' })
+
   const {
     userInfoPortalRef,
     isUserInfoPortalOpen,
     handleOutsideClick,
     setIsUserInfoPortalOpen,
   } = useUserInfoPortal()
+
+  const accesstoken = useUserStore()
+
+  async function fetchIsDuplicated<BodyType extends TypeNickname>(
+    text: BodyType,
+    fetcher: ({ body }: { body: TypeNickname }) => Promise<Response>,
+  ) {
+    const response = await fetcher({ body: text })
+
+    if (!response.ok) {
+      throw new Error('닉네임 중복 확인에 실패했습니다.')
+    }
+
+    const data: IPostDuplicateNicknameResponse = await response.json()
+    console.log('datas', data)
+    return data.duplicateNickname
+  }
+  useEffect(() => {
+    if (!accesstoken) {
+      alert('로그인이 필요한 서비스입니다.')
+      router.push('/signin')
+    }
+  }, [accesstoken, router])
 
   const handleModalClose = () => {
     setIsUserInfoPortalOpen(false)
@@ -57,13 +88,53 @@ function ManagingMyInfo({
   const { selectedDateTime, setSelectedDateTime } = useDate({
     timeIntervals: 60,
   })
-  const profileImage = useProfileImageStore((state) => state.profileImage)
 
-  const onSubmit = (data: IProfileFormInputs) => {
+  const profileImage = useEditProfileImageStore(
+    (state) => state.profileImageUrl,
+  )
+
+  const onSubmit = async (data: IProfileFormInputs) => {
+    if (!profileImage) return
+
+    const { detail, name } = data
+
+    const birth = selectedDateTime
+      ? selectedDateTime.toISOString().split('T')[0]
+      : ''
+
+    console.log('제출 데이터', { detail, name, birth, profileImage })
+
+    const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
+      { name },
+      postDuplicateNickname,
+    )
+
+    if (isDuplicateNickname) {
+      setError('name', {
+        type: 'validate',
+        message: '중복된 닉네임입니다.',
+      })
+      return
+    }
+
+    const editUserInfoResponse = await postEditUserInfo({
+      body: {
+        detail,
+        name,
+        birthday: birth,
+        profileImageUrl: profileImage,
+      },
+    })
     console.log('정보 변경 데이터', data)
+    if (!editUserInfoResponse.ok) {
+      return
+    }
+
     handleOpenModal()
   }
-  const hasErrors = !!errors.introduceOneLine || !!errors.nickname
+  const hasErrors = !!errors.detail || !!errors.name
+  if (!accesstoken) return null
+
   return (
     <>
       <form
@@ -110,24 +181,40 @@ function ManagingMyInfo({
         </div>
 
         <div className="mt-40pxr">
-          <label
-            htmlFor="nickname"
-            className="mb-8pxr text-gray-10 font-title-02"
-          >
+          <label htmlFor="name" className="mb-8pxr text-gray-10 font-title-02">
             닉네임
           </label>
           <Input
             variant="border"
-            id="nickname"
-            {...register('nickname', {
+            id="name"
+            {...register('name', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
+              onBlur: async (e) => {
+                const name = e.target.value
+
+                if (!name) return
+
+                const isDuplicateNickname =
+                  await fetchIsDuplicated<TypeNickname>(
+                    { name },
+                    postDuplicateNickname,
+                  )
+
+                if (isDuplicateNickname) {
+                  setError('name', {
+                    type: 'validate',
+                    message: '이미 중복된 닉네임입니다.',
+                  })
+                }
+              },
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
+            // defaultValue={}
           />
-          {!errors.nickname && (
+          {!errors.name && (
             <div className="mt-4pxr inline-flex">
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">
@@ -163,21 +250,21 @@ function ManagingMyInfo({
 
           <div className="mt-40pxr">
             <label
-              htmlFor="introduceOneLine"
+              htmlFor="detail"
               className="mb-8pxr text-gray-10 font-title-02"
             >
               한 줄 소개
             </label>
             <Input
               variant="border"
-              id="introduceOneLine"
-              {...register('introduceOneLine', {
+              id="detail"
+              {...register('detail', {
                 required: '한 줄 소개를 입력해 주세요.',
-                pattern: introduceOneLinePattern,
+                pattern: detailPattern,
               })}
               type="text"
               placeholder="띄어쓰기 포함 80자 이내로 입력해 주세요."
-              className={`mt-8pxr ${errors.introduceOneLine ? 'ring-1 ring-error' : ''}`}
+              className={`mt-8pxr ${errors.detail ? 'ring-1 ring-error' : ''}`}
             />
           </div>
           <div className="mt-40pxr">

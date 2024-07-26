@@ -14,13 +14,11 @@ import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import checkedIcon from '@/public/images/svgs/checked.svg'
 import Image from 'next/image'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
-import postDuplicateEmail from '@/apis/postDuplicateEmail'
+import postDuplicateEmail from '@/apis/postDuplicateCheck'
 import postSignUp from '@/apis/postSignUp'
 import { useRouter } from 'next/navigation'
 import type { TypeEmail, TypeNickname } from 'types/types'
 import Input from './Input'
-
-type TypeDuplicateBody = TypeNickname | TypeEmail
 
 export interface ISignUpFormInputs {
   nickname: string
@@ -41,9 +39,13 @@ function SignUpEmailForm(): JSX.Element {
 
   const password = watch('password')
 
-  async function fetchIsDuplicated<BodyType extends TypeDuplicateBody>(
+  async function fetchIsDuplicated<BodyType extends TypeEmail | TypeNickname>(
     text: BodyType,
-    fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
+    fetcher: ({
+      body,
+    }: {
+      body: TypeEmail | TypeNickname
+    }) => Promise<Response>,
   ) {
     const response = await fetcher({
       body: text,
@@ -76,9 +78,9 @@ function SignUpEmailForm(): JSX.Element {
 
     const signUpResponse = await postSignUp({
       body: {
+        nickname,
         email,
         password: dataPassword,
-        nickname,
       },
     })
 
