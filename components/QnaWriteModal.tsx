@@ -46,7 +46,7 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
             {...register('content', {
               required: '내용은 필수 입력입니다.',
             })}
-            className="w-full grow resize-none rounded-[0.625rem] border-none bg-gray-01 p-24pxr text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
+            className="w-full grow resize-none rounded-[0.625rem] border-none bg-gray-01 text-gray-10 outline-none font-body-02 placeholder:text-gray-04"
             placeholder="질문 내용을 작성해 주세요."
           />
 
