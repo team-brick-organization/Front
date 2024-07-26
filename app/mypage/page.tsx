@@ -8,13 +8,18 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 function MyPage() {
-  const { accessToken, name, profileImageUrl, description } = useUserStore()
+  const { name, profileImageUrl, description } = useUserStore()
   const tabStore = createTabStore()
   const router = useRouter()
 
+  const accessToken =
+    localStorage.getItem('user-store') !== null
+      ? JSON.parse(localStorage.getItem('user-store')!).state.accessToken
+      : ''
+
   useEffect(() => {
     if (accessToken === '') {
-      router.back()
+      router.push('/signin')
     }
   }, [accessToken, router])
 
