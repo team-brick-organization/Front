@@ -21,7 +21,7 @@ function SearchPage() {
   const searchParam = value.length > 7 ? `${value.slice(0, 7)}...` : value
   const data = getSearchResult() // searchValue 인자로 넣어줘야함
 
-  console.log(searchValue) // 린트 방지 console.log() 나중에 넣으면서 지워야함
+  console.log(searchValue) // 린트 방지 console.log() 나중에 api에 넣으면서 지워야함
 
   const onclickPopularity = () => {
     setSort('인기순')

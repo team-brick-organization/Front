@@ -56,6 +56,7 @@ function Search() {
           updatedSearches = updatedSearches.slice(0, 7)
         }
         localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
+        setIsFolded(true)
       }
       router.push(`/search/${encodeURIComponent(searchValue)}`)
     }
@@ -99,7 +100,7 @@ function Search() {
 
   return (
     <>
-      <main
+      <div
         ref={searchRef}
         className="absolute left-1/2 top-0pxr z-10 h-fit w-full max-w-540pxr -translate-x-1/2 transform rounded-b-[.625rem] bg-white opacity-100"
       >
@@ -162,7 +163,7 @@ function Search() {
             </div>
           </section>
         </div>
-      </main>
+      </div>
       {!isFolded && path.includes('search') && (
         <div onClick={handleFold} className="relative h-full w-full">
           <div

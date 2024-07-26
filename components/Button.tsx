@@ -12,7 +12,7 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(
       M: 'w-full max-w-232pxr py-10pxr px-16pxr font-title-02',
       S: 'w-full max-w-120pxr py-10pxr px-16pxr font-title-02',
       XS: 'w-full max-w-78pxr py-8pxr px-16pxr font-body-01',
-      FAB: 'w-full max-w-48pxr !rounded-full h-full min-h-48pxr font-body-01',
+      FAB: 'w-full max-w-56pxr !rounded-full h-full max-h-56pxr font-body-01 bg-primary ',
     }
     const defaultClasses = 'text-gray-01 bg-gray-10 rounded-[10px]'
     const hoverClasses = 'hover:bg-gray-08'
@@ -26,8 +26,8 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(
         className={classnames(
           defaultClasses,
           sizeClasses[size],
-          hoverClasses,
-          pressedClasses,
+          size !== 'FAB' && hoverClasses,
+          size !== 'FAB' && pressedClasses,
           disabledClasses,
           className,
         )}

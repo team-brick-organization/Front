@@ -1,11 +1,12 @@
 /* eslint-disable no-alert */
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface IUseImageFilesProps {
   imageLimit: number
+  initialImages?: string[]
 }
 
-function useImageFiles({ imageLimit }: IUseImageFilesProps) {
+function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [error, setError] = useState<boolean>(false)
@@ -57,6 +58,12 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
     URL.revokeObjectURL(imageUrls[index])
     setImageUrls((prevFiles) => prevFiles.filter((_, i) => i !== index))
   }
+
+  useEffect(() => {
+    if (initialImages) {
+      setImageUrls(initialImages)
+    }
+  }, [initialImages])
 
   return {
     inputRef,

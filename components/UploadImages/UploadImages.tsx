@@ -32,7 +32,7 @@ function UploadImages({
 
   return (
     <div
-      className={`flex h-540pxr w-full max-w-980pxr flex-col justify-between overflow-hidden rounded-[0.625rem] bg-gray-01 mb:h-205pxr ${imageUrls.length > 0 ? 'h-364pxr' : ''} ${error ? 'border border-error' : ''}`}
+      className={`flex h-540pxr w-full max-w-980pxr flex-col justify-between overflow-hidden rounded-[0.625rem] bg-gray-01 mb:h-205pxr ${imageUrls.length > 0 ? '!h-364pxr' : ''} ${error ? 'border border-error' : ''}`}
     >
       <input
         className="hidden"
