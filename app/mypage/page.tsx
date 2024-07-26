@@ -8,27 +8,22 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 function MyPage() {
-  const { name, profileImageUrl, description } = useUserStore()
+  const {
+    name,
+    profileImageUrl,
+    description,
+    accessToken,
+    setAccessToken,
+    hydrated,
+  } = useUserStore()
   const tabStore = createTabStore()
   const router = useRouter()
 
-  // api 나오면 api 호출함수로 바꾸기
-  const getAccessToken = () => {
-    if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('user-store') !== null
-        ? JSON.parse(localStorage.getItem('user-store')!).state.accessToken
-        : ''
-    }
-    return ''
-  }
-
-  const accessToken = getAccessToken()
-
   useEffect(() => {
-    if (accessToken === '') {
+    if (!hydrated && accessToken === '') {
       router.push('/signin')
     }
-  }, [accessToken, router])
+  }, [accessToken, router, setAccessToken, hydrated])
 
   return (
     <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row gap-16pxr px-20pxr mb:mt-40pxr mb:flex-col mb:gap-32pxr mb:px-0pxr">
