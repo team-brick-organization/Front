@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 interface IUserStoreProps {
+  hydrated: boolean
   accessToken: string
   setAccessToken: (token: string) => void
   email: string
@@ -17,6 +18,7 @@ interface IUserStoreProps {
 const useUserStore = create(
   persist<IUserStoreProps>(
     (set) => ({
+      hydrated: true,
       accessToken: '',
       setAccessToken: (token) => {
         set({ accessToken: token })
@@ -38,7 +40,13 @@ const useUserStore = create(
         set({ description })
       },
     }),
-    { name: 'user-store', storage: createJSONStorage(() => localStorage) },
+    {
+      name: 'user-store',
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => () => {
+        useUserStore.setState({ hydrated: true })
+      },
+    },
   ),
 )
 

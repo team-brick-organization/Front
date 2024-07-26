@@ -1,27 +1,17 @@
+'use client'
+
 import { ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons'
 import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
 import useUserStore from '@/stores/useUserStore'
 import getSignOut from '@/apis/getSignOut'
+import useScrollLock from '@/hooks/useScrollLock'
+import { usePathname } from 'next/navigation'
 
 interface SidemenuProps {
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const menus = [
-  {
-    name: '모집 중',
-    link: '/socials',
-  },
-  {
-    name: '모집 마감',
-    link: '/socials?type=imminent',
-  },
-  {
-    name: '찜한 소셜',
-    link: '/liked',
-  },
-]
 
 function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
   const {
@@ -33,6 +23,26 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
     profileImageUrl,
     setProfileImageUrl,
   } = useUserStore()
+  const path = usePathname()
+  useScrollLock(isOpen)
+
+  const menus = [
+    {
+      name: '모집 중',
+      link: '/socials',
+      isActive: path === '/liked' || path === '/socials?type=imminent',
+    },
+    {
+      name: '모집 마감',
+      link: '/socials?type=imminent',
+      isActive: path === '/socials' || path === '/liked',
+    },
+    {
+      name: '찜한 소셜',
+      link: '/liked',
+      isActive: path === '/socials?type=imminent' || path === '/socials',
+    },
+  ]
 
   const handleOnClose = () => {
     setIsOpen(false)
@@ -40,7 +50,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
 
   return (
     <div
-      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block`}
+      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block`}
     >
       <section className="left-0pxr top-0pxr flex h-70pxr w-full flex-row items-center justify-between bg-gray-02 px-20pxr">
         <div className="flex flex-row items-center gap-16pxr">
@@ -73,7 +83,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
         {menus.map((menu, index) => (
           <Link
             href={menu.link}
-            className="text-left text-gray-10 font-headline-02"
+            className={`${menu.isActive ? 'text-gray-06' : 'text-gray-10'} text-left font-headline-02`}
             key={`menu-${index + 0}`}
           >
             {menu.name}
@@ -83,7 +93,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
       {name && (
         <button
           type="button"
-          className="px-20pxr pt-400pxr text-left text-gray-10 font-headline-02"
+          className="mt-400pxr px-20pxr text-left text-gray-10 font-headline-02"
           onClick={async () => {
             await getSignOut({ accessToken })
             setAccessToken('')
