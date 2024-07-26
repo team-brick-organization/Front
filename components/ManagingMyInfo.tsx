@@ -22,7 +22,6 @@ import { useEffect } from 'react'
 import { TypeNickname } from 'types/types'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
-// import MyInfoSideMenu from './MyInfoSideMenu'
 
 registerLocale('ko', ko)
 
