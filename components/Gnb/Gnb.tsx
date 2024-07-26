@@ -2,7 +2,11 @@
 
 import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
-import { HamburgerMenuIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import {
+  HamburgerMenuIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
 import { Button, Search, Sidemenu } from '@/components'
@@ -11,6 +15,7 @@ import useUserStore from '@/stores/useUserStore'
 import { usePathname } from 'next/navigation'
 import logo from '@/public/images/svgs/logo.svg'
 import Image from 'next/image'
+import useScrollLock from '@/hooks/useScrollLock'
 
 /**
  * GNB컴포넌트
@@ -29,12 +34,23 @@ function Gnb() {
   } = useUserStore()
   const { onSearch, setOnSearch } = useSearchStore()
   const [sideMenu, setSideMenu] = useState(false)
+  useScrollLock(onSearch)
+
   const path = usePathname()
   const pathArray = path.split('/')
   const onlyLogo = !(
-    path === '/registration' || pathArray[pathArray.length - 1] === 'edit'
+    path.includes('password-find') ||
+    path.includes('signup') ||
+    path.includes('signin') ||
+    path.includes('registration') ||
+    pathArray[pathArray.length - 1] === 'edit'
   )
-
+  const isFloatingButtonInvisible =
+    path.includes('password-find') ||
+    path.includes('signup') ||
+    path.includes('signin') ||
+    path.includes('mypage') ||
+    path.includes('registration')
   const opacityClassName = onSearch ? 'opacity-0 pointer-events-none' : ''
 
   const menus = [
@@ -82,7 +98,7 @@ function Gnb() {
   }, [setOnSearch])
 
   return (
-    <div className="relative w-full px-80pxr mb:px-20pxr tb:px-20pxr">
+    <div className="relative w-full px-20pxr">
       <main
         className={`${opacityClassName} mx-auto h-70pxr w-full max-w-1180pxr`}
       >
@@ -168,7 +184,7 @@ function Gnb() {
           )}
         </div>
       </main>
-      <div className="absolute top-0pxr z-50 -translate-x-[80px] transform mb:-translate-x-[20px] tb:-translate-x-[20px]">
+      <div className="absolute top-0pxr z-50 -translate-x-[20px]">
         {onSearch ? (
           <>
             <Search />
@@ -187,6 +203,16 @@ function Gnb() {
         )}
       </div>
       <Sidemenu isOpen={sideMenu} setIsOpen={setSideMenu} />
+      {!isFloatingButtonInvisible && (
+        <Link href="/registration">
+          <Button
+            size="FAB"
+            className="fixed bottom-40pxr right-20pxr z-10 hidden items-center justify-center mb:flex"
+          >
+            <PlusIcon width={24} height={24} />
+          </Button>
+        </Link>
+      )}
     </div>
   )
 }
