@@ -7,12 +7,13 @@ interface IPanelProps {
   children: ReactNode
   index: number
   store: ReturnType<typeof createTabStore>
+  className?: string
 }
 
-function Panel({ children, index, store }: IPanelProps) {
+function Panel({ children, index, store, className }: IPanelProps) {
   const { activeTab } = store()
   return activeTab === index ? (
-    <div className="flex w-full flex-col items-center px-16pxr">{children}</div>
+    <div className={`${className} w-full`}>{children}</div>
   ) : null
 }
 
