@@ -137,7 +137,7 @@ function Gnb() {
               <button title="검색" type="button" onClick={handleOnSearch}>
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
-              <Link href="/registration">
+              <Link href={accessToken !== '' ? '/registration' : '/signin'}>
                 <Button
                   size="S"
                   className="cursor-pointer text-nowrap rounded-[0.625rem] bg-gray-10 px-20pxr py-6pxr text-gray-01 font-title-02"
@@ -204,7 +204,7 @@ function Gnb() {
       </div>
       <Sidemenu isOpen={sideMenu} setIsOpen={setSideMenu} />
       {!isFloatingButtonInvisible && (
-        <Link href="/registration">
+        <Link href={accessToken !== '' ? '/registration' : '/signin'}>
           <Button
             size="FAB"
             className="fixed bottom-40pxr right-20pxr z-10 hidden items-center justify-center mb:flex"

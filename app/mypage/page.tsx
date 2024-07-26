@@ -12,10 +12,17 @@ function MyPage() {
   const tabStore = createTabStore()
   const router = useRouter()
 
-  const accessToken =
-    localStorage.getItem('user-store') !== null
-      ? JSON.parse(localStorage.getItem('user-store')!).state.accessToken
-      : ''
+  // api 나오면 api 호출함수로 바꾸기
+  const getAccessToken = () => {
+    if (localStorage.getItem('user-store')) {
+      return localStorage.getItem('user-store') !== null
+        ? JSON.parse(localStorage.getItem('user-store')!).state.accessToken
+        : ''
+    }
+    return ''
+  }
+
+  const accessToken = getAccessToken()
 
   useEffect(() => {
     if (accessToken === '') {
