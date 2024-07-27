@@ -13,6 +13,7 @@ async function getSignOut({
       'Content-Type': 'application/json',
       authorization: `Bearer ${accessToken}`,
     },
+    credentials: 'include',
   })
 
   return response

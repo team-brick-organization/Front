@@ -1,5 +1,5 @@
 import mockSocialProps from '@/components/Gnb/moc'
-// import { Social } from '@/components/MypageCards/MypageCard'
+import { Social } from '@/components/MypageCards/MypageCard'
 
 /** 검색값 불러오는 API 호출함수
  * @param searchValue 검색 값 넣어주기
@@ -7,7 +7,7 @@ import mockSocialProps from '@/components/Gnb/moc'
  */
 
 function getSearchResult() {
-  const api = mockSocialProps
+  const api: Social[] = mockSocialProps
   return api
 }
 
