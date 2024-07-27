@@ -88,7 +88,7 @@ export const passwordMinLength = {
   message: '8자리 이상 비밀번호를 입력하세요.',
 }
 
-export const introduceOneLinePattern = {
+export const detailPattern = {
   value: /^.{1,80}$/,
   message: '',
 }

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import closeIcon from '@/public/images/svgs/close.svg'
 import { Button } from '@radix-ui/themes'
 import personIcon from '@/public/images/svgs/person.svg'
-import useProfileImageStore from '@/stores/useProfileImageStore'
+import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import { notify } from './ToastMessageTrigger'
 
 interface IProfileImageChangeModalProps {
@@ -14,8 +14,12 @@ interface IProfileImageChangeModalProps {
 
 function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const profileImage = useProfileImageStore((state) => state.profileImage)
-  const setProfileImage = useProfileImageStore((state) => state.setProfileImage)
+  const profileImage = useEditProfileImageStore(
+    (state) => state.profileImageUrl,
+  )
+  const setProfileImage = useEditProfileImageStore(
+    (state) => state.setProfileImageUrl,
+  )
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
