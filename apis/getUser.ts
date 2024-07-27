@@ -11,6 +11,7 @@ async function getUser({ accessToken }: IGetUserProps): Promise<Response> {
       'Content-Type': 'application/json',
       authorization: `Bearer ${accessToken}`,
     },
+    credentials: 'include',
   })
 
   return response

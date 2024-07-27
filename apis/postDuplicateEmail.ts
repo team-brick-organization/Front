@@ -12,6 +12,7 @@ async function postDuplicateEmail({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ...body }),
+    credentials: 'include',
   })
 
   return response

@@ -15,6 +15,7 @@ async function postSignUp({ body }: IPostSignUpProps): Promise<Response> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ...body }),
+    credentials: 'include',
   })
 
   return response
