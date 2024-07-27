@@ -2,8 +2,10 @@
 
 import { BottomBar, CategoryTagList } from '@/components/index'
 import useSocialRegistrationStore from '@/stores/useSocialRegistrationStore'
+import { useRouter } from 'next/navigation'
 
 function RegistrationPage() {
+  const router = useRouter()
   const { tags } = useSocialRegistrationStore()
 
   return (
@@ -17,6 +19,9 @@ function RegistrationPage() {
       <BottomBar
         disabled={tags.length <= 0}
         buttonClassName="px-40pxr py-8pxr font-title-04"
+        onButtonClick={() => {
+          router.push('/registration/social')
+        }}
       >
         다음
       </BottomBar>

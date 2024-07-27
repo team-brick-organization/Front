@@ -48,7 +48,7 @@ function GatheringInfo({
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(id)
 
   return (
-    <div className="w-480pxr rounded-[0.3125rem] bg-gray-01 p-24pxr shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.15)] mb:w-full mb:max-w-376pxr mb:px-16pxr mb:py-24pxr tb:w-full tb:max-w-376pxr tb:px-16pxr tb:py-24pxr">
+    <div className="h-346pxr w-full max-w-480pxr rounded-[0.3125rem] bg-gray-01 p-24pxr shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.15)] mb:px-16pxr mb:py-24pxr tb:px-16pxr tb:py-24pxr max759Min480:max-w-full">
       <div className="mb-40pxr flex flex-col gap-14pxr border-b border-dashed border-[#C8C8C8] pb-40pxr">
         <div className="flex justify-between">
           <TagBadgeList tags={tags} />

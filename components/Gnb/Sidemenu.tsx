@@ -7,6 +7,8 @@ import useUserStore from '@/stores/useUserStore'
 import getSignOut from '@/apis/getSignOut'
 import useScrollLock from '@/hooks/useScrollLock'
 import { usePathname } from 'next/navigation'
+import useWindowWidth from '@/hooks/useWindowWidth'
+import { useEffect } from 'react'
 
 interface SidemenuProps {
   isOpen: boolean
@@ -23,8 +25,19 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
     profileImageUrl,
     setProfileImageUrl,
   } = useUserStore()
+
   const path = usePathname()
+  const windowWidth = useWindowWidth()
+
   useScrollLock(isOpen)
+
+  useEffect(() => {
+    const openSideMenuWidth = windowWidth !== null && windowWidth <= 538
+
+    if (!openSideMenuWidth) {
+      setIsOpen(false)
+    }
+  }, [setIsOpen, windowWidth])
 
   const menus = [
     {
@@ -50,7 +63,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
 
   return (
     <div
-      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block`}
+      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block max538Min480:!left-0pxr max538Min480:!block`}
     >
       <section className="left-0pxr top-0pxr flex h-70pxr w-full flex-row items-center justify-between bg-gray-02 px-20pxr">
         <div className="flex flex-row items-center gap-16pxr">
@@ -63,10 +76,16 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
           )}
           <div className="item-center flex flex-row gap-4pxr">
             {accessToken ? (
-              <p className="text-gray-10 font-title-04">{name}</p>
+              <Link href="/mypage">
+                <button type="button" onClick={handleOnClose}>
+                  <p className="text-gray-10 font-title-04">{name}</p>
+                </button>
+              </Link>
             ) : (
               <Link href="/signin">
-                <p className="text-gray-10 font-title-04">로그인</p>
+                <button type="button" onClick={handleOnClose}>
+                  <p className="text-gray-10 font-title-04">로그인</p>
+                </button>
               </Link>
             )}
 
@@ -75,7 +94,11 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
             </Link>
           </div>
         </div>
-        <button type="button" onClick={handleOnClose}>
+        <button
+          title="사이드바 닫기 버튼"
+          type="button"
+          onClick={handleOnClose}
+        >
           <Cross2Icon width={30} height={30} />
         </button>
       </section>
