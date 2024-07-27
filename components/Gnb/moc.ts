@@ -1,4 +1,6 @@
-const mockSocialProps = [
+import { Social } from '../MypageCards/MypageCard'
+
+const mockSocialProps: Social[] = [
   {
     id: 1,
     type: 'social',

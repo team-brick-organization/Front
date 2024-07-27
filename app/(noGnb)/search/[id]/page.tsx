@@ -1,6 +1,6 @@
 'use client'
 
-import { CardList, Pagination, Search } from '@/components'
+import { GatheringCardList, Pagination, Search } from '@/components'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -88,7 +88,7 @@ function SearchPage() {
             </div>
           </div>
         </section>
-        <CardList data={data} />
+        <GatheringCardList data={data} />
       </div>
       <div className="mx-auto w-fit pb-160pxr pt-80pxr">
         <Pagination currentPage={1} totalPages={12} onPageChange={() => {}} />
