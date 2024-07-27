@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import localFont from 'next/font/local'
 import '@radix-ui/themes/styles.css'
 import '@/styles/globals.css'
@@ -40,7 +40,6 @@ export default function RootLayout({
           <KakaoScript />
           <Gnb />
           {children}
-          <ThemePanel defaultOpen={false} />
           <div id="portal" />
         </Theme>
       </body>
