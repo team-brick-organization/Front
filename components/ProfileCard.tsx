@@ -33,7 +33,7 @@ function ProfileCard({
       {type === 'user' && (
         <Link
           className="flex w-full justify-center rounded-[0.625rem]"
-          href="/mypage/edit-profile"
+          href="/mypage/edit/profile"
         >
           <Button size="M" type="button">
             프로필 편집
