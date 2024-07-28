@@ -2,6 +2,7 @@ import Image from 'next/image'
 import formatDate from '@/utils/formatDate'
 import Link from 'next/link'
 import { Social } from '../MypageCards/MypageCard'
+import { TagBadgeList } from '..'
 
 interface MainPageMobileCardProps {
   data: Social
@@ -12,7 +13,8 @@ function MainPageMobileCard({ data }: MainPageMobileCardProps) {
   return (
     <Link href={`/socials/${data.id}`}>
       <div className="flex h-235pxr w-full flex-col gap-4pxr rounded-[.625rem]">
-        <section className="relative h-158pxr w-full">
+        <section className="relative h-158pxr w-full pl-10pxr pt-10pxr">
+          <TagBadgeList tags={data.tags} />
           <Image
             src={data.imageUrl}
             alt="인기모임이미지"
