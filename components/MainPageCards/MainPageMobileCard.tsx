@@ -11,26 +11,26 @@ function MainPageMobileCard({ data }: MainPageMobileCardProps) {
 
   return (
     <Link href={`/socials/${data.id}`}>
-      <div className="flex h-235pxr w-212pxr flex-col justify-between gap-4pxr rounded-[.625rem]">
+      <div className="flex h-235pxr w-full flex-col gap-4pxr rounded-[.625rem]">
         <section className="relative h-158pxr w-full">
           <Image
             src={data.imageUrl}
             alt="인기모임이미지"
             fill
             style={{ objectFit: 'cover' }}
-            className="rounded-[.625rem]"
+            className="-z-10 rounded-[.625rem]"
           />
           <Image
             src="/images/svgs/subtract.svg"
             alt="이미지테두리"
-            fill
-            style={{ objectFit: 'fill' }}
-            className="rounded-[.625rem]"
+            layout="fill"
+            objectFit="cover"
+            className="inset-0 -z-10 rounded-[.625rem]"
           />
         </section>
         <section className="flex flex-col gap-0pxr">
           <h1 className="text-gray-10 font-title-04">{data.socialName}</h1>
-          <h1 className="text-gray-10 font-title-04">{data.socialName}</h1>
+
           <div className="flex flex-row gap-4pxr">
             <Image
               src="/images/svgs/location.svg"

@@ -18,7 +18,7 @@ function MainPageCardList({ data }: MainPageCardListProps) {
   ]
 
   return (
-    <div className="flex flex-col gap-20pxr mb:hidden">
+    <div className="flex flex-col gap-20pxr max599:hidden">
       {formattedData.slice(0, 3).map((pair, index) => (
         <section key={`${index + 0}`} className="flex flex-row gap-16pxr">
           {pair.map((item, i) => (
