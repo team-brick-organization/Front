@@ -25,8 +25,8 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
 
   return (
     <div className="flex flex-col justify-center">
-      <h2 className="text-[#1E1F20] font-title-04">
-        참여자 <span className="text-[#B9BABC]">{participants?.length}</span>
+      <h2 className="text-gray-10 font-title-04">
+        참여자 <span className="text-gray-05">{participants?.length}</span>
       </h2>
       <ul className="mt-20pxr flex flex-col gap-16pxr">
         {sliceParticipants?.map((participant) => {
@@ -46,7 +46,7 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
       </ul>
       {participants && offset < participants.length && (
         <button
-          className="mt-24pxr text-[#717274] font-body-02"
+          className="mt-24pxr text-gray-07 font-body-02"
           type="button"
           onClick={handleLoadMoreClick}
         >

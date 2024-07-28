@@ -101,7 +101,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
     await sendVerificationEmail(name, email, verifyNum, true)
     setTimeout(() => {
       setHideResendButton('')
-    }, 5000)
+    }, 30000)
   }
 
   const formatTime = (seconds: number) => {
@@ -219,13 +219,13 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
                   <InfoCircledIcon
                     width={12}
                     height={12}
-                    className="mt-1pxr flex-shrink-0"
+                    className="mt-3pxr flex-shrink-0"
                   />
                   <div>
-                    <h4 className="text-[10px] font-normal leading-[14px] text-error">
+                    <h4 className="!leading-[180%] text-error font-caption-02">
                       인증번호 메일을 못 받으셨나요?
                     </h4>
-                    <ul className="list-disc pl-14pxr text-[10px] font-normal leading-[15px] text-gray-06">
+                    <ul className="list-disc pl-14pxr !leading-[180%] text-gray-06 font-caption-02">
                       <li>
                         입력하신 인증정보가 일치하지 않을 경우, 인증번호 메일이
                         발송되지 않습니다.

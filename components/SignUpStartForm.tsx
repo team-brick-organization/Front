@@ -15,10 +15,12 @@ function SignUpStartForm() {
       : '카카오로 3초만에 시작하기'
   return (
     <div className="relative flex w-full max-w-480pxr flex-col items-center rounded-[.625rem] bg-gray-01 px-39pxr py-50pxr pt-139pxr mb:px-19pxr">
-      <div className="w-156pxr text-center">
+      <div className="w-full text-center">
         <h1 className="text-22pxr text-gray-10 font-headline-03">반가워요!</h1>
         <p className="mt-16pxr text-gray-06 font-body-02">
-          브릭을 통해서 어쩌고 해봐요 이렇게 해보세요
+          브릭에서 공통 관심사의 사람들과
+          <br />
+          자유롭게 모임을 가져보세요!
         </p>
       </div>
       <div className="mt-96pxr flex items-center justify-center">

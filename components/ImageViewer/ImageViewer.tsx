@@ -34,7 +34,7 @@ function ImageViewer({ images }: ImageViewerProps) {
         {mobileRemainingImages > 0 && (
           <div className="mb:absolute mb:left-1/2 mb:top-1/2 mb:flex mb:-translate-x-1/2 mb:-translate-y-1/2 mb:flex-col mb:items-center mb:justify-center tb:hidden">
             <Image src={moreImgIcon} alt="icon" width={40} height={40} />
-            <span className="text-center text-[#F9FAFC] font-headline-03">
+            <span className="text-center text-gray-01 font-headline-03">
               +{mobileRemainingImages}
             </span>
           </div>

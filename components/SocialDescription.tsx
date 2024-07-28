@@ -5,8 +5,8 @@ interface ISocialDescriptionProps {
 function SocialDescription({ children }: ISocialDescriptionProps) {
   return (
     <>
-      <h2 className="font-title-04">소셜 소개</h2>
-      <p className="font-body-02">{children}</p>
+      <h2 className="text-gray-10 font-title-04">소셜 소개</h2>
+      <p className="text-gray-10 font-body-02">{children}</p>
     </>
   )
 }
