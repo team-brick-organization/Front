@@ -1,7 +1,6 @@
 'use client'
 
-import ChevronLeft from '@/public/images/svgs/chevronleft'
-import ChevronRight from '@/public/images/svgs/chevronright'
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { useMemo } from 'react'
 
 interface IPaginationProps {
@@ -95,7 +94,9 @@ function Pagination({
         }}
         disabled={currentPage === 1}
       >
-        <ChevronLeft fill={currentPage === 1 ? '#9A9B9D' : '#1E1F20'} />
+        <ChevronLeftIcon
+          className={`h-26pxr w-26pxr ${currentPage === 1 ? 'text-gray-06' : 'text-gray-10'}`}
+        />
       </button>
       <ul
         className={`flex items-center ${renderPageNumbers.length <= 5 ? 'gap-24pxr' : ''}`}
@@ -128,8 +129,8 @@ function Pagination({
         }}
         disabled={currentPage === totalPages}
       >
-        <ChevronRight
-          fill={currentPage === totalPages ? '#9A9B9D' : '#1E1F20'}
+        <ChevronRightIcon
+          className={`h-26pxr w-26pxr ${currentPage === totalPages ? 'text-gray-06' : 'text-gray-10'}`}
         />
       </button>
     </div>
