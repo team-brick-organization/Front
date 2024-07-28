@@ -108,7 +108,7 @@ function Gnb() {
               <Image src={logo} alt="로고이미지" width={84} height={30} />
             </Link>
             {onlyLogo && (
-              <section className="flex flex-row justify-between gap-24pxr mb:hidden">
+              <section className="flex flex-row justify-between gap-24pxr mb:hidden max538Min480:hidden">
                 {menus.map((menu, index) => (
                   <Link href={menu.link} key={`menu-${index + 0}`}>
                     <button
@@ -123,7 +123,7 @@ function Gnb() {
             )}
           </div>
           {onlyLogo && (
-            <div className="hidden flex-row gap-16pxr mb:flex">
+            <div className="hidden flex-row gap-16pxr mb:flex max538Min480:flex">
               <button title="검색" type="button" onClick={handleOnSearch}>
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
@@ -133,28 +133,29 @@ function Gnb() {
             </div>
           )}
           {onlyLogo && (
-            <div className="flex flex-row items-center gap-24pxr mb:hidden">
+            <div className="flex flex-row items-center gap-24pxr mb:hidden max538Min480:hidden">
               <button title="검색" type="button" onClick={handleOnSearch}>
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
               <Link href={accessToken !== '' ? '/registration' : '/signin'}>
-                <Button
-                  size="S"
-                  className="cursor-pointer text-nowrap rounded-[0.625rem] bg-gray-10 px-20pxr py-6pxr text-gray-01 font-title-02"
-                >
-                  등록하기
+                <Button size="S" className="text-nowrap">
+                  모임 등록하기
                 </Button>
               </Link>
-              {name ? (
-                <Avatar
-                  fallback={
-                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
-                      {name.charAt(0)}
-                    </div>
-                  }
-                  src={profileImageUrl}
-                  className="w-36 h-36 rounded-full"
-                />
+              {accessToken ? (
+                <Link href="/mypage">
+                  <button type="button">
+                    <Avatar
+                      fallback={
+                        <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
+                          {name.charAt(0)}
+                        </div>
+                      }
+                      src={profileImageUrl}
+                      className="w-36 h-36 rounded-full"
+                    />
+                  </button>
+                </Link>
               ) : (
                 <Link href="/signin">
                   <button
@@ -207,7 +208,7 @@ function Gnb() {
         <Link href={accessToken !== '' ? '/registration' : '/signin'}>
           <Button
             size="FAB"
-            className="fixed bottom-40pxr right-20pxr z-10 hidden items-center justify-center mb:flex"
+            className={`fixed bottom-40pxr right-20pxr z-10 hidden items-center justify-center mb:flex ${path.includes('socials') ? 'bottom-110pxr' : ''}`}
           >
             <PlusIcon width={24} height={24} />
           </Button>

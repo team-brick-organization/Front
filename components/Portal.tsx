@@ -22,7 +22,7 @@ function Portal({
     <div>
       <div
         ref={portalRef}
-        className="fixed bottom-0pxr left-0pxr right-0pxr top-0pxr bg-[#1E1F20] opacity-30"
+        className="fixed bottom-0pxr left-0pxr right-0pxr top-0pxr z-20 bg-[#1E1F20] opacity-30"
         onClick={handleOutsideClick}
         role="presentation"
       />

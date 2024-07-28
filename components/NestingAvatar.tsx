@@ -27,7 +27,7 @@ function NestingAvatar({
           }}
           className="h-24pxr w-24pxr rounded-full border border-gray-01"
           color="gray"
-          key={item.imageUrl}
+          key={item.fallback}
           src={item.imageUrl}
           fallback={
             <div className="h-24pxr w-24pxr content-center rounded-full border border-gray-01 bg-gray-02 text-center text-14pxr text-gray-10 font-caption-02">
