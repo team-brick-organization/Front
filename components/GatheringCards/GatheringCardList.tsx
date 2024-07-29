@@ -14,7 +14,7 @@ interface CardListProps {
 
 function GatheringCardList({ data }: CardListProps) {
   return (
-    <div className="mx-auto grid w-full grid-cols-[repeat(auto-fit,minmax(280px,280px))] justify-center gap-x-20pxr gap-y-40pxr px-20pxr mb:grid-cols-[repeat(auto-fit,minmax(212px,212px))] mb:gap-x-10pxr mb:gap-y-32pxr mb:px-0pxr tb:grid-cols-[repeat(auto-fit,minmax(376px,376px))] tb:gap-x-16pxr">
+    <div className="grid w-full grid-cols-4 gap-x-20pxr gap-y-40pxr mb:grid-cols-2 mb:gap-x-10pxr mb:gap-y-32pxr tb:gap-x-16pxr max344:grid-cols-1 max700Min480:!grid-cols-2 max900Min480:grid-cols-3">
       {data.map((item, index) => (
         <GatheringCard data={item} key={`${index + 0}`} />
       ))}
