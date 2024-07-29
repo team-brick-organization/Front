@@ -149,6 +149,9 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
         <div className="flex w-full max-w-510pxr flex-col gap-24pxr">
           <div className="flex flex-col gap-16pxr">
             <section className="flex flex-col gap-4pxr">
+              <h1 className="mb-40pxr text-gray-10 font-headline-03">
+                계정 설정
+              </h1>
               <h4 className="text-gray-10 font-title-02">비밀번호 재설정</h4>
               <p className="text-gray-06 font-caption-02">
                 비밀번호 재설정을 위한 이메일을 전송합니다.
