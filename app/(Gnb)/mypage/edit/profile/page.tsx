@@ -44,27 +44,20 @@ function EditProfile() {
           </div>
           <div className="w-26pxr" />
           {isDropdownOpen && (
-            <div className="absolute -left-20pxr top-full z-30 h-250pxr w-screen bg-gray-02 shadow-lg transition-all duration-300 ease-in-out">
-              <div className="mt-40pxr rounded-lg bg-gray-02">
-                <div className="mb-40pxr ml-20pxr">
-                  <Link href="/mypage/edit/profile">
-                    <span
-                      className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/profile' ? 'text-gray-10' : 'text-gray-06'}`}
-                    >
-                      내 정보 관리
-                    </span>
-                  </Link>
-                </div>
-                <div className="ml-20pxr">
-                  <Link href="/mypage/edit/account">
-                    <span
-                      className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/account' ? 'text-gray-10' : 'text-gray-06'}`}
-                    >
-                      계정 설정
-                    </span>
-                  </Link>
-                </div>
-              </div>
+            <div className="absolute -left-20pxr top-full z-30 flex h-250pxr w-screen flex-col gap-40pxr rounded-lg bg-gray-02 px-20pxr pt-40pxr shadow-lg transition-all duration-300 ease-in-out">
+              <Link
+                href="/mypage/edit/profile"
+                className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/profile' ? 'text-gray-10' : 'text-gray-06'}`}
+              >
+                내 정보 관리
+              </Link>
+
+              <Link
+                href="/mypage/edit/account"
+                className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/account' ? 'text-gray-10' : 'text-gray-06'}`}
+              >
+                계정 설정
+              </Link>
             </div>
           )}
         </div>
