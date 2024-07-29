@@ -78,7 +78,7 @@ function MypageCard({ data }: MypageCardProps) {
               src={data.imageUrl}
               alt="카드이미지"
               fill
-              style={{ objectFit: 'contain' }}
+              className="rounded-[.3125rem] object-cover"
             />
             {/* 회의때 정해서 값넣어주기(false 대신) */}
             {false && (
