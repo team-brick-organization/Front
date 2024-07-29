@@ -12,6 +12,12 @@ function AccountPage() {
   const router = useRouter()
   const pathname = usePathname()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const linkItems = [
+    { href: '/mypage/edit/profile', text: '내 정보 관리' },
+    { href: '/mypage/edit/account', text: '계정 설정' },
+  ]
+
   return (
     <div className="relative mt-80pxr mb:mt-0pxr">
       <div className="hidden items-center mb:flex mb:justify-between mb:px-0pxr mb:pb-10pxr mb:pt-12pxr">
@@ -41,19 +47,17 @@ function AccountPage() {
         <div className="w-26pxr" />
         {isDropdownOpen && (
           <div className="absolute -left-20pxr top-60pxr z-30 flex h-250pxr w-screen flex-col gap-40pxr rounded-lg bg-gray-02 px-20pxr pt-40pxr shadow-lg transition-all duration-300 ease-in-out">
-            <Link
-              href="/mypage/edit/profile"
-              className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/profile' ? 'text-gray-10' : 'text-gray-06'}`}
-            >
-              내 정보 관리
-            </Link>
-
-            <Link
-              href="/mypage/edit/account"
-              className={`cursor-pointer font-headline-02 ${pathname === '/mypage/edit/account' ? 'text-gray-10' : 'text-gray-06'}`}
-            >
-              계정 설정
-            </Link>
+            {linkItems.map((item, index) => (
+              <Link
+                key={`${index + 0}`}
+                href={item.href}
+                className={`cursor-pointer font-headline-02 ${
+                  pathname === item.href ? 'text-gray-10' : 'text-gray-06'
+                }`}
+              >
+                {item.text}
+              </Link>
+            ))}
           </div>
         )}
       </div>
