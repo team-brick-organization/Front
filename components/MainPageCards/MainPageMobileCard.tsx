@@ -19,15 +19,13 @@ function MainPageMobileCard({ data }: MainPageMobileCardProps) {
             src={data.imageUrl}
             alt="인기모임이미지"
             fill
-            style={{ objectFit: 'cover' }}
-            className="-z-10 rounded-[.625rem]"
+            className="-z-10 rounded-[.625rem] object-cover"
           />
           <Image
             src="/images/svgs/subtract.svg"
             alt="이미지테두리"
-            layout="fill"
-            objectFit="cover"
-            className="inset-0 -z-10 rounded-[.625rem]"
+            fill
+            className="rounded-[.625rem]"
           />
         </section>
         <section className="flex flex-col gap-0pxr">

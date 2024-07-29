@@ -105,7 +105,7 @@ function Gnb() {
         <div className="flex h-full flex-row items-center justify-between">
           <div className="flex w-full max-w-370pxr flex-row items-center justify-between">
             <Link href="/" className="shrink-0">
-              <Image src={logo} alt="로고이미지" width={84} height={30} />
+              <Image src={logo} alt="로고이미지" width={88} height={22} />
             </Link>
             {onlyLogo && (
               <section className="flex flex-row justify-between gap-24pxr mb:hidden max538Min480:hidden">
