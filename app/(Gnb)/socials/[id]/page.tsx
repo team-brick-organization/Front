@@ -69,7 +69,7 @@ function SocialDetailPage() {
       profileImage: 'https://via.placeholder.com/23x23',
       title: 'title',
       description: 'description',
-      address: '대구시 북구 구암서로 22',
+      address: '대구시 북구 구암서로 22 1222212222222222223333',
       lat: 35.9364429433593,
       lng: 128.565589928605,
       date: '2024-07-30T00:00:00.000Z',
@@ -228,24 +228,26 @@ function SocialDetailPage() {
                 participants={participants}
               />
             </div>
-            <div className="w-full max-w-480pxr mb:order-1 mb:max-w-full max759Min480:order-1 max759Min480:max-w-full">
-              <GatheringInfo
-                id={1}
-                tags={tags}
-                title={title}
-                location={address}
-                date={date}
-                dues={dues}
-                participantProfileImagesConfig={participants.map(
-                  (participant) => ({
-                    imageUrl: participant.profileImage,
-                    fallback: participant.name.slice(0, 1),
-                  }),
-                )}
-                participantsCurrentCount={participantsCurrentCount}
-                participantsMinCount={participantsMinCount}
-                participantsMaxCount={participantsMaxCount}
-              />
+            <div className="relative h-full w-full max-w-480pxr mb:order-1 mb:max-w-full max759Min480:order-1 max759Min480:max-w-full">
+              <div className="sticky top-0pxr h-fit w-full pt-42pxr max759Min480:static">
+                <GatheringInfo
+                  id={1}
+                  tags={tags}
+                  title={title}
+                  location={address}
+                  date={date}
+                  dues={dues}
+                  participantProfileImagesConfig={participants.map(
+                    (participant) => ({
+                      imageUrl: participant.profileImage,
+                      fallback: participant.name.slice(0, 1),
+                    }),
+                  )}
+                  participantsCurrentCount={participantsCurrentCount}
+                  participantsMinCount={participantsMinCount}
+                  participantsMaxCount={participantsMaxCount}
+                />
+              </div>
             </div>
           </div>
         </div>

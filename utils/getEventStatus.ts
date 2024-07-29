@@ -7,8 +7,8 @@ function getEventStatus(
   const today = new Date()
 
   // 3일 이내로 임박
-  const isDateNear =
-    eventDate.getTime() < today.getTime() + 3 * 24 * 60 * 60 * 1000
+  // const isDateNear =
+  //   eventDate.getTime() < today.getTime() + 3 * 24 * 60 * 60 * 1000
 
   // 인원수가 80% 이상 찬 경우
   const isAlmostFull = participantsCurrentCount / participantsMaxCount > 0.8
@@ -23,7 +23,7 @@ function getEventStatus(
     return '모집 마감'
   }
 
-  if (isDateNear || isAlmostFull) {
+  if (isAlmostFull) {
     return '마감 임박'
   }
 
