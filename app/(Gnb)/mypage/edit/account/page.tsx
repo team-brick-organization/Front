@@ -3,7 +3,7 @@ import React from 'react'
 
 function AccountPage() {
   return (
-    <div>
+    <div className="mt-80pxr">
       <PasswordResetVerifier name="김참치" email="test1@naver.com" />
       {/* 추후 변경해야합니다 */}
     </div>
