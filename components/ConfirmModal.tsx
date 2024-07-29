@@ -28,7 +28,7 @@ function ConfirmModal({
   cancelFunc,
 }: ConfirmModalProps) {
   return (
-    <div className="relative flex max-w-440pxr flex-col items-center gap-60pxr rounded-[.625rem] border bg-white px-20pxr pb-60pxr pt-88pxr">
+    <div className="relative flex max-w-440pxr flex-col items-center gap-60pxr rounded-[.625rem] bg-white px-20pxr pb-60pxr pt-88pxr">
       <section className="flex flex-col items-center gap-40pxr">
         <h1 className="text-gray-10 font-headline-03">{title}</h1>
         {children && (
