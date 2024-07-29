@@ -6,7 +6,7 @@ import Link from 'next/link'
 import useUserStore from '@/stores/useUserStore'
 import getSignOut from '@/apis/getSignOut'
 import useScrollLock from '@/hooks/useScrollLock'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import useWindowWidth from '@/hooks/useWindowWidth'
 import { useEffect } from 'react'
 
@@ -27,12 +27,13 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
   } = useUserStore()
 
   const path = usePathname()
+  const searchParams = useSearchParams()
   const windowWidth = useWindowWidth()
 
   useScrollLock(isOpen)
 
   useEffect(() => {
-    const openSideMenuWidth = windowWidth !== null && windowWidth <= 538
+    const openSideMenuWidth = windowWidth !== null && windowWidth <= 700
 
     if (!openSideMenuWidth) {
       setIsOpen(false)
@@ -43,17 +44,23 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
     {
       name: '모집 중',
       link: '/socials',
-      isActive: path === '/liked' || path === '/socials?type=imminent',
+      isActive:
+        path === '/liked' ||
+        (path === '/socials' && searchParams.get('type') === 'closed'),
     },
     {
       name: '모집 마감',
-      link: '/socials?type=imminent',
-      isActive: path === '/socials' || path === '/liked',
+      link: '/socials?type=closed',
+      isActive:
+        (path === '/socials' && searchParams.get('type') !== 'closed') ||
+        path === '/liked',
     },
     {
       name: '찜한 소셜',
       link: '/liked',
-      isActive: path === '/socials?type=imminent' || path === '/socials',
+      isActive:
+        (path === '/socials' && searchParams.get('type') === 'closed') ||
+        path === '/socials',
     },
   ]
 
@@ -63,7 +70,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
 
   return (
     <div
-      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block max538Min480:!left-0pxr max538Min480:!block`}
+      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block max700Min480:!left-0pxr max700Min480:!block`}
     >
       <section className="left-0pxr top-0pxr flex h-70pxr w-full flex-row items-center justify-between bg-gray-02 px-20pxr">
         <div className="flex flex-row items-center gap-16pxr">
@@ -108,6 +115,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
             href={menu.link}
             className={`${menu.isActive ? 'text-gray-06' : 'text-gray-10'} text-left font-headline-02`}
             key={`menu-${index + 0}`}
+            onClick={() => setIsOpen(false)}
           >
             {menu.name}
           </Link>

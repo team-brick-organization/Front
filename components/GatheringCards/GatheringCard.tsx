@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { PersonIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import useFavorite from '@/hooks/useFavorite'
+import formatDate from '@/utils/formatDate'
 import TagBadgeList from '../CustomBadge/TagBadgeList'
 import CustomBadge from '../CustomBadge/CustomBadge'
 import FavoriteButton from '../FavoriteButton'
@@ -32,20 +33,23 @@ function GatheringCard({ data }: GatheringCardProps) {
 
   const formattedAddress = data.address.split(' ')[1]
 
+  const formattedDate = formatDate(new Date(data.gatheringDate))
+
   return (
-    <div className="relative w-fit overflow-hidden">
+    <div className="card group relative w-full">
       <Link href={`/socials/${data.id}`}>
         <button
           type="button"
-          className="relative flex h-310pxr w-280pxr cursor-pointer flex-col gap-8pxr mb:h-256pxr mb:w-212pxr tb:h-382pxr tb:w-376pxr"
+          className="relative flex h-full w-full cursor-pointer flex-col gap-8pxr"
         >
-          <section className="relative flex h-208pxr w-full items-center justify-center rounded-[.3125rem] bg-slate-100 tb:h-280pxr">
+          <section className="relative flex h-fit w-fit items-center justify-center overflow-hidden rounded-[.3125rem] bg-slate-100">
             {data?.imageUrl && (
               <Image
                 src={data.imageUrl}
                 alt="모임사진"
-                fill
-                style={{ objectFit: 'contain' }}
+                className="object-cover transition-transform duration-200 group-[.card]:group-hover:scale-110"
+                width={320}
+                height={248}
               />
             )}
             {/* 회의때 정해서 값넣어주기(false 대신) */}
@@ -71,41 +75,55 @@ function GatheringCard({ data }: GatheringCardProps) {
               </>
             )}
           </section>
-          <div className="flex w-280pxr flex-col gap-4pxr mb:w-212pxr tb:w-376pxr">
-            <section>
+          <div className="flex w-full flex-col gap-4pxr">
+            <section className="text-start">
               <TagBadgeList tags={data.tags} />
             </section>
             <section className="flex flex-col gap-4pxr">
-              <h4 className="truncate whitespace-nowrap text-left font-title-04">
+              <h4 className="truncate whitespace-nowrap text-left text-gray-10 font-title-04">
                 {data.socialName}
               </h4>
-              <div className="flex flex-row gap-4pxr">
-                <Image
-                  src="/images/svgs/location.svg"
-                  alt="위치SVG"
-                  width={15}
-                  height={15}
-                />
-                <p className="truncate whitespace-nowrap text-left font-body-01">
-                  {formattedAddress}
-                </p>
+              <div className="flex items-center gap-8pxr">
+                <div className="flex flex-row gap-4pxr">
+                  <Image
+                    src="/images/svgs/location.svg"
+                    alt="위치SVG"
+                    width={15}
+                    height={15}
+                  />
+                  <p className="truncate whitespace-nowrap text-left text-gray-08 font-body-01">
+                    {formattedAddress}
+                  </p>
+                </div>
+                <div className="h-11pxr w-1pxr bg-gray-08" />
+                <p className="text-gray-08 font-body-01">{formattedDate}</p>
               </div>
 
-              <div className="flex flex-row gap-16pxr">
-                <div className="font-Title-04 flex flex-row items-center gap-4pxr">
+              <div className="flex flex-row gap-8pxr">
+                <div className="flex flex-row items-center gap-4pxr">
                   <Avatar
                     size="1"
-                    className="h-20pxr w-20pxr"
+                    className="h-20pxr w-20pxr bg-gray-04"
                     src={data.owner.profileImageUrl}
                     radius="full"
-                    fallback={data.owner.name?.charAt(0)}
+                    fallback={
+                      <div className="flex h-20pxr w-20pxr items-center justify-center rounded-full bg-gray-04 text-gray-10">
+                        <PersonIcon
+                          className="text-gray-06"
+                          width={11}
+                          height={11}
+                        />
+                      </div>
+                    }
                   />
-                  <p className="font-caption-03">{data.owner.name}</p>
+                  <p className="text-gray-06 font-caption-03">
+                    {data.owner.name}
+                  </p>
                 </div>
 
                 <div className="flex flex-row items-center gap-4pxr">
-                  <PersonIcon width={20} height={20} />
-                  <p className="font-caption-03">{`${data.participantCount.currentPeople}/${data.participantCount.maxPeople}`}</p>
+                  <PersonIcon className="text-gray-06" width={17} height={17} />
+                  <p className="text-gray-06 font-caption-03">{`${data.participantCount.currentPeople}/${data.participantCount.maxPeople}`}</p>
                 </div>
               </div>
             </section>
@@ -113,7 +131,7 @@ function GatheringCard({ data }: GatheringCardProps) {
         </button>
       </Link>
       {isClickableFavorite && (
-        <div className="absolute right-16pxr top-16pxr tb:right-24pxr tb:top-24pxr">
+        <div className="absolute right-16pxr top-16pxr">
           <FavoriteButton
             isFavoriteClicked={isFavoriteClicked}
             onFavoriteClick={handleFavoriteClick}

@@ -1,6 +1,11 @@
 'use client'
 
-import { GatheringCardList, Pagination, Search } from '@/components'
+import {
+  GatheringCardList,
+  Pagination,
+  Search,
+  SortButtons,
+} from '@/components'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -23,10 +28,10 @@ function SearchPage() {
 
   console.log(searchValue) // 린트 방지 console.log() 나중에 api에 넣으면서 지워야함
 
-  const onclickPopularity = () => {
+  const handleClickPopularity = () => {
     setSort('인기순')
   }
-  const onclickLatest = () => {
+  const handleClickLatest = () => {
     setSort('최신순')
   }
 
@@ -61,34 +66,25 @@ function SearchPage() {
           />
         </Link>
       </div>
-      <div className="mx-auto max-w-1220pxr">
-        <section className="mb-26pxr flex flex-col gap-40pxr px-20pxr pt-85pxr">
-          <div className="flex w-fit flex-row gap-8pxr">
-            <h1 className="text-gray-10 font-headline-03">{searchParam}</h1>
-            <p className="text-gray-06 font-headline-02">검색결과</p>
-          </div>
-          <div className="flex flex-row items-center justify-between">
-            {/* 총 개수 넣어줘야함 */}
-            <p className="text-gray-10 font-title-04">총 {11}개</p>
-            <div className="flex flex-row gap-16pxr">
-              <button
-                type="button"
-                className={`${sort === '인기순' ? 'text-gray-10' : 'text-gray-06'} font-title-04`}
-                onClick={onclickPopularity}
-              >
-                인기순
-              </button>
-              <button
-                type="button"
-                className={`${sort === '최신순' ? 'text-gray-10' : 'text-gray-06'} font-title-04`}
-                onClick={onclickLatest}
-              >
-                최신순
-              </button>
+      <div className="flex w-full justify-center">
+        <div className="flex w-full max-w-1220pxr flex-col gap-26pxr px-20pxr">
+          <section className="flex flex-col gap-40pxr pt-85pxr">
+            <div className="flex w-fit flex-row gap-8pxr">
+              <h1 className="text-gray-10 font-headline-03">{searchParam}</h1>
+              <p className="text-gray-06 font-headline-02">검색결과</p>
             </div>
-          </div>
-        </section>
-        <GatheringCardList data={data} />
+            <div className="flex flex-row items-center justify-between">
+              {/* 총 개수 넣어줘야함 */}
+              <p className="text-gray-10 font-title-04">총 {11}개</p>
+              <SortButtons
+                sort={sort}
+                onClickLatest={handleClickLatest}
+                onClickPopularity={handleClickPopularity}
+              />
+            </div>
+          </section>
+          <GatheringCardList data={data} />
+        </div>
       </div>
       <div className="mx-auto w-fit pb-160pxr pt-80pxr">
         <Pagination currentPage={1} totalPages={12} onPageChange={() => {}} />
