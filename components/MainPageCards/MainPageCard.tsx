@@ -39,8 +39,7 @@ function MainPageCard({ data }: MainPageCardProps) {
             alt="인기모임배경이미지"
             src={data.imageUrl}
             fill
-            style={{ objectFit: 'cover' }}
-            className="-z-10 rounded-[.625rem]"
+            className="-z-10 rounded-[.625rem] object-cover"
           />
         </div>
       </div>
