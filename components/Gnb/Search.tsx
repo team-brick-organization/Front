@@ -4,13 +4,13 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
+import useScrollLock from '@/hooks/useScrollLock'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import CustomBadge from '../CustomBadge/CustomBadge'
 
 /**
  * 돋보기 아이콘 눌렀을시 뜨는 검색창
- *
  */
 
 function Search() {
@@ -20,6 +20,7 @@ function Search() {
   const path = usePathname()
   const searchRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  useScrollLock(!isFolded)
 
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value)
@@ -102,7 +103,7 @@ function Search() {
     <>
       <div
         ref={searchRef}
-        className="absolute left-1/2 top-0pxr z-10 h-fit w-full max-w-540pxr -translate-x-1/2 transform rounded-b-[.625rem] bg-white opacity-100"
+        className="absolute left-1/2 top-0pxr z-50 h-fit w-full max-w-540pxr -translate-x-1/2 transform rounded-b-[.625rem] bg-white opacity-100"
       >
         <div className="flex flex-col">
           <section className="p-15pxr">
@@ -128,7 +129,7 @@ function Search() {
             </TextField.Root>
           </section>
           <section
-            className={`${isFolded ? 'hidden' : ''} flex h-full w-full flex-col gap-24pxr p-24pxr`}
+            className={`${isFolded ? 'hidden' : ''} z-50 flex h-full w-full flex-col gap-24pxr p-24pxr`}
           >
             <div className="flex flex-row items-center gap-16pxr">
               <h3 className="font-title-02">최근 검색어</h3>
@@ -148,7 +149,9 @@ function Search() {
                   key={`recent-${1 + index}`}
                 >
                   <CustomBadge
-                    onCrossClick={() => {
+                    onCrossClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
                       handleDeleteSearchItem({
                         searchItems: recentSearch,
                         index,
@@ -165,12 +168,15 @@ function Search() {
         </div>
       </div>
       {!isFolded && path.includes('search') && (
-        <div onClick={handleFold} className="relative h-full w-full">
-          <div
-            className="absolute left-0pxr top-70pxr w-full cursor-default bg-black opacity-30"
-            style={{ height: 'calc(100% - 70px)' }}
-          />
-        </div>
+        <>
+          <div onClick={handleFold} className="aboslute h-full w-full">
+            <div
+              className="absolute left-0pxr top-70pxr z-10 w-full cursor-default bg-black opacity-30"
+              style={{ height: 'calc(100% - 70px)' }}
+            />
+          </div>
+          <div className="absolute left-0pxr top-0pxr h-70pxr w-full bg-white" />
+        </>
       )}
     </>
   )

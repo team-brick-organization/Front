@@ -19,7 +19,7 @@ function Home() {
         <MainPageTopButtonGroup />
         <section className="max599Min480:px-0pxr mx-auto w-full max-w-1160pxr px-20pxr">
           <div className="max599Min480:hidden flex flex-col gap-40pxr">
-            <div className="flex flex-row justify-between max599:hidden">
+            <div className="flex flex-row items-center justify-between max599:hidden">
               <h1 className="text-gray-10 font-headline-03">
                 이번주 인기 모임
               </h1>
