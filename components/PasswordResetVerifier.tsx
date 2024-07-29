@@ -146,7 +146,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
   return (
     <>
       {!isPasswordInputFolded && (
-        <div className="flex w-full max-w-510pxr flex-col gap-24pxr">
+        <div className="flex w-full max-w-510pxr flex-col gap-24pxr mb:mt-40pxr">
           <div className="flex flex-col gap-16pxr">
             <section className="flex flex-col gap-4pxr">
               <h1 className="mb-40pxr text-gray-10 font-headline-03">
