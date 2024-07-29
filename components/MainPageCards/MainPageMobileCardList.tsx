@@ -8,12 +8,16 @@ interface MainPageMobileCardListProps {
 
 function MainPageMobileCardList({ data }: MainPageMobileCardListProps) {
   return (
-    <div className="hidden w-full gap-x-16pxr gap-y-24pxr max599:grid max599:!grid-cols-2 max392:!grid-cols-1">
-      <WeeklyMoreButton />
+    <ul className="hidden w-full gap-x-16pxr gap-y-24pxr max599:grid max599:!grid-cols-2 max392:!grid-cols-1">
+      <li>
+        <WeeklyMoreButton />
+      </li>
       {data.slice(0, 7).map((item, i) => (
-        <MainPageMobileCard key={`${i + 0}`} data={item} />
+        <li key={`${i + 0}`}>
+          <MainPageMobileCard key={`${i + 0}`} data={item} />
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
 export default MainPageMobileCardList
