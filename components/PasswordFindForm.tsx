@@ -29,7 +29,7 @@ function PasswordFindForm(): JSX.Element {
       <h1 className="text-center text-gray-10 font-headline-03">
         비밀번호를 잊으셨나요?
       </h1>
-      <p className="mt-16pxr text-center text-[#9A9B9D] font-body-02">
+      <p className="mt-16pxr text-center text-gray-06 font-body-02">
         가입한 이메일을 입력하면
         <br />
         암호를 재설정할 수 있는 링크를 이메일로 보내드릴게요.

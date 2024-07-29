@@ -74,7 +74,7 @@ function ImageViewerModal({
           </button>
         </div>
         <div className="rounded-full bg-black px-20pxr py-6pxr">
-          <span className="flex items-center gap-8pxr text-[#f9fafc] font-title-01">
+          <span className="flex items-center gap-8pxr text-gray-01 font-title-01">
             {currentImageIndex + 1}
             <div className="h-12pxr w-1pxr bg-[#f9fafc]" />
             {images.length}

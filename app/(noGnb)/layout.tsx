@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import localFont from 'next/font/local'
 import '@radix-ui/themes/styles.css'
 import '@/styles/globals.css'
@@ -28,7 +28,6 @@ export default function NoGnbLayout({
       <body className={`h-full ${pretendard.className}`}>
         <Theme className="h-full">
           {children}
-          <ThemePanel defaultOpen={false} />
           <div id="portal" />
         </Theme>
       </body>

@@ -76,10 +76,10 @@ function UploadImages({
       {imageUrls.length > 0 && (
         <>
           <div className="flex grow flex-col items-center justify-center">
-            <p className="text-center text-[#1E1F20] font-title-04">
+            <p className="text-center text-gray-10 font-title-04">
               이미지 (최대 5장)을 업로드해 주세요.
             </p>
-            <p className="text-center text-[#B9BABC] font-body-01">
+            <p className="text-center text-gray-05 font-body-01">
               최대 10MB의 JPEG, PNG, WEBP 이미지 파일
             </p>
           </div>
