@@ -9,7 +9,7 @@ async function getUser({ accessToken }: IGetUserProps): Promise<Response> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      authorization: `${accessToken}`,
+      authorization: `Bearer ${accessToken}`,
     },
     credentials: 'include',
   })
