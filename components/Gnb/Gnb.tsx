@@ -193,13 +193,13 @@ function Gnb() {
           )}
         </div>
       </main>
-      <div className="absolute top-0pxr z-50 -translate-x-[20px]">
+      <div className="absolute top-0pxr z-50 w-full -translate-x-[20px]">
         {onSearch ? (
           <>
             <Search />
             <div
               onClick={handleClickOutside}
-              className="relative h-screen w-screen"
+              className="absolue -top-70pxr h-screen w-screen"
             >
               <div
                 className="absolute left-0pxr top-70pxr w-full cursor-default bg-black opacity-30"
