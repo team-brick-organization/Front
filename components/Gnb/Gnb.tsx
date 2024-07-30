@@ -16,6 +16,8 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import logo from '@/public/images/svgs/logo.svg'
 import Image from 'next/image'
 import useScrollLock from '@/hooks/useScrollLock'
+import getUser from '@/apis/getUser'
+import useUserDataStore from '@/stores/useUserDataStore'
 
 /**
  * GNB컴포넌트
@@ -23,17 +25,11 @@ import useScrollLock from '@/hooks/useScrollLock'
  */
 
 function Gnb() {
-  const {
-    accessToken,
-    setAccessToken,
-    name,
-    setName,
-    setEmail,
-    profileImageUrl,
-    setProfileImageUrl,
-  } = useUserStore()
+  const { hydrated, accessToken, setAccessToken } = useUserStore()
+  const { userData, setUserData } = useUserDataStore()
   const { onSearch, setOnSearch } = useSearchStore()
   const [sideMenu, setSideMenu] = useState(false)
+
   useScrollLock(onSearch)
 
   const path = usePathname()
@@ -90,6 +86,27 @@ function Gnb() {
   const handleClickOutside = () => {
     setOnSearch(false)
   }
+
+  useEffect(() => {
+    async function fetchUserData() {
+      if (accessToken !== '' && accessToken !== null) {
+        try {
+          console.log(accessToken)
+          const data = await getUser({ accessToken })
+          const jsonfied = await data.json()
+          console.log('data', jsonfied)
+          setUserData(jsonfied)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
+      }
+    }
+
+    fetchUserData()
+    console.log(userData)
+
+    console.log('hydrated', hydrated)
+  }, [accessToken, hydrated])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -156,10 +173,14 @@ function Gnb() {
                     <Avatar
                       fallback={
                         <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
-                          {name.charAt(0)}
+                          {userData.name?.charAt(0)}
                         </div>
                       }
-                      src={profileImageUrl}
+                      src={
+                        userData.profileImageUrl
+                          ? userData.profileImageUrl
+                          : undefined
+                      }
                       className="w-36 h-36 rounded-full"
                     />
                   </button>
@@ -181,9 +202,6 @@ function Gnb() {
                   onClick={async () => {
                     await getSignOut({ accessToken })
                     setAccessToken('')
-                    setName('')
-                    setEmail('')
-                    setProfileImageUrl('')
                   }}
                 >
                   로그아웃

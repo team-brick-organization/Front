@@ -9,6 +9,7 @@ import useScrollLock from '@/hooks/useScrollLock'
 import { usePathname, useSearchParams } from 'next/navigation'
 import useWindowWidth from '@/hooks/useWindowWidth'
 import { useEffect } from 'react'
+import useUserDataStore from '@/stores/useUserDataStore'
 
 interface SidemenuProps {
   isOpen: boolean
@@ -16,16 +17,8 @@ interface SidemenuProps {
 }
 
 function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
-  const {
-    accessToken,
-    setAccessToken,
-    name,
-    setName,
-    setEmail,
-    profileImageUrl,
-    setProfileImageUrl,
-  } = useUserStore()
-
+  const { accessToken, setAccessToken } = useUserStore()
+  const { userData } = useUserDataStore()
   const path = usePathname()
   const searchParams = useSearchParams()
   const windowWidth = useWindowWidth()
@@ -76,8 +69,8 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
         <div className="flex flex-row items-center gap-16pxr">
           {accessToken && (
             <Avatar
-              src={profileImageUrl}
-              fallback={name?.slice(0, 1)}
+              src={userData.profileImageUrl}
+              fallback={userData.name.slice(0, 1)}
               className="rounded-full"
             />
           )}
@@ -85,7 +78,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
             {accessToken ? (
               <Link href="/mypage">
                 <button type="button" onClick={handleOnClose}>
-                  <p className="text-gray-10 font-title-04">{name}</p>
+                  <p className="text-gray-10 font-title-04">{userData.name}</p>
                 </button>
               </Link>
             ) : (
@@ -121,16 +114,13 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
           </Link>
         ))}
       </section>
-      {name && (
+      {accessToken && (
         <button
           type="button"
           className="mt-400pxr px-20pxr text-left text-gray-10 font-headline-02"
           onClick={async () => {
             await getSignOut({ accessToken })
             setAccessToken('')
-            setName('')
-            setEmail('')
-            setProfileImageUrl('')
           }}
         >
           로그아웃
