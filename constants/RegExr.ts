@@ -70,7 +70,7 @@ export const namePattern = {
 
 export const nicknamePattern = {
   value: /^[가-힣a-zA-Z0-9]{2,8}$/,
-  message: '닉네임을 입력해 주세요.',
+  message: '',
 }
 
 export const birthPattern = {

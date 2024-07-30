@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { detailPattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
 import checkedIcon from '@/public/images/svgs/checked.svg'
+import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import personIcon from '@/public/images/svgs/person.svg'
@@ -29,11 +30,10 @@ interface IManagingMyInfoProps {
   setIsPortalOpen: (value: boolean) => void
 }
 
-// name 추후 nickname으로 수정
 interface IProfileFormInputs {
   detail: string
   email: string
-  name: string
+  nickname: string
 }
 function ManagingMyInfo({
   setIsPortalOpen,
@@ -43,9 +43,11 @@ function ManagingMyInfo({
   const {
     register,
     handleSubmit,
+    watch,
     setError,
     formState: { errors },
   } = useForm<IProfileFormInputs>({ mode: 'onChange' })
+  const watchNickname = watch('nickname')
 
   const {
     userInfoPortalRef,
@@ -67,8 +69,8 @@ function ManagingMyInfo({
     }
 
     const data: IPostDuplicateNicknameResponse = await response.json()
-    console.log('datas', data)
-    return data.duplicateNickname
+
+    return data.duplicateName
   }
   useEffect(() => {
     if (!accesstoken) {
@@ -95,21 +97,21 @@ function ManagingMyInfo({
   const onSubmit = async (data: IProfileFormInputs) => {
     if (!profileImage) return
 
-    const { detail, name } = data
+    const { detail, nickname } = data
 
     const birth = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
 
-    console.log('제출 데이터', { detail, name, birth, profileImage })
+    console.log('제출 데이터', { detail, nickname, birth, profileImage })
 
     const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-      { name },
+      { name: nickname },
       postDuplicateNickname,
     )
 
     if (isDuplicateNickname) {
-      setError('name', {
+      setError('nickname', {
         type: 'validate',
         message: '중복된 닉네임입니다.',
       })
@@ -119,7 +121,7 @@ function ManagingMyInfo({
     const editUserInfoResponse = await postEditUserInfo({
       body: {
         detail,
-        name,
+        nickname,
         birthday: birth,
         profileImageUrl: profileImage,
       },
@@ -131,8 +133,13 @@ function ManagingMyInfo({
 
     handleOpenModal()
   }
-  const hasErrors = !!errors.detail || !!errors.name
+  const hasErrors = !!errors.detail || !!errors.nickname
   if (!accesstoken) return null
+
+  const isLengthValid =
+    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
+  const hasNoWhitespace = !/\s/.test(watchNickname || '')
 
   return (
     <>
@@ -180,28 +187,31 @@ function ManagingMyInfo({
         </div>
 
         <div className="mt-40pxr">
-          <label htmlFor="name" className="mb-8pxr text-gray-10 font-title-02">
+          <label
+            htmlFor="nickname"
+            className="mb-8pxr text-gray-10 font-title-02"
+          >
             닉네임
           </label>
           <Input
             variant="border"
-            id="name"
-            {...register('name', {
+            id="nickname"
+            {...register('nickname', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
               onBlur: async (e) => {
-                const name = e.target.value
+                const nickname = e.target.value
 
-                if (!name) return
+                if (!nickname) return
 
                 const isDuplicateNickname =
                   await fetchIsDuplicated<TypeNickname>(
-                    { name },
+                    { name: nickname },
                     postDuplicateNickname,
                   )
 
                 if (isDuplicateNickname) {
-                  setError('name', {
+                  setError('nickname', {
                     type: 'validate',
                     message: '이미 중복된 닉네임입니다.',
                   })
@@ -210,41 +220,60 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
             // defaultValue={}
           />
-          {!errors.name && (
+          {(!errors.nickname ||
+            String(errors.nickname.message).length === 0) && (
             <div className="mt-4pxr inline-flex">
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isLengthValid ? checkedIcon : unCheckedIcon}
+                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">2-8자 이하</span>
+                  <span
+                    className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    2-8자 이하
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isValidPattern ? checkedIcon : unCheckedIcon}
+                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">한글/영어/숫자 가능</span>
+                  <span
+                    className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    한글/영어/숫자 가능
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">공백 불가</span>
+                  <span
+                    className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    공백 불가
+                  </span>
                 </div>
               </div>
             </div>
+          )}
+
+          {errors.nickname && String(errors.nickname.message).length !== 0 && (
+            <small className="mt-4pxr text-error font-caption-02" role="alert">
+              {errors.nickname.message}
+            </small>
           )}
 
           <div className="mt-40pxr">
@@ -313,7 +342,7 @@ function ManagingMyInfo({
           </div>
         </div>
 
-        <div className="mt-192pxr flex justify-center">
+        <div className="mb: mb-115pxr mt-192pxr flex justify-center">
           <Button
             type="submit"
             className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${!hasErrors ? 'bg-gray-10 text-gray-01' : 'bg-gray-04 text-gray-01'}`}

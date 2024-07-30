@@ -3,5 +3,5 @@ interface IPostDuplicateEmailResponse {
 }
 
 interface IPostDuplicateNicknameResponse {
-  duplicateNickname: boolean
+  duplicateName: boolean
 }
