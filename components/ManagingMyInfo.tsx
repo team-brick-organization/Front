@@ -29,7 +29,6 @@ interface IManagingMyInfoProps {
   setIsPortalOpen: (value: boolean) => void
 }
 
-// name 추후 nickname으로 수정
 interface IProfileFormInputs {
   detail: string
   email: string

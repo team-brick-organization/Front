@@ -197,8 +197,8 @@ function SignUpEmailForm(): JSX.Element {
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">
                   <Image
-                    src={isLengthValid ? unCheckedIcon : checkedIcon}
-                    alt={isLengthValid ? 'unCheckedIcon' : 'checkedIcon'}
+                    src={isLengthValid ? checkedIcon : unCheckedIcon}
+                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
@@ -210,8 +210,8 @@ function SignUpEmailForm(): JSX.Element {
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={isValidPattern ? unCheckedIcon : checkedIcon}
-                    alt={isValidPattern ? 'unCheckedIcon' : 'checkedIcon'}
+                    src={isValidPattern ? checkedIcon : unCheckedIcon}
+                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
@@ -223,8 +223,8 @@ function SignUpEmailForm(): JSX.Element {
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={hasNoWhitespace ? unCheckedIcon : checkedIcon}
-                    alt={hasNoWhitespace ? 'unCheckedIcon' : 'checkedIcon'}
+                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
