@@ -190,7 +190,7 @@ function SignUpEmailForm(): JSX.Element {
             placeholder="닉네임을 입력해 주세요."
             className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
           />
-          {/* {닉네임이 undefined일때 보여야됨, nickname의 length가 0이될때 보여야함} */}
+
           {(!errors.nickname ||
             String(errors.nickname.message).length === 0) && (
             <div className="mt-4pxr inline-flex">
