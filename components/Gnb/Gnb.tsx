@@ -91,10 +91,10 @@ function Gnb() {
     async function fetchUserData() {
       if (accessToken !== '' && accessToken !== null) {
         try {
-          console.log(accessToken)
           const data = await getUser({ accessToken })
+          if (!data.ok) console.error('error: ', data.status)
+
           const jsonfied = await data.json()
-          console.log('data', jsonfied)
           setUserData(jsonfied)
         } catch (error) {
           console.error('Error fetching user data:', error)
@@ -103,9 +103,6 @@ function Gnb() {
     }
 
     fetchUserData()
-    console.log(userData)
-
-    console.log('hydrated', hydrated)
   }, [accessToken, hydrated])
 
   useEffect(() => {
