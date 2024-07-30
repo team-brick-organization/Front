@@ -3,7 +3,6 @@
 import { MyPageTab } from '@/components/index'
 import ProfileCard from '@/components/ProfileCard'
 import createTabStore from '@/stores/createTabStore'
-import useUserStore from '@/stores/useUserStore'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -14,14 +13,14 @@ function ProfilePage() {
     profileImageUrl: '',
     description: '',
   })
-  const { name, profileImageUrl, description } = useUserStore()
+
   const { id } = useParams()
 
   useEffect(() => {
     // api 호출 함수 넣기
     console.log(id)
-    setProfileData({ name, profileImageUrl, description })
-  }, [name, profileImageUrl, description, id])
+    setProfileData({ name: '', profileImageUrl: '', description: '' })
+  }, [id])
 
   return (
     <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row px-20pxr mb:mt-40pxr mb:flex-col mb:gap-32pxr mb:px-0pxr">
