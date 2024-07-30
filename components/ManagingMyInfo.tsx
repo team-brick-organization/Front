@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { detailPattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
 import checkedIcon from '@/public/images/svgs/checked.svg'
+import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import personIcon from '@/public/images/svgs/person.svg'
@@ -42,9 +43,11 @@ function ManagingMyInfo({
   const {
     register,
     handleSubmit,
+    watch,
     setError,
     formState: { errors },
   } = useForm<IProfileFormInputs>({ mode: 'onChange' })
+  const watchNickname = watch('nickname')
 
   const {
     userInfoPortalRef,
@@ -133,6 +136,11 @@ function ManagingMyInfo({
   const hasErrors = !!errors.detail || !!errors.nickname
   if (!accesstoken) return null
 
+  const isLengthValid =
+    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
+  const hasNoWhitespace = !/\s/.test(watchNickname || '')
+
   return (
     <>
       <form
@@ -215,38 +223,57 @@ function ManagingMyInfo({
             className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
             // defaultValue={}
           />
-          {!errors.nickname && (
+          {(!errors.nickname ||
+            String(errors.nickname.message).length === 0) && (
             <div className="mt-4pxr inline-flex">
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isLengthValid ? checkedIcon : unCheckedIcon}
+                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">2-8자 이하</span>
+                  <span
+                    className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    2-8자 이하
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isValidPattern ? checkedIcon : unCheckedIcon}
+                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">한글/영어/숫자 가능</span>
+                  <span
+                    className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    한글/영어/숫자 가능
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">공백 불가</span>
+                  <span
+                    className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    공백 불가
+                  </span>
                 </div>
               </div>
             </div>
+          )}
+
+          {errors.nickname && String(errors.nickname.message).length !== 0 && (
+            <small className="mt-4pxr text-error font-caption-02" role="alert">
+              {errors.nickname.message}
+            </small>
           )}
 
           <div className="mt-40pxr">
@@ -315,7 +342,7 @@ function ManagingMyInfo({
           </div>
         </div>
 
-        <div className="mt-192pxr flex justify-center">
+        <div className="mb: mb-115pxr mt-192pxr flex justify-center">
           <Button
             type="submit"
             className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${!hasErrors ? 'bg-gray-10 text-gray-01' : 'bg-gray-04 text-gray-01'}`}
