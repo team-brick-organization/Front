@@ -33,7 +33,7 @@ interface IManagingMyInfoProps {
 interface IProfileFormInputs {
   detail: string
   email: string
-  name: string
+  nickname: string
 }
 function ManagingMyInfo({
   setIsPortalOpen,
@@ -68,7 +68,7 @@ function ManagingMyInfo({
 
     const data: IPostDuplicateNicknameResponse = await response.json()
     console.log('datas', data)
-    return data.duplicateNickname
+    return data.duplicateName
   }
   useEffect(() => {
     if (!accesstoken) {
@@ -95,21 +95,21 @@ function ManagingMyInfo({
   const onSubmit = async (data: IProfileFormInputs) => {
     if (!profileImage) return
 
-    const { detail, name } = data
+    const { detail, nickname } = data
 
     const birth = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
 
-    console.log('제출 데이터', { detail, name, birth, profileImage })
+    console.log('제출 데이터', { detail, nickname, birth, profileImage })
 
     const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-      { name },
+      { name: nickname },
       postDuplicateNickname,
     )
 
     if (isDuplicateNickname) {
-      setError('name', {
+      setError('nickname', {
         type: 'validate',
         message: '중복된 닉네임입니다.',
       })
@@ -119,7 +119,7 @@ function ManagingMyInfo({
     const editUserInfoResponse = await postEditUserInfo({
       body: {
         detail,
-        name,
+        nickname,
         birthday: birth,
         profileImageUrl: profileImage,
       },
@@ -131,7 +131,7 @@ function ManagingMyInfo({
 
     handleOpenModal()
   }
-  const hasErrors = !!errors.detail || !!errors.name
+  const hasErrors = !!errors.detail || !!errors.nickname
   if (!accesstoken) return null
 
   return (
@@ -180,28 +180,31 @@ function ManagingMyInfo({
         </div>
 
         <div className="mt-40pxr">
-          <label htmlFor="name" className="mb-8pxr text-gray-10 font-title-02">
+          <label
+            htmlFor="nickname"
+            className="mb-8pxr text-gray-10 font-title-02"
+          >
             닉네임
           </label>
           <Input
             variant="border"
-            id="name"
-            {...register('name', {
+            id="nickname"
+            {...register('nickname', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
               onBlur: async (e) => {
-                const name = e.target.value
+                const nickname = e.target.value
 
-                if (!name) return
+                if (!nickname) return
 
                 const isDuplicateNickname =
                   await fetchIsDuplicated<TypeNickname>(
-                    { name },
+                    { name: nickname },
                     postDuplicateNickname,
                   )
 
                 if (isDuplicateNickname) {
-                  setError('name', {
+                  setError('nickname', {
                     type: 'validate',
                     message: '이미 중복된 닉네임입니다.',
                   })
@@ -210,10 +213,10 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.name ? 'ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
             // defaultValue={}
           />
-          {!errors.name && (
+          {!errors.nickname && (
             <div className="mt-4pxr inline-flex">
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">

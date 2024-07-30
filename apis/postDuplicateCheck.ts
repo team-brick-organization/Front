@@ -7,17 +7,11 @@ async function postDuplicateCheck({
   body: TypeEmail | TypeNickname
 }): Promise<Response> {
   let endpoint = ''
-  // if (!('email' in body)) {
-  //   throw new Error('email이 없습니다.')
-  // }
-  // if (!('nickname' in body)) {
-  //   throw new Error('nickname이 없습니다.')
-  // }
 
   if ('email' in body) {
     endpoint = `${BASE_URL}/auth/users/duplicate-email`
   }
-  if ('nickname' in body) {
+  if ('name' in body) {
     endpoint = `${BASE_URL}/auth/users/duplicate-name`
   }
 
