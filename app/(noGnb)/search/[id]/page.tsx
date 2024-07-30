@@ -53,7 +53,7 @@ function SearchPage() {
   }, [sort, data])
 
   return (
-    <>
+    <div className="relative">
       <Search />
       <div className="mx-auto flex h-70pxr max-w-1220pxr flex-row items-center justify-normal px-20pxr">
         <Link href="/">
@@ -89,7 +89,7 @@ function SearchPage() {
       <div className="mx-auto w-fit pb-160pxr pt-80pxr">
         <Pagination currentPage={1} totalPages={12} onPageChange={() => {}} />
       </div>
-    </>
+    </div>
   )
 }
 
