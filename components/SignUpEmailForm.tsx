@@ -7,17 +7,18 @@ import {
   nicknamePattern,
   passwordMinLength,
 } from '@/constants/RegExr'
-import { Button } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@radix-ui/themes'
+import Image from 'next/image'
+import type { TypeEmail, TypeNickname } from 'types/types'
 import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import checkedIcon from '@/public/images/svgs/checked.svg'
-import Image from 'next/image'
+import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
-import postDuplicateEmail from '@/apis/postDuplicateCheck'
+import postDuplicateCheck from '@/apis/postDuplicateCheck'
 import postSignUp from '@/apis/postSignUp'
-import { useRouter } from 'next/navigation'
-import type { TypeEmail, TypeNickname } from 'types/types'
 import Input from './Input'
 
 export interface ISignUpFormInputs {
@@ -37,9 +38,12 @@ function SignUpEmailForm(): JSX.Element {
     setError,
   } = useForm<ISignUpFormInputs>({ mode: 'onChange' })
 
+  const watchNickname = watch('nickname')
   const password = watch('password')
 
-  async function fetchIsDuplicated<BodyType extends TypeEmail | TypeNickname>(
+  async function fetchIsDuplicatedEmail<
+    BodyType extends TypeEmail | TypeNickname,
+  >(
     text: BodyType,
     fetcher: ({
       body,
@@ -54,18 +58,52 @@ function SignUpEmailForm(): JSX.Element {
     if (!response.ok) {
       throw new Error('이메일 중복 확인에 실패했습니다.')
     }
-
     const data: IPostDuplicateEmailResponse = await response.json()
 
     return data.duplicateEmail
   }
 
+  async function fetchIsDuplicatedNickname<
+    BodyType extends TypeEmail | TypeNickname,
+  >(
+    text: BodyType,
+    fetcher: ({
+      body,
+    }: {
+      body: TypeEmail | TypeNickname
+    }) => Promise<Response>,
+  ) {
+    const response = await fetcher({
+      body: text,
+    })
+
+    if (!response.ok) {
+      throw new Error('닉네임 중복 확인에 실패했습니다.')
+    }
+    const data: IPostDuplicateNicknameResponse = await response.json()
+
+    return data.duplicateName
+  }
+
   const onSubmit = async (data: ISignUpFormInputs) => {
     const { email, password: dataPassword, nickname } = data
 
-    const isDuplicateEmail = await fetchIsDuplicated<TypeEmail>(
+    const isDuplicateNickname = await fetchIsDuplicatedNickname<TypeNickname>(
+      { name: nickname },
+      postDuplicateCheck,
+    )
+
+    if (isDuplicateNickname) {
+      setError('nickname', {
+        type: 'validate',
+        message: '중복된 닉네임입니다.',
+      })
+      return
+    }
+
+    const isDuplicateEmail = await fetchIsDuplicatedEmail<TypeEmail>(
       { email },
-      postDuplicateEmail,
+      postDuplicateCheck,
     )
 
     if (isDuplicateEmail) {
@@ -105,6 +143,11 @@ function SignUpEmailForm(): JSX.Element {
     togglePasswordCheckVisibility,
   } = usePasswordVisibility()
 
+  const isLengthValid =
+    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
+  const hasNoWhitespace = !/\s/.test(watchNickname || '')
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -123,48 +166,79 @@ function SignUpEmailForm(): JSX.Element {
             variant="border"
             id="nickname"
             {...register('nickname', {
-              required: '닉네임은 필수 입력입니다.',
+              required: '',
               pattern: nicknamePattern,
+              onBlur: async (e) => {
+                const nickname = e.target.value
+
+                if (!nickname) return
+
+                const isDuplicateNickname = await fetchIsDuplicatedNickname(
+                  { name: nickname },
+                  postDuplicateCheck,
+                )
+
+                if (isDuplicateNickname) {
+                  setError('nickname', {
+                    type: 'validate',
+                    message: '중복된 닉네임 입니다.',
+                  })
+                }
+              },
             })}
             type="text"
             placeholder="닉네임을 입력해 주세요."
             className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
           />
-          {!errors.nickname && (
+
+          {(!errors.nickname ||
+            String(errors.nickname.message).length === 0) && (
             <div className="mt-4pxr inline-flex">
               <div className="flex gap-16pxr">
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isLengthValid ? checkedIcon : unCheckedIcon}
+                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">2-8자 이하</span>
+                  <span
+                    className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    2-8자 이하
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={isValidPattern ? checkedIcon : unCheckedIcon}
+                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">한글/영어/숫자 가능</span>
+                  <span
+                    className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    한글/영어/숫자 가능
+                  </span>
                 </div>
                 <div className="flex gap-2pxr">
                   <Image
-                    src={checkedIcon}
-                    alt="checked 아이콘"
+                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
                     width={14}
                     height={14}
                   />
-                  <span className="font-caption-02">공백 불가</span>
+                  <span
+                    className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
+                  >
+                    공백 불가
+                  </span>
                 </div>
               </div>
             </div>
           )}
 
-          {errors.nickname && (
+          {errors.nickname && String(errors.nickname.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">
               {errors.nickname.message}
             </small>
@@ -186,9 +260,9 @@ function SignUpEmailForm(): JSX.Element {
 
                 if (!email) return
 
-                const isDuplicateEmail = await fetchIsDuplicated(
+                const isDuplicateEmail = await fetchIsDuplicatedEmail(
                   { email },
-                  postDuplicateEmail,
+                  postDuplicateCheck,
                 )
 
                 if (isDuplicateEmail) {
@@ -201,7 +275,7 @@ function SignUpEmailForm(): JSX.Element {
             })}
             type="email"
             placeholder="이메일을 입력해 주세요."
-            className={`mt-8pxr ${errors.email ? 'ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.email ? 'ring-1 ring-error' : 'text-gray-10'}`}
             autoComplete="username"
           />
 

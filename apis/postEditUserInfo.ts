@@ -3,7 +3,7 @@ import BASE_URL from './apiConfig'
 interface IPostEditUserInfoProps {
   body: {
     detail: string
-    name?: string // 추후 nickname으로 변경 예정
+    nickname?: string
     birthday: string
     profileImageUrl: string
   }
