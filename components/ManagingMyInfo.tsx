@@ -69,7 +69,7 @@ function ManagingMyInfo({
     }
 
     const data: IPostDuplicateNicknameResponse = await response.json()
-    console.log('datas', data)
+
     return data.duplicateName
   }
   useEffect(() => {

@@ -33,28 +33,30 @@ function SignInForm(): JSX.Element {
   } = useForm<ILoginFormInputs>({ mode: 'onChange' })
 
   const onSubmit = async (data: ILoginFormInputs) => {
-    const { email, password } = data
+    try {
+      const { email, password } = data
 
-    const postSignInResponse = await postSignIn({ body: { email, password } })
+      const postSignInResponse = await postSignIn({ body: { email, password } })
 
-    if (!postSignInResponse.ok) {
-      setError('email', {
-        type: 'manual',
-        message: '이메일 또는 비밀번호가 일치하지 않습니다.',
-      })
+      if (!postSignInResponse.ok) {
+        setError('email', {
+          type: 'manual',
+          message: '이메일 또는 비밀번호가 일치하지 않습니다.',
+        })
+      }
 
+      const { accessToken } =
+        (await postSignInResponse.json()) as IPostSignInResponse
+
+      setAccessToken(accessToken)
+
+      router.push('/')
+    } catch (error) {
       setError('password', {
         type: 'manual',
         message: '이메일 또는 비밀번호가 일치하지 않습니다.',
       })
-      return
     }
-    const { accessToken } =
-      (await postSignInResponse.json()) as IPostSignInResponse
-
-    setAccessToken(accessToken)
-
-    router.push('/')
   }
 
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
