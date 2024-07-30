@@ -6,9 +6,10 @@ import Link from 'next/link'
 import useUserStore from '@/stores/useUserStore'
 import getSignOut from '@/apis/getSignOut'
 import useScrollLock from '@/hooks/useScrollLock'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import useWindowWidth from '@/hooks/useWindowWidth'
 import { useEffect } from 'react'
+import useUserDataStore from '@/stores/useUserDataStore'
 
 interface SidemenuProps {
   isOpen: boolean
@@ -16,23 +17,16 @@ interface SidemenuProps {
 }
 
 function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
-  const {
-    accessToken,
-    setAccessToken,
-    name,
-    setName,
-    setEmail,
-    profileImageUrl,
-    setProfileImageUrl,
-  } = useUserStore()
-
+  const { accessToken, setAccessToken } = useUserStore()
+  const { userData } = useUserDataStore()
   const path = usePathname()
+  const searchParams = useSearchParams()
   const windowWidth = useWindowWidth()
 
   useScrollLock(isOpen)
 
   useEffect(() => {
-    const openSideMenuWidth = windowWidth !== null && windowWidth <= 538
+    const openSideMenuWidth = windowWidth !== null && windowWidth <= 700
 
     if (!openSideMenuWidth) {
       setIsOpen(false)
@@ -43,17 +37,23 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
     {
       name: '모집 중',
       link: '/socials',
-      isActive: path === '/liked' || path === '/socials?type=imminent',
+      isActive:
+        path === '/liked' ||
+        (path === '/socials' && searchParams.get('type') === 'closed'),
     },
     {
       name: '모집 마감',
-      link: '/socials?type=imminent',
-      isActive: path === '/socials' || path === '/liked',
+      link: '/socials?type=closed',
+      isActive:
+        (path === '/socials' && searchParams.get('type') !== 'closed') ||
+        path === '/liked',
     },
     {
       name: '찜한 소셜',
       link: '/liked',
-      isActive: path === '/socials?type=imminent' || path === '/socials',
+      isActive:
+        (path === '/socials' && searchParams.get('type') === 'closed') ||
+        path === '/socials',
     },
   ]
 
@@ -63,14 +63,14 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
 
   return (
     <div
-      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block max538Min480:!left-0pxr max538Min480:!block`}
+      className={`${isOpen ? '' : 'translate-x-full'} fixed left-0pxr top-0pxr z-50 hidden h-screen w-full bg-gray-01 transition-transform duration-300 ease-in-out mb:block max700Min480:!left-0pxr max700Min480:!block`}
     >
       <section className="left-0pxr top-0pxr flex h-70pxr w-full flex-row items-center justify-between bg-gray-02 px-20pxr">
         <div className="flex flex-row items-center gap-16pxr">
           {accessToken && (
             <Avatar
-              src={profileImageUrl}
-              fallback={name?.slice(0, 1)}
+              src={userData.profileImageUrl}
+              fallback={userData.name.slice(0, 1)}
               className="rounded-full"
             />
           )}
@@ -78,7 +78,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
             {accessToken ? (
               <Link href="/mypage">
                 <button type="button" onClick={handleOnClose}>
-                  <p className="text-gray-10 font-title-04">{name}</p>
+                  <p className="text-gray-10 font-title-04">{userData.name}</p>
                 </button>
               </Link>
             ) : (
@@ -108,21 +108,19 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
             href={menu.link}
             className={`${menu.isActive ? 'text-gray-06' : 'text-gray-10'} text-left font-headline-02`}
             key={`menu-${index + 0}`}
+            onClick={() => setIsOpen(false)}
           >
             {menu.name}
           </Link>
         ))}
       </section>
-      {name && (
+      {accessToken && (
         <button
           type="button"
           className="mt-400pxr px-20pxr text-left text-gray-10 font-headline-02"
           onClick={async () => {
             await getSignOut({ accessToken })
             setAccessToken('')
-            setName('')
-            setEmail('')
-            setProfileImageUrl('')
           }}
         >
           로그아웃

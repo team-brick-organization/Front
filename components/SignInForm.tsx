@@ -14,7 +14,6 @@ import useWindowWidth from '@/hooks/useWindowWidth'
 import postSignIn from '@/apis/postSignIn'
 import { useRouter } from 'next/navigation'
 import useUserStore from '@/stores/useUserStore'
-import getUser from '@/apis/getUser'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -24,7 +23,8 @@ export interface ILoginFormInputs {
 
 function SignInForm(): JSX.Element {
   const router = useRouter()
-  const { setAccessToken, setEmail, setName } = useUserStore()
+  const { setAccessToken } = useUserStore()
+
   const {
     register,
     handleSubmit,
@@ -53,14 +53,6 @@ function SignInForm(): JSX.Element {
       (await postSignInResponse.json()) as IPostSignInResponse
 
     setAccessToken(accessToken)
-
-    const getUserResponse = await getUser({ accessToken })
-
-    const { email: getUserEmail, name: getUserName } =
-      (await getUserResponse.json()) as IGetUserResponse
-
-    setEmail(getUserEmail)
-    setName(getUserName)
 
     router.push('/')
   }

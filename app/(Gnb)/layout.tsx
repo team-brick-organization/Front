@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Gnb, KakaoScript } from '@/components'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -38,7 +39,9 @@ export default function RootLayout({
           <Script src={DAUM_POST_CODE_URL} />
           <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
           <KakaoScript />
-          <Gnb />
+          <Suspense>
+            <Gnb />
+          </Suspense>
           {children}
           <div id="portal" />
         </Theme>

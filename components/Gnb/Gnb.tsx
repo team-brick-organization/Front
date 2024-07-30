@@ -12,10 +12,12 @@ import useSearchStore from '@/stores/useSearchStore'
 import { Button, Search, Sidemenu } from '@/components'
 import getSignOut from '@/apis/getSignOut'
 import useUserStore from '@/stores/useUserStore'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import logo from '@/public/images/svgs/logo.svg'
 import Image from 'next/image'
 import useScrollLock from '@/hooks/useScrollLock'
+import getUser from '@/apis/getUser'
+import useUserDataStore from '@/stores/useUserDataStore'
 
 /**
  * GNB컴포넌트
@@ -23,20 +25,15 @@ import useScrollLock from '@/hooks/useScrollLock'
  */
 
 function Gnb() {
-  const {
-    accessToken,
-    setAccessToken,
-    name,
-    setName,
-    setEmail,
-    profileImageUrl,
-    setProfileImageUrl,
-  } = useUserStore()
+  const { hydrated, accessToken, setAccessToken } = useUserStore()
+  const { userData, setUserData } = useUserDataStore()
   const { onSearch, setOnSearch } = useSearchStore()
   const [sideMenu, setSideMenu] = useState(false)
+
   useScrollLock(onSearch)
 
   const path = usePathname()
+  const searchParams = useSearchParams()
   const pathArray = path.split('/')
   const onlyLogo = !(
     path.includes('password-find') ||
@@ -57,19 +54,26 @@ function Gnb() {
     {
       name: '모집 중',
       link: '/socials',
-      pathName: path === '/liked' || path === '/socials?type=imminent',
+      pathName:
+        path === '/liked' ||
+        (path === '/socials' && searchParams.get('type') === 'closed'),
     },
     {
       name: '모집 마감',
-      link: '/socials?type=imminent',
-      pathName: path === '/socials' || path === '/liked',
+      link: '/socials?type=closed',
+      pathName:
+        (path === '/socials' && searchParams.get('type') !== 'closed') ||
+        path === '/liked',
     },
     {
       name: '찜한 소셜',
       link: '/liked',
-      pathName: path === '/socials?type=imminent' || path === '/socials',
+      pathName:
+        (path === '/socials' && searchParams.get('type') === 'closed') ||
+        path === '/socials',
     },
   ]
+  console.log(searchParams)
 
   const handleOpenSideMenu = () => {
     setSideMenu(true)
@@ -82,6 +86,24 @@ function Gnb() {
   const handleClickOutside = () => {
     setOnSearch(false)
   }
+
+  useEffect(() => {
+    async function fetchUserData() {
+      if (accessToken !== '' && accessToken !== null) {
+        try {
+          const data = await getUser({ accessToken })
+          if (!data.ok) console.error('error: ', data.status)
+
+          const jsonfied = await data.json()
+          setUserData(jsonfied)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
+      }
+    }
+
+    fetchUserData()
+  }, [accessToken, hydrated])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,17 +125,17 @@ function Gnb() {
         className={`${opacityClassName} mx-auto h-70pxr w-full max-w-1180pxr`}
       >
         <div className="flex h-full flex-row items-center justify-between">
-          <div className="flex w-full max-w-370pxr flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-60pxr">
             <Link href="/" className="shrink-0">
               <Image src={logo} alt="로고이미지" width={88} height={22} />
             </Link>
             {onlyLogo && (
-              <section className="flex flex-row justify-between gap-24pxr mb:hidden max538Min480:hidden">
+              <section className="flex flex-row justify-between gap-24pxr mb:hidden max700Min480:hidden">
                 {menus.map((menu, index) => (
                   <Link href={menu.link} key={`menu-${index + 0}`}>
                     <button
                       type="button"
-                      className={`${menu.pathName ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04 tb:font-title-02`}
+                      className={`${menu.pathName ? 'text-gray-06' : 'text-gray-10'} text-nowrap font-title-04`}
                     >
                       {menu.name}
                     </button>
@@ -123,7 +145,7 @@ function Gnb() {
             )}
           </div>
           {onlyLogo && (
-            <div className="hidden flex-row gap-16pxr mb:flex max538Min480:flex">
+            <div className="hidden flex-row gap-16pxr mb:flex max700Min480:flex">
               <button title="검색" type="button" onClick={handleOnSearch}>
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
@@ -133,7 +155,7 @@ function Gnb() {
             </div>
           )}
           {onlyLogo && (
-            <div className="flex flex-row items-center gap-24pxr mb:hidden max538Min480:hidden">
+            <div className="flex flex-row items-center gap-24pxr mb:hidden max700Min480:hidden">
               <button title="검색" type="button" onClick={handleOnSearch}>
                 <MagnifyingGlassIcon width="30" height="30" />
               </button>
@@ -148,10 +170,14 @@ function Gnb() {
                     <Avatar
                       fallback={
                         <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
-                          {name.charAt(0)}
+                          {userData.name?.charAt(0)}
                         </div>
                       }
-                      src={profileImageUrl}
+                      src={
+                        userData.profileImageUrl
+                          ? userData.profileImageUrl
+                          : undefined
+                      }
                       className="w-36 h-36 rounded-full"
                     />
                   </button>
@@ -173,9 +199,6 @@ function Gnb() {
                   onClick={async () => {
                     await getSignOut({ accessToken })
                     setAccessToken('')
-                    setName('')
-                    setEmail('')
-                    setProfileImageUrl('')
                   }}
                 >
                   로그아웃
@@ -185,13 +208,13 @@ function Gnb() {
           )}
         </div>
       </main>
-      <div className="absolute top-0pxr z-50 -translate-x-[20px]">
+      <div className="absolute top-0pxr z-50 w-full -translate-x-[20px]">
         {onSearch ? (
           <>
             <Search />
             <div
               onClick={handleClickOutside}
-              className="relative h-screen w-screen"
+              className="absolue -top-70pxr h-screen w-screen"
             >
               <div
                 className="absolute left-0pxr top-70pxr w-full cursor-default bg-black opacity-30"

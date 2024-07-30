@@ -3,19 +3,14 @@
 import { MyPageTab } from '@/components/index'
 import ProfileCard from '@/components/ProfileCard'
 import createTabStore from '@/stores/createTabStore'
+import useUserDataStore from '@/stores/useUserDataStore'
 import useUserStore from '@/stores/useUserStore'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 function MyPage() {
-  const {
-    name,
-    profileImageUrl,
-    description,
-    accessToken,
-    setAccessToken,
-    hydrated,
-  } = useUserStore()
+  const { accessToken, setAccessToken, hydrated } = useUserStore()
+  const { userData } = useUserDataStore()
   const tabStore = createTabStore()
   const router = useRouter()
 
@@ -30,9 +25,9 @@ function MyPage() {
       <section className="h-400pxr mb:px-20pxr">
         <ProfileCard
           type="user"
-          profileImageUrl={profileImageUrl}
-          name={name}
-          description={description}
+          profileImageUrl={userData.profileImageUrl}
+          name={userData.name}
+          description={userData.introduce}
         />
       </section>
       <section className="flex w-full flex-col pb-160pxr">

@@ -5,7 +5,9 @@ interface IBadgeProps {
   type: 'primary' | 'tag' | 'search'
   size?: 'small' | 'medium' | 'large'
   className?: string
-  onCrossClick?: () => void
+  onCrossClick?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void
   children: ReactNode
 }
 
