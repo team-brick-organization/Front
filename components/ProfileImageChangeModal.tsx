@@ -35,11 +35,13 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
         !file.type.includes('jpeg') &&
         !file.type.includes('webp')
       ) {
+        // eslint-disable-next-line no-alert
         alert('이미지 파일만 업로드 가능합니다.')
         return
       }
 
       if (file.size > 1024 * 1024 * 10) {
+        // eslint-disable-next-line no-alert
         alert(
           `${file.name}이 10MB를 초과합니다.\n이미지는 10MB 이하만 업로드 가능 합니다.`,
         )
