@@ -50,7 +50,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
       const reader = new FileReader()
       reader.onload = () => {
         setProfileImage(reader.result as string)
-        notify('프로필 이미지가 성공적으로 변경되었습니다.', 'default')
+        notify('프로필 이미지가 성공적으로 변경되었어요.', 'default')
       }
       reader.readAsDataURL(file)
     }
