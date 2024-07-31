@@ -1,9 +1,8 @@
-import { Social } from '../MypageCards/MypageCard'
 import MainPageMobileCard from './MainPageMobileCard'
 import WeeklyMoreButton from '../WeeklyMoreButton'
 
 interface MainPageMobileCardListProps {
-  data: Social[]
+  data?: GetSocialsType
 }
 
 function MainPageMobileCardList({ data }: MainPageMobileCardListProps) {
@@ -12,7 +11,7 @@ function MainPageMobileCardList({ data }: MainPageMobileCardListProps) {
       <li>
         <WeeklyMoreButton />
       </li>
-      {data.slice(0, 7).map((item, i) => (
+      {data?.slice(0, 7).map((item, i) => (
         <li key={`${i + 0}`}>
           <MainPageMobileCard key={`${i + 0}`} data={item} />
         </li>
