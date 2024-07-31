@@ -47,6 +47,7 @@ function ManagingMyInfo({
     setError,
     formState: { errors },
   } = useForm<IProfileFormInputs>({ mode: 'onChange' })
+
   const watchNickname = watch('nickname')
 
   const {
@@ -220,8 +221,7 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
-            // defaultValue={}
+            className={`mt-8pxr ${errors.nickname ? 'border-0 ring-1 ring-error' : ''}`}
           />
           {(!errors.nickname ||
             String(errors.nickname.message).length === 0) && (
@@ -292,7 +292,7 @@ function ManagingMyInfo({
               })}
               type="text"
               placeholder="띄어쓰기 포함 80자 이내로 입력해 주세요."
-              className={`mt-8pxr ${errors.detail ? 'ring-1 ring-error' : ''}`}
+              className={`mt-8pxr ${errors.detail ? 'border-0 ring-1 ring-error' : ''}`}
             />
           </div>
           <div className="mt-40pxr">
