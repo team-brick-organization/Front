@@ -86,7 +86,7 @@ function SignInForm(): JSX.Element {
           })}
           type="email"
           placeholder="이메일을 입력해 주세요."
-          className={`mt-4pxr ${errors.email ? 'ring-1 ring-error' : ''}`}
+          className={`mt-4pxr ${errors.email ? 'border-0 ring-1 ring-error' : ''}`}
           color="gray"
         />
 
@@ -111,7 +111,7 @@ function SignInForm(): JSX.Element {
             })}
             type={showPassword ? 'text' : 'password'}
             placeholder="비밀번호를 입력해주세요."
-            className={`${errors.password ? 'ring-1 ring-error' : ''}`}
+            className={`${errors.password ? 'border-0 ring-1 ring-error' : ''}`}
           />
           <button
             title="비밀번호 보이기/숨기기 버튼"

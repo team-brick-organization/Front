@@ -147,7 +147,7 @@ function SignUpEmailForm(): JSX.Element {
     watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
   const isValidPattern = nicknamePattern.value.test(watchNickname || '')
   const hasNoWhitespace = !/\s/.test(watchNickname || '')
-
+  const showChecks = watchNickname && watchNickname.length >= 2
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -188,55 +188,55 @@ function SignUpEmailForm(): JSX.Element {
             })}
             type="text"
             placeholder="닉네임을 입력해 주세요."
-            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.nickname ? 'border-0 ring-1 ring-error' : ''}`}
           />
 
-          {(!errors.nickname ||
-            String(errors.nickname.message).length === 0) && (
-            <div className="mt-4pxr inline-flex">
-              <div className="flex gap-16pxr">
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={isLengthValid ? checkedIcon : unCheckedIcon}
-                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    2-8자 이하
-                  </span>
-                </div>
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={isValidPattern ? checkedIcon : unCheckedIcon}
-                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    한글/영어/숫자 가능
-                  </span>
-                </div>
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
-                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    공백 불가
-                  </span>
+          {(!errors.nickname || String(errors.nickname.message).length === 0) &&
+            showChecks && (
+              <div className="mt-4pxr inline-flex">
+                <div className="flex gap-16pxr">
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={isLengthValid ? checkedIcon : unCheckedIcon}
+                      alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      2-8자 이하
+                    </span>
+                  </div>
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={isValidPattern ? checkedIcon : unCheckedIcon}
+                      alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      한글/영어/숫자 가능
+                    </span>
+                  </div>
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                      alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      공백 불가
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {errors.nickname && String(errors.nickname.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">
@@ -275,7 +275,7 @@ function SignUpEmailForm(): JSX.Element {
             })}
             type="email"
             placeholder="이메일을 입력해 주세요."
-            className={`mt-8pxr ${errors.email ? 'ring-1 ring-error' : 'text-gray-10'}`}
+            className={`mt-8pxr ${errors.email ? 'border-0 ring-1 ring-error' : 'text-gray-10'}`}
             autoComplete="username"
           />
 
@@ -303,7 +303,7 @@ function SignUpEmailForm(): JSX.Element {
               })}
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력해주세요."
-              className={`${errors.password ? 'ring-1 ring-error' : ''}`}
+              className={`${errors.password ? 'border-0 ring-1 ring-error' : ''}`}
               autoComplete="password"
             />
             <button
@@ -351,7 +351,7 @@ function SignUpEmailForm(): JSX.Element {
               })}
               type={showPasswordCheck ? 'text' : 'password'}
               placeholder="비밀번호를 다시 한번 입력해주세요."
-              className={`${errors.passwordCheck ? 'ring-1 ring-error' : ''}`}
+              className={`${errors.passwordCheck ? 'border-0 ring-1 ring-error' : ''}`}
               autoComplete="new-password"
             />
             <button
