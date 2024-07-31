@@ -18,9 +18,11 @@ import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
 import postEditUserInfo from '@/apis/postEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
+import BASE_URL from '@/apis/apiConfig'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { TypeNickname } from 'types/types'
+import useUserDataStore from '@/stores/useUserDataStore'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
 
@@ -57,7 +59,16 @@ function ManagingMyInfo({
   } = useUserInfoPortal()
 
   const accesstoken = useUserStore()
-
+  const {
+    userData: { email, name: userName, introduce },
+  } = useUserDataStore()
+  // console.log('userData', { email, userName, introduce })
+  const profileImage = useEditProfileImageStore(
+    (state) => state.profileImageUrl,
+  )
+  const setProfileImage = useEditProfileImageStore(
+    (state) => state.setProfileImageUrl,
+  )
   async function fetchIsDuplicated<BodyType extends TypeNickname>(
     text: BodyType,
     fetcher: ({ body }: { body: TypeNickname }) => Promise<Response>,
@@ -74,6 +85,7 @@ function ManagingMyInfo({
   }
   useEffect(() => {
     if (!accesstoken) {
+      // eslint-disable-next-line no-alert
       alert('로그인이 필요한 서비스입니다.')
       router.push('/signin')
     }
@@ -90,10 +102,6 @@ function ManagingMyInfo({
     timeIntervals: 60,
   })
 
-  const profileImage = useEditProfileImageStore(
-    (state) => state.profileImageUrl,
-  )
-
   const onSubmit = async (data: IProfileFormInputs) => {
     if (!profileImage) return
 
@@ -102,7 +110,7 @@ function ManagingMyInfo({
     const birth = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
-
+    // eslint-disable-next-line no-console
     console.log('제출 데이터', { detail, nickname, birth, profileImage })
 
     const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
@@ -117,21 +125,33 @@ function ManagingMyInfo({
       })
       return
     }
+    const formData = new FormData()
+    formData.append('file', profileImage)
 
-    const editUserInfoResponse = await postEditUserInfo({
-      body: {
-        detail,
-        nickname,
-        birthday: birth,
-        profileImageUrl: profileImage,
-      },
-    })
-    console.log('정보 변경 데이터', data)
-    if (!editUserInfoResponse.ok) {
-      return
+    try {
+      const response = await fetch(`${BASE_URL}/auth/users`, {
+        method: 'PATCH',
+        body: formData,
+      })
+      const result = await response.json()
+
+      const editUserInfoResponse = await postEditUserInfo({
+        body: {
+          detail,
+          nickname,
+          birthday: birth,
+          profileImageUrl: result.imageUrl,
+        },
+      })
+
+      if (!editUserInfoResponse.ok) {
+        return
+      }
+      setProfileImage(null)
+      handleOpenModal()
+    } catch (error) {
+      console.error('회원정보 수정에 실패했습니다.', error)
     }
-
-    handleOpenModal()
   }
   const hasErrors = !!errors.detail || !!errors.nickname
   if (!accesstoken) return null
@@ -196,6 +216,7 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="nickname"
+            defaultValue={userName}
             {...register('nickname', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
@@ -221,7 +242,6 @@ function ManagingMyInfo({
             type="text"
             placeholder="User123"
             className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
-            // defaultValue={}
           />
           {(!errors.nickname ||
             String(errors.nickname.message).length === 0) && (
@@ -286,6 +306,7 @@ function ManagingMyInfo({
             <Input
               variant="border"
               id="detail"
+              defaultValue={introduce}
               {...register('detail', {
                 required: '한 줄 소개를 입력해 주세요.',
                 pattern: detailPattern,
@@ -310,7 +331,7 @@ function ManagingMyInfo({
               placeholder="User@gmail.com"
               className="mt-8pxr bg-gray-03"
               color="gray"
-              // defaultValue={}
+              defaultValue={email}
             />
           </div>
 
