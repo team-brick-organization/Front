@@ -6,13 +6,13 @@ import { PersonIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import useFavorite from '@/hooks/useFavorite'
 import formatDate from '@/utils/formatDate'
+import getEventStatus from '@/utils/getEventStatus'
 import TagBadgeList from '../CustomBadge/TagBadgeList'
 import CustomBadge from '../CustomBadge/CustomBadge'
 import FavoriteButton from '../FavoriteButton'
-import { Social } from '../MypageCards/MypageCard'
 
 type GatheringCardProps = {
-  data: Social
+  data: IGetSocial
 }
 
 /**
@@ -24,10 +24,6 @@ type GatheringCardProps = {
 function GatheringCard({ data }: GatheringCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
-  const isClosed =
-    new Date(data.gatheringDate) < new Date() ||
-    data.participantCount.currentPeople === data.participantCount.maxPeople
-
   const isClickableFavorite =
     new Date(data.gatheringDate) > new Date() || isFavoriteClicked
 
@@ -35,44 +31,35 @@ function GatheringCard({ data }: GatheringCardProps) {
 
   const formattedDate = formatDate(new Date(data.gatheringDate))
 
+  const statusBadgeText = getEventStatus(
+    data.gatheringDate,
+    data.participantCount.current,
+    data.participantCount.max,
+  )
+
   return (
-    <div className="card group relative w-full">
+    <div className="card group relative">
       <Link href={`/socials/${data.id}`}>
         <button
           type="button"
           className="relative flex h-full w-full cursor-pointer flex-col gap-8pxr"
         >
-          <section className="relative flex h-fit w-fit items-center justify-center overflow-hidden rounded-[.3125rem] bg-slate-100">
-            {data?.imageUrl && (
-              <Image
-                src={data.imageUrl}
-                alt="모임사진"
-                className="object-cover transition-transform duration-200 group-[.card]:group-hover:scale-110"
-                width={320}
-                height={248}
-              />
-            )}
-            {/* 회의때 정해서 값넣어주기(false 대신) */}
-            {false && (
+          <section className="relative flex aspect-[280/208] h-full w-full items-center justify-center overflow-hidden rounded-[.3125rem] bg-slate-100">
+            <Image
+              src={data.thumbnail}
+              alt="모임사진"
+              className="transition-transform duration-200 group-[.card]:group-hover:scale-110"
+              objectFit="cover"
+              fill
+            />
+            {statusBadgeText && (
               <CustomBadge
                 type="primary"
                 size="large"
-                className="absolute left-16pxr top-16pxr tb:left-24pxr tb:top-24pxr"
+                className="absolute left-16pxr top-16pxr"
               >
-                마감 임박
+                {statusBadgeText}
               </CustomBadge>
-            )}
-            {isClosed && (
-              <>
-                <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
-                <CustomBadge
-                  type="primary"
-                  size="large"
-                  className="absolute left-16pxr top-16pxr tb:left-24pxr tb:top-24pxr"
-                >
-                  모집 마감
-                </CustomBadge>
-              </>
             )}
           </section>
           <div className="flex w-full flex-col gap-4pxr">
@@ -81,7 +68,7 @@ function GatheringCard({ data }: GatheringCardProps) {
             </section>
             <section className="flex flex-col gap-4pxr">
               <h4 className="truncate whitespace-nowrap text-left text-gray-10 font-title-04">
-                {data.socialName}
+                {data.name}
               </h4>
               <div className="flex items-center gap-8pxr">
                 <div className="flex flex-row gap-4pxr">
@@ -104,7 +91,7 @@ function GatheringCard({ data }: GatheringCardProps) {
                   <Avatar
                     size="1"
                     className="h-20pxr w-20pxr bg-gray-04"
-                    src={data.owner.profileImageUrl}
+                    src={data.owner.profileUrl}
                     radius="full"
                     fallback={
                       <div className="flex h-20pxr w-20pxr items-center justify-center rounded-full bg-gray-04 text-gray-10">
@@ -123,13 +110,14 @@ function GatheringCard({ data }: GatheringCardProps) {
 
                 <div className="flex flex-row items-center gap-4pxr">
                   <PersonIcon className="text-gray-06" width={17} height={17} />
-                  <p className="text-gray-06 font-caption-03">{`${data.participantCount.currentPeople}/${data.participantCount.maxPeople}`}</p>
+                  <p className="text-gray-06 font-caption-03">{`${data.participantCount.current}/${data.participantCount.max}`}</p>
                 </div>
               </div>
             </section>
           </div>
         </button>
       </Link>
+
       {isClickableFavorite && (
         <div className="absolute right-16pxr top-16pxr">
           <FavoriteButton

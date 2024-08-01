@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import formatDate from '@/utils/formatDate'
 import Link from 'next/link'
-import { Social } from '../MypageCards/MypageCard'
 import { TagBadgeList } from '..'
 
 interface MainPageMobileCardProps {
-  data: Social
+  data: IGetSocial
 }
 function MainPageMobileCard({ data }: MainPageMobileCardProps) {
   const formattedDate = formatDate(new Date(data.gatheringDate))
@@ -13,10 +12,10 @@ function MainPageMobileCard({ data }: MainPageMobileCardProps) {
   return (
     <Link href={`/socials/${data.id}`}>
       <div className="flex h-235pxr w-full flex-col gap-4pxr rounded-[.625rem]">
-        <section className="relative h-158pxr w-full pl-10pxr pt-10pxr">
+        <section className="relative h-158pxr w-full pl-10pxr pt-10pxr transition-all duration-150 hover:scale-[1.03] hover:shadow-lg">
           <TagBadgeList tags={data.tags} />
           <Image
-            src={data.imageUrl}
+            src={data.thumbnail}
             alt="인기모임이미지"
             fill
             className="-z-10 rounded-[.625rem] object-cover"
@@ -29,7 +28,7 @@ function MainPageMobileCard({ data }: MainPageMobileCardProps) {
           />
         </section>
         <section className="flex flex-col gap-0pxr">
-          <h1 className="text-gray-10 font-title-04">{data.socialName}</h1>
+          <h1 className="text-gray-10 font-title-04">{data.name}</h1>
 
           <div className="flex flex-row gap-4pxr">
             <Image

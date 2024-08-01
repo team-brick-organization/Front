@@ -1,64 +1,53 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import mockSocialProps from '@/components/Gnb/moc'
 import { GatheringCardList, Pagination, SortButtons } from '@/components/index'
-import { Social } from '@/components/MypageCards/MypageCard'
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import curlyArrowImage from '@/public/images/svgs/curlyArrow.svg'
 import doodleImage from '@/public/images/svgs/doodle.svg'
 import pinImage from '@/public/images/pngs/pin.png'
+import getSocials from '@/apis/getSocials'
+import chevronDownIcon from '@/public/images/svgs/chevronDown.svg'
 
 function LikedSocialsListPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [socialsData, setSocialsData] = useState<Social[]>([])
+  const [socialsData, setSocialsData] = useState<GetSocialsType>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [sort, setSort] = useState('최신순')
-  const [filter, setFilter] = useState('전체')
+  const [sort, setSort] = useState<'popularity' | 'latest'>(
+    searchParams.get('sort') === 'popularity' ? 'popularity' : 'latest',
+  )
+  const [filter, setFilter] = useState(() => {
+    const type = searchParams.get('type')
+    if (type === 'closed') {
+      return '모집 마감'
+    }
+
+    if (type === 'recruiting') {
+      return '모집 중'
+    }
+
+    return '전체'
+  })
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-  const slicedSocialsData = socialsData.slice(
-    (currentPage - 1) * 24,
-    currentPage * 24,
-  )
-
   const handleClickPopularity = () => {
-    setSort('인기순')
+    setSort('popularity')
+    router.push(`/liked?sort=popularity`)
   }
   const handleClickLatest = () => {
-    setSort('최신순')
+    setSort('latest')
+    router.push(`/liked`)
   }
 
   const titleText = '찜한 모임'
 
-  const description = '찜한 모임을 보면 내가 좋아하는 것을 알 수 있어요'
-
-  const bannerImage = pinImage
-
   const filterButtons = ['전체', '모집 중', '모집 마감']
-
-  useEffect(() => {
-    if (sort === '인기순') {
-      socialsData.sort((a, b) => {
-        return (
-          b.participantCount.currentPeople - a.participantCount.currentPeople
-        )
-      })
-    } else if (sort === '최신순') {
-      socialsData.sort((a, b) => {
-        return (
-          new Date(b.gatheringDate).getTime() -
-          new Date(a.gatheringDate).getTime()
-        )
-      })
-    }
-  }, [sort, socialsData])
 
   useEffect(() => {
     if (searchParams.get('type') === 'closed') {
@@ -72,60 +61,43 @@ function LikedSocialsListPage() {
   }, [searchParams])
 
   useEffect(() => {
-    const fetchSocialsData = [
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-    ]
+    const fetchSocials = async () => {
+      const response = await getSocials({
+        orderBy: sort === 'popularity' ? 'popularity' : undefined,
+      })
 
-    setSocialsData(fetchSocialsData)
-  }, [])
+      if (!response.ok) {
+        console.error('Failed to fetch socials')
+        return
+      }
+
+      const data = await response.json()
+      setSocialsData(data)
+    }
+
+    fetchSocials()
+  }, [sort])
 
   return (
     <div className="flex w-full flex-col items-center gap-80pxr px-20pxr pb-160pxr pt-40pxr">
       <div className="flex w-full max-w-1180pxr flex-col">
-        <Banner
-          titleText={titleText}
-          description={description}
-          bannerImage={bannerImage}
-        />
+        <Banner titleText={titleText} />
         <h1 className="mt-80pxr text-gray-10 font-headline-03 mb:mt-60pxr max862Min480:mt-60pxr">
           {titleText}
         </h1>
         <div className="mt-40pxr flex justify-between">
-          <ul className="flex items-center gap-8pxr">
-            {filterButtons.map((button) => (
-              <li key={button}>
-                <button
-                  className={`rounded-[0.3125rem] bg-gray-03 px-14pxr py-3pxr text-gray-06 font-title-02 ${button === filter ? 'bg-gray-06 !text-gray-01' : ''}`}
-                  type="button"
-                  onClick={() => {
-                    if (button === '전체') {
-                      setFilter('전체')
-                      router.push('/liked')
-                      return
-                    }
-
-                    if (button === '모집 중') {
-                      setFilter('모집 중')
-                      router.push('/liked?type=recruiting')
-                      return
-                    }
-
-                    if (button === '모집 마감') {
-                      setFilter('모집 마감')
-                      router.push('/liked?type=closed')
-                    }
-                  }}
-                >
-                  {button}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <FilterButtonList
+            filter={filter}
+            setFilter={setFilter}
+            filterButtons={filterButtons}
+            sort={sort}
+          />
+          <FilterDropDown
+            filter={filter}
+            setFilter={setFilter}
+            filterButtons={filterButtons}
+            sort={sort}
+          />
           <SortButtons
             sort={sort}
             onClickLatest={handleClickLatest}
@@ -133,7 +105,7 @@ function LikedSocialsListPage() {
           />
         </div>
         <div className="mt-24pxr w-full">
-          <GatheringCardList data={slicedSocialsData} />
+          <GatheringCardList data={socialsData} />
         </div>
       </div>
       <Pagination
@@ -147,15 +119,11 @@ function LikedSocialsListPage() {
 
 export default LikedSocialsListPage
 
-function Banner({
-  titleText,
-  description,
-  bannerImage,
-}: {
-  titleText: string
-  description: string
-  bannerImage: StaticImageData
-}) {
+function Banner({ titleText }: { titleText: string }) {
+  const description = '찜한 모임을 보면 내가 좋아하는 것을 알 수 있어요'
+
+  const bannerImage = pinImage
+
   return (
     <div className="relative flex h-200pxr w-full max-w-1180pxr overflow-hidden rounded-[0.625rem] border border-gray-04 bg-gray-01 mb:bg-primary max862Min480:bg-primary">
       <div className="absolute bottom-0pxr left-0pxr right-0pxr top-0pxr hidden h-200pxr w-440pxr opacity-[0.2] mb:block max862Min480:block">
@@ -185,5 +153,138 @@ function Banner({
         alt="pin image"
       />
     </div>
+  )
+}
+
+function FilterDropDown({
+  filter,
+  setFilter,
+  filterButtons,
+  sort,
+}: {
+  filter: string
+  setFilter: (filter: string) => void
+  filterButtons: string[]
+  sort: 'popularity' | 'latest'
+}) {
+  const router = useRouter()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  return (
+    <div className="relative hidden max400:block">
+      <button
+        className="flex items-center"
+        type="button"
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      >
+        <span className="px-13pxr py-2pxr text-gray-08 font-title-02">
+          {filter}
+        </span>
+        <Image
+          className={
+            isDropdownOpen
+              ? 'transition-transform duration-300 ease-in-out'
+              : 'rotate-180 transform transition-transform duration-300 ease-in-out'
+          }
+          src={chevronDownIcon}
+          width={26}
+          height={26}
+          alt="chevron down icon"
+        />
+      </button>
+      {isDropdownOpen && (
+        <ul className="absolute left-0pxr top-32pxr z-10 w-78pxr rounded-[0.3125rem] border border-gray-04 bg-white">
+          {filterButtons.map((button, index) => (
+            <>
+              <li key={button}>
+                <button
+                  className={`w-full py-4pxr text-gray-06 font-title-02 ${button === filter ? '!text-gray-08' : ''}`}
+                  type="button"
+                  onClick={() => {
+                    if (button === '전체') {
+                      setFilter('전체')
+                      router.push(
+                        `/liked${sort === 'latest' ? '' : `?sort=${sort}`}`,
+                      )
+                      return
+                    }
+
+                    if (button === '모집 중') {
+                      setFilter('모집 중')
+                      router.push(
+                        `/liked?type=recruiting${sort === 'latest' ? '' : `&sort=${sort}`}`,
+                      )
+                      return
+                    }
+
+                    if (button === '모집 마감') {
+                      setFilter('모집 마감')
+                      router.push(
+                        `/liked?type=closed${sort === 'latest' ? '' : `&sort=${sort}`}`,
+                      )
+                    }
+                  }}
+                >
+                  {button}
+                </button>
+              </li>
+              {index !== filterButtons.length - 1 && (
+                <div className="h-1pxr w-77pxr bg-gray-04" />
+              )}
+            </>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function FilterButtonList({
+  filterButtons,
+  filter,
+  setFilter,
+  sort,
+}: {
+  filterButtons: string[]
+  filter: string
+  setFilter: (filter: string) => void
+  sort: 'popularity' | 'latest'
+}) {
+  const router = useRouter()
+  return (
+    <ul className="flex items-center gap-8pxr max400:hidden">
+      {filterButtons.map((button) => (
+        <li key={button}>
+          <button
+            className={`rounded-[0.3125rem] bg-gray-03 px-14pxr py-3pxr text-gray-06 font-title-02 ${button === filter ? 'bg-gray-06 !text-gray-01' : ''}`}
+            type="button"
+            onClick={() => {
+              if (button === '전체') {
+                setFilter('전체')
+                router.push(`/liked${sort === 'latest' ? '' : `?sort=${sort}`}`)
+                return
+              }
+
+              if (button === '모집 중') {
+                setFilter('모집 중')
+                router.push(
+                  `/liked?type=recruiting${sort === 'latest' ? '' : `&sort=${sort}`}`,
+                )
+                return
+              }
+
+              if (button === '모집 마감') {
+                setFilter('모집 마감')
+                router.push(
+                  `/liked?type=closed${sort === 'latest' ? '' : `&sort=${sort}`}`,
+                )
+              }
+            }}
+          >
+            {button}
+          </button>
+        </li>
+      ))}
+    </ul>
   )
 }

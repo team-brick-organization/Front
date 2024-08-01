@@ -1,10 +1,10 @@
 'use client'
 
 import { GatheringCard } from '@/components'
-import { Social } from '../MypageCards/MypageCard'
+import React from 'react'
 
 interface CardListProps {
-  data: Social[]
+  data: GetSocialsType
 }
 
 /**
@@ -14,7 +14,7 @@ interface CardListProps {
 
 function GatheringCardList({ data }: CardListProps) {
   return (
-    <div className="grid w-full grid-cols-4 gap-x-20pxr gap-y-40pxr mb:grid-cols-2 mb:gap-x-10pxr mb:gap-y-32pxr tb:gap-x-16pxr max344:grid-cols-1 max700Min480:!grid-cols-2 max900Min480:grid-cols-3">
+    <div className="grid w-full grid-cols-4 gap-x-20pxr gap-y-40pxr mb:grid-cols-2 mb:gap-x-10pxr mb:gap-y-32pxr tb:gap-x-16pxr max420:!grid-cols-1 max700Min480:!grid-cols-2 max900Min480:grid-cols-3">
       {data.map((item, index) => (
         <GatheringCard data={item} key={`${index + 0}`} />
       ))}

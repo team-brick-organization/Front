@@ -5,7 +5,7 @@ interface ILikedLayoutProps {
 }
 
 function LikedLayout({ children }: ILikedLayoutProps) {
-  return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+  return <Suspense>{children}</Suspense>
 }
 
 export default LikedLayout
