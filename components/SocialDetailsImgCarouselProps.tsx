@@ -26,7 +26,7 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
       className="relative h-400pxr w-full max-w-1180pxr overflow-hidden mb:max-h-231pxr mb:max-w-439pxr"
       ref={emblaRef}
     >
-      <ul className="p-0 flex h-full w-full list-none flex-row">
+      <ul className="flex h-full w-full list-none flex-row p-0pxr">
         {images.map((image, index) => (
           <li key={`${index + 0}`} className="relative h-full w-full flex-none">
             <Image
