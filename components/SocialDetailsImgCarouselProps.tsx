@@ -26,12 +26,9 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
       className="relative h-400pxr w-full max-w-1180pxr overflow-hidden mb:max-h-231pxr mb:max-w-439pxr"
       ref={emblaRef}
     >
-      <div className="flex h-full w-full flex-row">
+      <ul className="p-0 flex h-full w-full list-none flex-row">
         {images.map((image, index) => (
-          <div
-            key={`${index + 0}`}
-            className="relative h-full w-full flex-none"
-          >
+          <li key={`${index + 0}`} className="relative h-full w-full flex-none">
             <Image
               fill
               src={image.src}
@@ -39,9 +36,9 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
               className="h-full w-full object-cover"
               onClick={() => setIsPortalOpen(true)}
             />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <Portal
         handleOutsideClick={handleOutsideClick}
