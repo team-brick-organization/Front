@@ -8,7 +8,7 @@ import chevronrightIcon from '@/public/images/svgs/chevronright.svg'
 
 interface IImageViewerModalProps {
   images: {
-    id: number
+    // id: number
     src: string
   }[]
   initialIndex: number
@@ -40,7 +40,7 @@ function ImageViewerModal({
     <div className="relative h-full w-full overflow-hidden rounded-[.625rem] bg-[#F9FAFC] object-cover">
       <Image
         src={images[currentImageIndex].src}
-        alt={images[currentImageIndex].id.toString()}
+        alt={`이미지 ${currentImageIndex + 1}`}
         className="object-cover"
         fill
       />
