@@ -1,5 +1,6 @@
 import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
+import { PersonIcon } from '@radix-ui/react-icons'
 import Button from './Button'
 
 interface IProfileCardProps {
@@ -21,7 +22,11 @@ function ProfileCard({
         className="h-109pxr w-109pxr rounded-full bg-gray-04"
         src={profileImageUrl}
         alt="프로필 이미지"
-        fallback={<div className="h-109pxr w-109pxr rounded-full bg-gray-04" />}
+        fallback={
+          <div className="flex h-109pxr w-109pxr items-center justify-center rounded-full bg-gray-04">
+            <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
+          </div>
+        }
       />
 
       <h1 className="mt-16pxr text-gray-10 font-headline-02">{name}</h1>
