@@ -1,4 +1,4 @@
-import { IParticipants } from '@/app/(Gnb)/socials/[id]/page'
+import { IParticipants } from 'types/getSocialDetails'
 import { LocationMap, ParticipantsList, SocialDescription } from './index'
 
 interface ISocialIntroduceProps {

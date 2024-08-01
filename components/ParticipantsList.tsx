@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { IParticipants } from '@/app/(Gnb)/socials/[id]/page'
+import { IParticipants } from 'types/getSocialDetails'
 import { Participants } from './index'
 
 interface IParticipantsListProps {
