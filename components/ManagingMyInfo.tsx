@@ -40,7 +40,7 @@ interface IProfileFormInputs {
 function ManagingMyInfo({
   setIsPortalOpen,
 }: IManagingMyInfoProps): JSX.Element | null {
-  const accesstoken = useUserStore()
+  const { accessToken, hydrated } = useUserStore()
   const router = useRouter()
   const [isFormChanged, setIsFormChanged] = useState(false)
 
@@ -103,12 +103,12 @@ function ManagingMyInfo({
     return data.duplicateName
   }
   useEffect(() => {
-    if (!accesstoken) {
+    if (hydrated && !accessToken) {
       // eslint-disable-next-line no-alert
       alert('로그인이 필요한 서비스입니다.')
       router.push('/signin')
     }
-  }, [accesstoken, router])
+  }, [accessToken, router, hydrated])
 
   const handleModalClose = () => {
     setIsUserInfoPortalOpen(false)
@@ -179,13 +179,14 @@ function ManagingMyInfo({
       setProfileImage(null)
       handleOpenModal()
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('회원정보 수정에 실패했습니다.', error)
     }
   }
   const hasErrors = !!errors.detail || !!errors.nickname
   const isButtonActive = isFormChanged && !hasErrors
 
-  if (!accesstoken) return null
+  if (!accessToken) return null
 
   const isLengthValid =
     watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
