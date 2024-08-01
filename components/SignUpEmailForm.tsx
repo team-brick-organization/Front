@@ -116,7 +116,7 @@ function SignUpEmailForm(): JSX.Element {
 
     const signUpResponse = await postSignUp({
       body: {
-        nickname,
+        name: nickname,
         email,
         password: dataPassword,
       },
