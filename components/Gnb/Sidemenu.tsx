@@ -70,7 +70,7 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
           {accessToken && (
             <Avatar
               src={userData.profileImageUrl}
-              fallback={userData.name.slice(0, 1)}
+              fallback={userData.name?.slice(0, 1)}
               className="rounded-full"
             />
           )}
