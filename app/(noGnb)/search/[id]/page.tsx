@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  GatheringCardList,
-  Pagination,
-  Search,
-  SortButtons,
-} from '@/components'
+import { Pagination, Search, SortButtons } from '@/components'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -20,7 +15,7 @@ import useSearchStore from '@/stores/useSearchStore'
 
 function SearchPage() {
   const { searchValue } = useSearchStore()
-  const [sort, setSort] = useState('최신순')
+  const [sort, setSort] = useState<'popularity' | 'latest'>('latest')
   const { id } = useParams()
   const value = decodeURIComponent(Array.isArray(id) ? id[0] : id)
   const searchParam = value.length > 7 ? `${value.slice(0, 7)}...` : value
@@ -29,20 +24,20 @@ function SearchPage() {
   console.log(searchValue) // 린트 방지 console.log() 나중에 api에 넣으면서 지워야함
 
   const handleClickPopularity = () => {
-    setSort('인기순')
+    setSort('popularity')
   }
   const handleClickLatest = () => {
-    setSort('최신순')
+    setSort('latest')
   }
 
   useEffect(() => {
-    if (sort === '인기순') {
+    if (sort === 'popularity') {
       data.sort((a, b) => {
         return (
           b.participantCount.currentPeople - a.participantCount.currentPeople
         )
       })
-    } else if (sort === '최신순') {
+    } else if (sort === 'latest') {
       data.sort((a, b) => {
         return (
           new Date(b.gatheringDate).getTime() -
@@ -83,7 +78,7 @@ function SearchPage() {
               />
             </div>
           </section>
-          <GatheringCardList data={data} />
+          {/* <GatheringCardList data={data} /> */}
         </div>
       </div>
       <div className="mx-auto w-fit pb-160pxr pt-80pxr">
