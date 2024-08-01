@@ -1,3 +1,4 @@
+import { IParticipants } from '@/app/(Gnb)/socials/[id]/page'
 import { LocationMap, ParticipantsList, SocialDescription } from './index'
 
 interface ISocialIntroduceProps {
@@ -5,12 +6,7 @@ interface ISocialIntroduceProps {
   location: string
   lat: number
   lng: number
-  participants: {
-    profileImage: string
-    name: string
-    description: string
-    role: 'host' | 'participant'
-  }[]
+  participants: IParticipants[]
 }
 
 function SocialIntroduce({

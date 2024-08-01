@@ -138,7 +138,11 @@ function MypageCard({ data }: MypageCardProps) {
                   className="h-20pxr w-20pxr"
                   src={data.owner.profileImageUrl}
                   radius="full"
-                  fallback={data.owner.name.charAt(0)}
+                  fallback={
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                      <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
+                    </div>
+                  }
                 />
                 <p className="text-gray-06 font-caption-03">
                   {data.owner.name}

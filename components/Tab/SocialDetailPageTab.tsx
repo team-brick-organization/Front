@@ -2,18 +2,14 @@
 
 import createTabStore from '@/stores/createTabStore'
 import { SocialIntroduce, SocialQna, Tab } from '@/components'
+import { IParticipants } from 'types/getSocialDetails'
 
 interface ISocialDetailPageTabProps {
   description: string
   address: string
   lat: number
   lng: number
-  participants: {
-    profileImage: string
-    name: string
-    description: string
-    role: 'host' | 'participant'
-  }[]
+  participants: IParticipants[]
 }
 
 function SocialDetailPageTab({

@@ -3,6 +3,11 @@
 import Image from 'next/image'
 import penIcon from '@/public/images/svgs/pen.svg'
 import usePortal from '@/hooks/usePortal'
+import useUserStore from '@/stores/useUserStore'
+import { useEffect, useState } from 'react'
+import getQnA from '@/apis/getQnA'
+import { useParams } from 'next/navigation'
+import { ISocialQnAs } from 'types/getSocialQnAs'
 import { Portal, QnaWriteModal, SocialQnaCardList } from './index'
 
 export interface ISocialQnaComment {
@@ -25,103 +30,67 @@ export interface ISocialQnaContent {
   createdAt: string
 }
 
-const contents: ISocialQnaContent[] = [
-  {
-    qnaId: 1,
-    socialId: 1,
-    title: '게시글 제목입니다.',
-    content:
-      '게시글 내용입니다. 게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.게시글 내용입니다.',
-    profileImageUrl: 'https://randomuser.me/api/port',
-    name: '이땡땡',
-    commentCount: 7,
-    comments: [
-      {
-        commentId: 1,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 2,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 3,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 4,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 5,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 6,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-      {
-        commentId: 7,
-        name: '이땡땡',
-        profileImageUrl: 'asdasd',
-        createdAt: '2021-07-01T00:00:00',
-        content: 'asdasd',
-      },
-    ],
-    createdAt: '2021-07-01T00:00:00',
-  },
-  {
-    qnaId: 1,
-    socialId: 2,
-    title: '게시글 제목입니다.',
-    content: '게시글 내용입니다.',
-
-    profileImageUrl: 'https://randomuser.me/api/port',
-    name: '이땡땡',
-    commentCount: 0,
-    comments: [],
-    createdAt: '2021-07-01T00:00:00',
-  },
-] // 목데이터임 api 연결 시 삭제해야함
+/**
+ * Q&A 탭 컴포넌트
+ * @todo 페이지네이션 해야함
+ */
 
 function SocialQna() {
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
     usePortal()
-  // api 연결해야함. 형식 달라질수도 있음
+  const { accessToken } = useUserStore()
+  const [qnaData, setQnaData] = useState<ISocialQnAs>({
+    nextCursor: null,
+    data: [
+      {
+        id: null,
+        title: '',
+        content: '',
+        profileUrl: '',
+        writerName: '',
+        commentCount: 0,
+        createdAt: '',
+        updatedAt: '',
+      },
+    ],
+  })
+  const params = useParams()
+
+  useEffect(() => {
+    const getQnAData = async () => {
+      try {
+        const data = await getQnA(Number(params.id), 8)
+        if (!data.ok) console.error('error: ', data.status)
+        const jsonfied = await data.json()
+        console.log('jsonfied', jsonfied)
+        setQnaData(jsonfied)
+      } catch (error) {
+        console.error('Error fetching user data:', error)
+      }
+    }
+
+    getQnAData()
+  }, [params])
+
   return (
     <>
       <div className="flex justify-between">
         <h3 className="text-gray-10 font-title-04">
-          게시글<span className="ml-4pxr text-gray-05">{contents.length}</span>
+          게시글
+          <span className="ml-4pxr text-gray-05">{qnaData?.data?.length}</span>
         </h3>
-        <button
-          className="flex items-center gap-4pxr font-body-02"
-          type="button"
-          onClick={() => setIsPortalOpen(true)}
-        >
-          <Image src={penIcon} alt="펜 아이콘" /> 새 글 작성
-        </button>
+        {accessToken !== '' && (
+          <button
+            className="flex items-center gap-4pxr font-body-02"
+            type="button"
+            onClick={() => setIsPortalOpen(true)}
+          >
+            <Image src={penIcon} alt="펜 아이콘" /> 새 글 작성
+          </button>
+        )}
       </div>
       <div className="mt-24pxr">
-        <SocialQnaCardList contents={contents} />
+        <SocialQnaCardList contents={qnaData.data} />
       </div>
       <Portal
         portalRef={portalRef}

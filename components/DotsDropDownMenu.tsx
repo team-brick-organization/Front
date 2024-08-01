@@ -48,14 +48,17 @@ function DotsDropDownMenu({ direction, menuItems }: IDotsDropDownMenuProps) {
         )}
       </button>
       {isDropdownOpen && (
-        <ul className="absolute -bottom-82pxr right-0pxr w-145pxr overflow-hidden rounded-[0.3125rem] bg-white shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.10)]">
+        <ul className="absolute right-0pxr top-26pxr z-40 w-145pxr overflow-hidden rounded-[0.3125rem] bg-white shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.10)]">
           {menuItems.map((menuItem, index) => {
             return (
               <li key={menuItem.menuItem}>
                 <button
                   className={`w-full px-24pxr py-11pxr text-start text-gray-08 font-caption-03 ${index === 0 ? 'border-b border-gray-04' : ''}`}
                   type="button"
-                  onClick={menuItem.onClick}
+                  onClick={() => {
+                    menuItem.onClick()
+                    setIsDropdownOpen(false)
+                  }}
                 >
                   {menuItem.menuItem}
                 </button>

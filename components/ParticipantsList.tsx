@@ -1,17 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { IParticipants } from '@/app/(Gnb)/socials/[id]/page'
 import { Participants } from './index'
 
 interface IParticipantsListProps {
-  participants:
-    | {
-        profileImage: string
-        name: string
-        description: string
-        role: 'host' | 'participant'
-      }[]
-    | undefined
+  participants: IParticipants[] | undefined
 }
 
 function ParticipantsList({ participants }: IParticipantsListProps) {
@@ -26,16 +20,17 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
   return (
     <div className="flex flex-col justify-center">
       <h2 className="text-gray-10 font-title-04">
-        참여자 <span className="text-gray-05">{participants?.length}</span>
+        같이하는 멤버{' '}
+        <span className="text-gray-05">{participants?.length}</span>
       </h2>
       <ul className="mt-20pxr flex flex-col gap-16pxr">
-        {sliceParticipants?.map((participant) => {
-          const { profileImage, name, description, role } = participant
+        {sliceParticipants?.map((participant, index) => {
+          const { profileUrl, name, description, role } = participant
 
           return (
-            <li key={profileImage}>
+            <li key={`${index + 0}`}>
               <Participants
-                profileImage={profileImage}
+                profileImage={profileUrl}
                 name={name}
                 description={description}
                 role={role}
