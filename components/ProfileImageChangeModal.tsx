@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import closeIcon from '@/public/images/svgs/close.svg'
 import { Button } from '@radix-ui/themes'
-import personIcon from '@/public/images/svgs/person.svg'
+import { PersonIcon } from '@radix-ui/react-icons'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import { notify } from './ToastMessageTrigger'
 
@@ -75,13 +75,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
             />
           ) : (
             <div className="mb-24pxr mt-40pxr flex h-80pxr w-80pxr rounded-full bg-gray-04">
-              <Image
-                src={personIcon}
-                alt="Person"
-                className="ml-10pxr"
-                width={60}
-                height={60}
-              />
+              <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
             </div>
           )}
         </div>

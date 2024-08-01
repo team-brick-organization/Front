@@ -13,7 +13,7 @@ import checkedIcon from '@/public/images/svgs/checked.svg'
 import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
-import personIcon from '@/public/images/svgs/person.svg'
+import { PersonIcon } from '@radix-ui/react-icons'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
 import postEditUserInfo from '@/apis/postEditUserInfo'
@@ -214,13 +214,8 @@ function ManagingMyInfo({
               src={profileImage || ''}
               alt="profileImg"
               fallback={
-                <div className="h-80pxr w-80pxr rounded-full bg-gray-04">
-                  <Image
-                    src={personIcon}
-                    alt="Person"
-                    className="px-10pxr py-10pxr"
-                    fill
-                  />
+                <div className="flex h-full w-full items-center justify-center bg-gray-04">
+                  <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
                 </div>
               }
               className="h-80pxr w-80pxr rounded-full bg-gray-04"
