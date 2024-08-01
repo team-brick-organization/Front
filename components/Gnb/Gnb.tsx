@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {
   HamburgerMenuIcon,
   MagnifyingGlassIcon,
+  PersonIcon,
   PlusIcon,
 } from '@radix-ui/react-icons'
 import { useEffect, useState } from 'react'
@@ -169,8 +170,8 @@ function Gnb() {
                   <button type="button">
                     <Avatar
                       fallback={
-                        <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04 text-gray-10">
-                          {userData.name?.charAt(0)}
+                        <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                          <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
                         </div>
                       }
                       src={

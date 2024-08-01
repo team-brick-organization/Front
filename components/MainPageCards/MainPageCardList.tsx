@@ -1,11 +1,10 @@
-import { Social } from '../MypageCards/MypageCard'
 import MainPageCard from './MainPageCard'
 
 interface MainPageCardListProps {
-  data: Social[]
+  data?: GetSocialsType
 }
 
-function MainPageCardList({ data }: MainPageCardListProps) {
+function MainPageCardList({ data = [] }: MainPageCardListProps) {
   const formattedData = Array.from(
     { length: Math.ceil(data.length / 2) },
     (_, i) => data.slice(i * 2, i * 2 + 2),

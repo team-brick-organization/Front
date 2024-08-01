@@ -5,7 +5,7 @@ interface IGetUserProps {
 }
 
 async function getUser({ accessToken }: IGetUserProps): Promise<Response> {
-  const response = await fetch(`${BASE_URL}/auth/user`, {
+  const response = await fetch(`${BASE_URL}/auth/users`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

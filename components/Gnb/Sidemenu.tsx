@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronRightIcon, Cross2Icon } from '@radix-ui/react-icons'
+import { ChevronRightIcon, Cross2Icon, PersonIcon } from '@radix-ui/react-icons'
 import { Avatar } from '@radix-ui/themes'
 import Link from 'next/link'
 import useUserStore from '@/stores/useUserStore'
@@ -70,7 +70,11 @@ function Sidemenu({ isOpen = false, setIsOpen }: SidemenuProps) {
           {accessToken && (
             <Avatar
               src={userData.profileImageUrl}
-              fallback={userData.name.slice(0, 1)}
+              fallback={
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                  <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
+                </div>
+              }
               className="rounded-full"
             />
           )}

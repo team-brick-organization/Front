@@ -3,11 +3,12 @@
 import getSignOut from '@/apis/getSignOut'
 import useUserStore from '@/stores/useUserStore'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 function MyInfoSideMenu() {
   const { accessToken, setAccessToken } = useUserStore()
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <div className="mt-80pxr flex h-314pxr w-full max-w-180pxr flex-col mb:hidden">
@@ -29,6 +30,7 @@ function MyInfoSideMenu() {
         onClick={async () => {
           await getSignOut({ accessToken })
           setAccessToken('')
+          router.push('/')
         }}
         className="mt-200pxr cursor-pointer text-gray-10 font-title-04"
       >
