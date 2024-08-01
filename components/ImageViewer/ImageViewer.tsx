@@ -7,7 +7,7 @@ import { ImageViewerModal, Portal } from '@/components'
 import moreImgIcon from '@/public/images/svgs/moreImg.svg'
 
 interface IImage {
-  id: number
+  // id: number
   src: string
 }
 
@@ -41,16 +41,16 @@ function ImageViewer({ images }: ImageViewerProps) {
         )}
       </Box>
       <Box className="grid h-400pxr w-full max-w-480pxr grid-cols-2 grid-rows-2 gap-10pxr mb:hidden">
-        {images.slice(1, 5).map((image) => {
+        {images.slice(1, 5).map((image, index) => {
           // 만약 리펙토링했을때 이미지수 늘린다면 image moreIcon받을시 index 넣어주기
           return (
             <div
               className="relative cursor-pointer overflow-hidden rounded-[10px]"
-              key={image.id}
+              key={`${index + 0}`}
             >
               <Image
                 src={image.src}
-                alt={image.id.toString()}
+                alt={`이미지 ${index + 1}`}
                 width={235}
                 height={195}
                 className="h-195pxr w-235pxr object-cover"

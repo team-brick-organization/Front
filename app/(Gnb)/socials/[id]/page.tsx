@@ -5,6 +5,7 @@ import {
   GatheringInfo,
   ImageViewer,
   SocialDetailPageTab,
+  SocialDetailsImgCarouselProps,
 } from '@/components/index'
 import getEventStatus from '@/utils/getEventStatus'
 import { Avatar } from '@radix-ui/themes'
@@ -198,7 +199,13 @@ function SocialDetailPage() {
   return (
     <div className="flex justify-center px-20pxr pb-230pxr pt-20pxr">
       <div className="flex w-full max-w-1180pxr flex-col gap-40pxr">
-        <ImageViewer images={images} />
+        {images.length < 5 ? (
+          <SocialDetailsImgCarouselProps images={images} />
+        ) : (
+          <ImageViewer images={images} />
+        )}
+        {/* <ImageViewer images={images} />
+        {/* <SocialDetailsImgCarouselProps images={images} /> */}
         <div className="flex flex-col gap-16pxr">
           <div className="flex items-center gap-8pxr">
             <h1 className="text-gray-10 font-headline-03">{title}</h1>
