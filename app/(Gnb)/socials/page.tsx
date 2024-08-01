@@ -1,79 +1,69 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import mockSocialProps from '@/components/Gnb/moc'
 import { GatheringCardList, Pagination, SortButtons } from '@/components/index'
-import { Social } from '@/components/MypageCards/MypageCard'
 import Image, { StaticImageData } from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import curlyArrowImage from '@/public/images/svgs/curlyArrow.svg'
 import doodleImage from '@/public/images/svgs/doodle.svg'
 import handsImage from '@/public/images/pngs/hands.png'
 import calendarImage from '@/public/images/pngs/calendar.png'
+import getSocials from '@/apis/getSocials'
 
 function SocialsListPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
-  const [socialsData, setSocialsData] = useState<Social[]>([])
+  const typeParams = searchParams.get('type')
+  const [socialsData, setSocialsData] = useState<GetSocialsType>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [sort, setSort] = useState('최신순')
+  const [pageType, setPageType] = useState<'closed' | null>(
+    typeParams as 'closed' | null,
+  )
+  const [sort, setSort] = useState<'popularity' | 'latest'>('latest')
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-  const slicedSocialsData = socialsData.slice(
-    (currentPage - 1) * 24,
-    currentPage * 24,
-  )
-
   const handleClickPopularity = () => {
-    setSort('인기순')
+    setSort('popularity')
+    router.push(
+      `/socials${pageType ? `?type=${pageType}` : ''}${pageType ? '&' : '?'}sort=popularity`,
+    )
   }
   const handleClickLatest = () => {
-    setSort('최신순')
+    setSort('latest')
+    router.push(`/socials${pageType ? `?type=${pageType}` : ''}`)
   }
 
-  const titleText =
-    searchParams.get('type') === 'closed' ? '모집 마감' : '모집 중'
+  const titleText = pageType === 'closed' ? '모집 마감' : '모집 중'
 
   const description =
-    searchParams.get('type') === 'closed'
+    pageType === 'closed'
       ? '모집 완료! 앞으로의 만남을 기다려요'
       : '공통 관심사를 가진 사람들과의 모임, 지금 모집중!'
 
-  const bannerImage =
-    searchParams.get('type') === 'closed' ? calendarImage : handsImage
-
+  const bannerImage = pageType === 'closed' ? calendarImage : handsImage
   useEffect(() => {
-    if (sort === '인기순') {
-      socialsData.sort((a, b) => {
-        return (
-          b.participantCount.currentPeople - a.participantCount.currentPeople
-        )
+    const fetchSocials = async () => {
+      const response = await getSocials({
+        filterBy: typeParams === 'closed' ? 'close' : 'open',
+        orderBy: sort === 'popularity' ? 'popularity' : undefined,
       })
-    } else if (sort === '최신순') {
-      socialsData.sort((a, b) => {
-        return (
-          new Date(b.gatheringDate).getTime() -
-          new Date(a.gatheringDate).getTime()
-        )
-      })
+
+      if (!response.ok) {
+        console.error('Failed to fetch socials')
+        return
+      }
+
+      const data = await response.json()
+      setSocialsData(data)
     }
-  }, [sort, socialsData])
 
-  useEffect(() => {
-    const fetchSocialsData = [
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-      ...mockSocialProps,
-    ]
-
-    setSocialsData(fetchSocialsData)
-  }, [])
+    setPageType(typeParams as 'closed' | null)
+    fetchSocials()
+  }, [pageType, sort, typeParams])
 
   return (
     <div className="flex w-full flex-col items-center gap-80pxr px-20pxr pb-160pxr pt-40pxr">
@@ -94,7 +84,7 @@ function SocialsListPage() {
           />
         </div>
         <div className="mt-24pxr w-full">
-          <GatheringCardList data={slicedSocialsData} />
+          <GatheringCardList data={socialsData} />
         </div>
       </div>
       <Pagination

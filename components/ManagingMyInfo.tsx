@@ -13,14 +13,16 @@ import checkedIcon from '@/public/images/svgs/checked.svg'
 import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
-import personIcon from '@/public/images/svgs/person.svg'
+import { PersonIcon } from '@radix-ui/react-icons'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
 import postEditUserInfo from '@/apis/postEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
+import BASE_URL from '@/apis/apiConfig'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { TypeNickname } from 'types/types'
+import useUserDataStore from '@/stores/useUserDataStore'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
 
@@ -38,16 +40,40 @@ interface IProfileFormInputs {
 function ManagingMyInfo({
   setIsPortalOpen,
 }: IManagingMyInfoProps): JSX.Element | null {
+  const accesstoken = useUserStore()
   const router = useRouter()
+  const [isFormChanged, setIsFormChanged] = useState(false)
+
+  const { userData } = useUserDataStore()
+  const { email, name: userName, introduce, birthday } = userData
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     setError,
+    clearErrors,
     formState: { errors },
-  } = useForm<IProfileFormInputs>({ mode: 'onChange' })
+  } = useForm<IProfileFormInputs>({
+    mode: 'onChange',
+  })
+
   const watchNickname = watch('nickname')
+  const watchDetail = watch('detail')
+
+  useEffect(() => {
+    setValue('email', email)
+    setValue('detail', introduce)
+    setValue('nickname', userName)
+  }, [email, introduce, userName, setValue])
+
+  useEffect(() => {
+    setIsFormChanged(
+      (watchNickname !== userName && watchNickname !== '') ||
+        (watchDetail !== introduce && watchDetail !== ''),
+    )
+  }, [watchNickname, watchDetail, userName, introduce])
 
   const {
     userInfoPortalRef,
@@ -56,11 +82,15 @@ function ManagingMyInfo({
     setIsUserInfoPortalOpen,
   } = useUserInfoPortal()
 
-  const accesstoken = useUserStore()
-
+  const profileImage = useEditProfileImageStore(
+    (state) => state.profileImageUrl,
+  )
+  const setProfileImage = useEditProfileImageStore(
+    (state) => state.setProfileImageUrl,
+  )
   async function fetchIsDuplicated<BodyType extends TypeNickname>(
     text: BodyType,
-    fetcher: ({ body }: { body: TypeNickname }) => Promise<Response>,
+    fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
   ) {
     const response = await fetcher({ body: text })
 
@@ -74,6 +104,7 @@ function ManagingMyInfo({
   }
   useEffect(() => {
     if (!accesstoken) {
+      // eslint-disable-next-line no-alert
       alert('로그인이 필요한 서비스입니다.')
       router.push('/signin')
     }
@@ -90,9 +121,11 @@ function ManagingMyInfo({
     timeIntervals: 60,
   })
 
-  const profileImage = useEditProfileImageStore(
-    (state) => state.profileImageUrl,
-  )
+  useEffect(() => {
+    if (birthday) {
+      setSelectedDateTime(new Date(birthday))
+    }
+  }, [birthday, setSelectedDateTime])
 
   const onSubmit = async (data: IProfileFormInputs) => {
     if (!profileImage) return
@@ -102,8 +135,11 @@ function ManagingMyInfo({
     const birth = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
-
+    // eslint-disable-next-line no-console
     console.log('제출 데이터', { detail, nickname, birth, profileImage })
+
+    // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
+    // nickname => 변경 데이터, userName => 기존 저장 데이터
 
     const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
       { name: nickname },
@@ -118,28 +154,44 @@ function ManagingMyInfo({
       return
     }
 
-    const editUserInfoResponse = await postEditUserInfo({
-      body: {
-        detail,
-        nickname,
-        birthday: birth,
-        profileImageUrl: profileImage,
-      },
-    })
-    console.log('정보 변경 데이터', data)
-    if (!editUserInfoResponse.ok) {
-      return
-    }
+    const formData = new FormData()
+    formData.append('file', profileImage)
 
-    handleOpenModal()
+    try {
+      const response = await fetch(`${BASE_URL}/auth/users`, {
+        method: 'PATCH',
+        body: formData,
+      })
+      const result = await response.json()
+
+      const editUserInfoResponse = await postEditUserInfo({
+        body: {
+          detail,
+          nickname,
+          birthday: birth,
+          profileImageUrl: result.imageUrl,
+        },
+      })
+
+      if (!editUserInfoResponse.ok) {
+        return
+      }
+      setProfileImage(null)
+      handleOpenModal()
+    } catch (error) {
+      console.error('회원정보 수정에 실패했습니다.', error)
+    }
   }
   const hasErrors = !!errors.detail || !!errors.nickname
+  const isButtonActive = isFormChanged && !hasErrors
+
   if (!accesstoken) return null
 
   const isLengthValid =
     watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
   const isValidPattern = nicknamePattern.value.test(watchNickname || '')
   const hasNoWhitespace = !/\s/.test(watchNickname || '')
+  const showChecks = watchNickname && watchNickname.length >= 2
 
   return (
     <>
@@ -162,13 +214,8 @@ function ManagingMyInfo({
               src={profileImage || ''}
               alt="profileImg"
               fallback={
-                <div className="h-80pxr w-80pxr rounded-full bg-gray-04">
-                  <Image
-                    src={personIcon}
-                    alt="Person"
-                    className="px-10pxr py-10pxr"
-                    fill
-                  />
+                <div className="flex h-full w-full items-center justify-center bg-gray-04">
+                  <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
                 </div>
               }
               className="h-80pxr w-80pxr rounded-full bg-gray-04"
@@ -196,6 +243,7 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="nickname"
+            defaultValue={userData.name}
             {...register('nickname', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
@@ -203,6 +251,12 @@ function ManagingMyInfo({
                 const nickname = e.target.value
 
                 if (!nickname) return
+
+                // 현재 닉네임과 동일한 경우 중복 체크 x
+                if (nickname === userName) {
+                  clearErrors('nickname')
+                  return
+                }
 
                 const isDuplicateNickname =
                   await fetchIsDuplicated<TypeNickname>(
@@ -220,55 +274,54 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.nickname ? 'ring-1 ring-error' : ''}`}
-            // defaultValue={}
+            className={`mt-8pxr ${errors.nickname ? 'border-0 ring-1 ring-error' : ''}`}
           />
-          {(!errors.nickname ||
-            String(errors.nickname.message).length === 0) && (
-            <div className="mt-4pxr inline-flex">
-              <div className="flex gap-16pxr">
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={isLengthValid ? checkedIcon : unCheckedIcon}
-                    alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    2-8자 이하
-                  </span>
-                </div>
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={isValidPattern ? checkedIcon : unCheckedIcon}
-                    alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    한글/영어/숫자 가능
-                  </span>
-                </div>
-                <div className="flex gap-2pxr">
-                  <Image
-                    src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
-                    alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
-                    width={14}
-                    height={14}
-                  />
-                  <span
-                    className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
-                  >
-                    공백 불가
-                  </span>
+          {(!errors.nickname || String(errors.nickname.message).length === 0) &&
+            showChecks && (
+              <div className="mt-4pxr inline-flex">
+                <div className="flex gap-16pxr">
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={isLengthValid ? checkedIcon : unCheckedIcon}
+                      alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      2-8자 이하
+                    </span>
+                  </div>
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={isValidPattern ? checkedIcon : unCheckedIcon}
+                      alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      한글/영어/숫자 가능
+                    </span>
+                  </div>
+                  <div className="flex gap-2pxr">
+                    <Image
+                      src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
+                      alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
+                      width={14}
+                      height={14}
+                    />
+                    <span
+                      className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
+                    >
+                      공백 불가
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           {errors.nickname && String(errors.nickname.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">
@@ -286,13 +339,14 @@ function ManagingMyInfo({
             <Input
               variant="border"
               id="detail"
+              defaultValue={userData.introduce}
               {...register('detail', {
                 required: '한 줄 소개를 입력해 주세요.',
                 pattern: detailPattern,
               })}
               type="text"
               placeholder="띄어쓰기 포함 80자 이내로 입력해 주세요."
-              className={`mt-8pxr ${errors.detail ? 'ring-1 ring-error' : ''}`}
+              className={`mt-8pxr ${errors.detail ? 'border-0 ring-1 ring-error' : ''}`}
             />
           </div>
           <div className="mt-40pxr">
@@ -310,7 +364,8 @@ function ManagingMyInfo({
               placeholder="User@gmail.com"
               className="mt-8pxr bg-gray-03"
               color="gray"
-              // defaultValue={}
+              defaultValue={email}
+              {...register('email')}
             />
           </div>
 
@@ -345,8 +400,12 @@ function ManagingMyInfo({
         <div className="mb: mb-115pxr mt-192pxr flex justify-center">
           <Button
             type="submit"
-            className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${!hasErrors ? 'bg-gray-10 text-gray-01' : 'bg-gray-04 text-gray-01'}`}
-            disabled={hasErrors}
+            className={`h-46pxr w-full max-w-216pxr cursor-pointer rounded-[0.625rem] ${
+              isButtonActive
+                ? 'bg-gray-10 text-gray-01'
+                : 'bg-gray-04 text-gray-01'
+            }`}
+            disabled={!isButtonActive}
           >
             저장하기
           </Button>

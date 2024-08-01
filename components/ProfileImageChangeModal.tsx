@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import closeIcon from '@/public/images/svgs/close.svg'
 import { Button } from '@radix-ui/themes'
-import personIcon from '@/public/images/svgs/person.svg'
+import { PersonIcon } from '@radix-ui/react-icons'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import { notify } from './ToastMessageTrigger'
 
@@ -35,11 +35,13 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
         !file.type.includes('jpeg') &&
         !file.type.includes('webp')
       ) {
+        // eslint-disable-next-line no-alert
         alert('이미지 파일만 업로드 가능합니다.')
         return
       }
 
       if (file.size > 1024 * 1024 * 10) {
+        // eslint-disable-next-line no-alert
         alert(
           `${file.name}이 10MB를 초과합니다.\n이미지는 10MB 이하만 업로드 가능 합니다.`,
         )
@@ -48,7 +50,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
       const reader = new FileReader()
       reader.onload = () => {
         setProfileImage(reader.result as string)
-        notify('프로필 이미지가 성공적으로 변경되었습니다.', 'default')
+        notify('프로필 이미지가 성공적으로 변경되었어요.', 'default')
       }
       reader.readAsDataURL(file)
     }
@@ -73,13 +75,7 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
             />
           ) : (
             <div className="mb-24pxr mt-40pxr flex h-80pxr w-80pxr rounded-full bg-gray-04">
-              <Image
-                src={personIcon}
-                alt="Person"
-                className="ml-10pxr"
-                width={60}
-                height={60}
-              />
+              <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
             </div>
           )}
         </div>

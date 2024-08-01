@@ -5,7 +5,7 @@ interface ISocialsLayoutProps {
 }
 
 function SocialsLayout({ children }: ISocialsLayoutProps) {
-  return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+  return <Suspense>{children}</Suspense>
 }
 
 export default SocialsLayout
