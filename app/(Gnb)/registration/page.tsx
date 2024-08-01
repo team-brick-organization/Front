@@ -18,7 +18,6 @@ function RegistrationPage() {
       </div>
       <BottomBar
         disabled={tags.length <= 0}
-        buttonClassName="px-40pxr py-8pxr font-title-04"
         onButtonClick={() => {
           router.push('/registration/social')
         }}
