@@ -3,7 +3,8 @@
 import useUserStore from '@/stores/useUserStore'
 import { useForm } from 'react-hook-form'
 import postQnA from '@/apis/postQnA'
-import { useParams, useRouter } from 'next/navigation'
+import useSocialQnAListStore from '@/stores/useSocialQnAListStore'
+import { useParams } from 'next/navigation'
 import DisplayMaxLength from './DisplayMaxLength'
 import { notify } from './ToastMessageTrigger'
 
@@ -17,10 +18,11 @@ interface IQnaWriteModalProps {
 }
 
 function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
+  const { SocialQnAListDataReFetchTrigger } = useSocialQnAListStore()
   const { register, handleSubmit, watch } = useForm<IQnaWriteFormInputs>()
   const { accessToken } = useUserStore()
   const params = useParams()
-  const router = useRouter()
+
   const onSubmit = async (data: IQnaWriteFormInputs) => {
     try {
       const res = await postQnA({
@@ -32,8 +34,8 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
         throw new Error('질문 등록에 실패했어요.')
       }
       notify('질문 등록이 완료되었어요.')
+      SocialQnAListDataReFetchTrigger()
       onClose()
-      router.refresh()
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)

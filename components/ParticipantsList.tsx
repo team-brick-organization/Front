@@ -29,10 +29,12 @@ function ParticipantsList({ participants }: IParticipantsListProps) {
           return (
             <li key={`${index + 0}`}>
               <Participants
-                profileImage={profileUrl}
+                profileUrl={profileUrl}
                 name={name}
                 description={description}
                 role={role}
+                // 추후에 api나오면 id값 변경해야함
+                id={1}
               />
             </li>
           )

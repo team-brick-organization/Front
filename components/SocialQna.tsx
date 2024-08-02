@@ -4,9 +4,10 @@ import Image from 'next/image'
 import penIcon from '@/public/images/svgs/pen.svg'
 import usePortal from '@/hooks/usePortal'
 import useUserStore from '@/stores/useUserStore'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import getQnA from '@/apis/getQnA'
 import { useParams } from 'next/navigation'
+import useSocialQnAListStore from '@/stores/useSocialQnAListStore'
 import { Portal, QnaWriteModal, SocialQnaCardList } from './index'
 import { notify } from './ToastMessageTrigger'
 
@@ -38,49 +39,44 @@ export interface ISocialQnaContent {
 function SocialQna() {
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
     usePortal()
+  const { SocialQnAListData, setSocialQnAListData, fetchSocialQnAListData } =
+    useSocialQnAListStore()
   const { accessToken } = useUserStore()
-  const [qnaData, setQnaData] = useState<ISocialQnAs>({
-    nextCursor: null,
-    data: [
-      {
-        id: null,
-        title: '',
-        content: '',
-        profileUrl: '',
-        writerName: '',
-        commentCount: 0,
-        createdAt: '',
-        updatedAt: '',
-      },
-    ],
-  })
   const params = useParams()
 
   useEffect(() => {
     const getQnAData = async () => {
       try {
-        const data = await getQnA(Number(params.id), 8)
+        const data = await getQnA({
+          id: Number(params.id),
+          pageNum: 0,
+          size: 9999,
+        })
         if (!data.ok) {
           throw new Error('QnA불러오기를 실패했어요')
         }
         const jsonfied = await data.json()
 
-        setQnaData(jsonfied)
+        setSocialQnAListData(jsonfied)
       } catch (error) {
         notify('QnA불러오기를 실패했어요', 'error')
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     }
-
     getQnAData()
-  }, [params])
+  }, [params, setSocialQnAListData, fetchSocialQnAListData])
+
+  console.log('SocialQnAListData', SocialQnAListData)
 
   return (
     <>
       <div className="flex justify-between">
         <h3 className="text-gray-10 font-title-04">
           게시글
-          <span className="ml-4pxr text-gray-05">{qnaData?.data?.length}</span>
+          <span className="ml-4pxr text-gray-05">
+            {SocialQnAListData?.length}
+          </span>
         </h3>
         {accessToken !== '' && (
           <button
@@ -93,7 +89,7 @@ function SocialQna() {
         )}
       </div>
       <div className="mt-24pxr">
-        <SocialQnaCardList contents={qnaData.data} />
+        <SocialQnaCardList contents={SocialQnAListData} />
       </div>
       <Portal
         portalRef={portalRef}

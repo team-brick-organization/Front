@@ -23,19 +23,13 @@ import useUserStore from '@/stores/useUserStore'
 import deleteSocial from '@/apis/deleteSocial'
 import deleteCancelSocialParticipation from '@/apis/deleteSocialParticipation'
 import { notify } from '@/components/ToastMessageTrigger'
+import useSocialDetailStore from '@/stores/useSocialDetailStore'
+import { PersonIcon } from '@radix-ui/react-icons'
 
-const fetchData1 = {
-  place: {
-    address: '대구시 북구 구암서로 22 1222212222222222223333',
-    lat: 35.9364429433593,
-    lng: 128.565589928605,
-  },
-}
 /** @todo fetchData1.place 부분 수정해야함 */
 
 function SocialDetailPage() {
-  const [socialDetailData, setSocialDetailData] =
-    useState<ISocialDetailData | null>(null)
+  const { socialDetailData, setSocialDetailData } = useSocialDetailStore()
   const [modalType, setModalType] = useState<'join' | 'cancel'>('join')
   const [isOwner, setIsOwner] = useState(false)
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
@@ -62,7 +56,6 @@ function SocialDetailPage() {
       if (!jsonfied.ok) {
         throw new Error('모임 참가를 실패했어요.')
       }
-      router.refresh()
       router.refresh()
     } catch (error) {
       notify('모임 참가를 실패했어요.', 'error')
@@ -152,8 +145,7 @@ function SocialDetailPage() {
       }
     }
     getSocialDetailData(Number(params.id))
-    // setSocialDetailData(fetchData1)
-  }, [params.id, router])
+  }, [params.id, router, setSocialDetailData])
 
   const dropDownMenuItems = isOwner
     ? [
@@ -224,7 +216,9 @@ function SocialDetailPage() {
               className="h-23pxr w-23pxr rounded-full bg-gray-06"
               src={socialDetailData.owner.profileUrl}
               fallback={
-                <div className="h-23pxr w-23pxr rounded-full bg-gray-06" />
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                  <PersonIcon className="text-gray-06" />
+                </div>
               }
             />
             <span className="text-gray-08 font-title-01">
@@ -233,34 +227,11 @@ function SocialDetailPage() {
           </div>
           <div className="grid w-full grid-cols-[minmax(auto,680px)_minmax(auto,480px)] gap-20pxr mb:grid-cols-1 mb:gap-36pxr max759Min480:grid-cols-1 max759Min480:gap-36pxr">
             <div className="flex w-full max-w-680pxr flex-col mb:order-2 max759Min480:order-2">
-              <SocialDetailPageTab
-                description={socialDetailData.description}
-                address={fetchData1.place.address}
-                lat={fetchData1.place.lat}
-                lng={fetchData1.place.lng}
-                participants={socialDetailData.participants}
-              />
+              <SocialDetailPageTab />
             </div>
             <div className="relative h-full w-full max-w-480pxr mb:order-1 mb:max-w-full max759Min480:order-1 max759Min480:max-w-full">
               <div className="sticky top-0pxr h-fit w-full pt-42pxr max759Min480:static">
-                <GatheringInfo
-                  tags={socialDetailData.tags}
-                  title={socialDetailData.name}
-                  location={fetchData1.place.address}
-                  date={socialDetailData.gatheringDate}
-                  dues={socialDetailData.dues}
-                  participantProfileImagesConfig={socialDetailData.participants.map(
-                    (participant) => ({
-                      imageUrl: participant.profileUrl,
-                      fallback: participant.name.slice(0, 1),
-                    }),
-                  )}
-                  participantsCurrentCount={
-                    socialDetailData.participantCount.current
-                  }
-                  participantsMinCount={socialDetailData.participantCount.min}
-                  participantsMaxCount={socialDetailData.participantCount.max}
-                />
+                <GatheringInfo />
               </div>
             </div>
           </div>
@@ -282,7 +253,7 @@ function SocialDetailPage() {
             }}
           >
             <p>{formatDate(new Date(socialDetailData.gatheringDate))}</p>
-            <p>{fetchData1.place.address}</p>
+            <p>{socialDetailData.introduction.place.address}</p>
           </ConfirmModal>
         ) : (
           <ConfirmModal

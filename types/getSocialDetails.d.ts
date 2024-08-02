@@ -10,6 +10,7 @@ interface IOwner {
   role: 'host' | 'participant'
 }
 interface IParticipants {
+  id?: number
   name: string
   profileUrl: string
   role: 'OWNER' | 'PARTICIPANT'
@@ -18,14 +19,19 @@ interface IParticipants {
 
 interface IPlace {
   address: string
-  lat: number
-  lng: number
+  latitude: number
+  longitude: number
 }
+
+interface IIntroduction {
+  description: string
+  place: IPlace
+}
+
 interface ISocialDetailData {
   id: number
   name: string
-  description: string
-  place: IPlace
+  introduction: IIntroduction
   gatheringDate: string
   participantCount: IParticipantCount
   imageUrls: string[]

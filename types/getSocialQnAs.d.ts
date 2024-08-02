@@ -10,6 +10,5 @@ interface IQnADatas {
 }
 
 interface ISocialQnAs {
-  nextCursor: null | string
   data: IQnADatas[]
 }

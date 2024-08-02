@@ -14,15 +14,10 @@ function SocialQnaCardList({ contents }: ISocialQnaCardListProps) {
     setCurrentPage(page)
   }
 
-  const slicedContents = contents.slice(
-    (currentPage - 1) * 10,
-    currentPage * 10,
-  )
-
   return (
     <>
       <ul className="w-full">
-        {slicedContents.map((content) => {
+        {contents?.map((content) => {
           return (
             <li className="mt-24pxr w-full" key={content.id}>
               <SocialQnaCard

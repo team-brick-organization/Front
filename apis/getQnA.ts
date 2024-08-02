@@ -1,8 +1,14 @@
 import BASE_URL from './apiConfig'
 
-async function getQnA(id: number, limit: number): Promise<Response> {
+interface GetQnAProps {
+  id: number
+  pageNum: number
+  size: number
+}
+
+async function getQnA({ id, pageNum, size }: GetQnAProps): Promise<Response> {
   const response = await fetch(
-    `${BASE_URL}/socials/${id}/qnas?limit=${limit}`,
+    `${BASE_URL}/socials/${id}/qnas?page=${pageNum}&size=${size}`,
     {
       method: 'GET',
       headers: {

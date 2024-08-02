@@ -3,21 +3,7 @@
 import createTabStore from '@/stores/createTabStore'
 import { SocialIntroduce, SocialQna, Tab } from '@/components'
 
-interface ISocialDetailPageTabProps {
-  description: string
-  address: string
-  lat: number
-  lng: number
-  participants: IParticipants[]
-}
-
-function SocialDetailPageTab({
-  description,
-  address,
-  lat,
-  lng,
-  participants,
-}: ISocialDetailPageTabProps) {
+function SocialDetailPageTab() {
   const tabStore = createTabStore()
   const tabs = [{ tabName: '소개' }, { tabName: 'Q&A' }]
 
@@ -36,13 +22,7 @@ function SocialDetailPageTab({
       </div>
       <Tab.Panel index={0} store={tabStore}>
         <div className="mt-40pxr w-full px-16pxr">
-          <SocialIntroduce
-            description={description}
-            location={address}
-            lat={lat}
-            lng={lng}
-            participants={participants}
-          />
+          <SocialIntroduce />
         </div>
       </Tab.Panel>
       <Tab.Panel index={1} store={tabStore}>
