@@ -10,7 +10,7 @@ interface IUserStoreProps {
 const useUserStore = create(
   persist<IUserStoreProps>(
     (set) => ({
-      hydrated: true,
+      hydrated: false,
       accessToken: '',
       setAccessToken: (token) => {
         set({ accessToken: token })

@@ -6,13 +6,15 @@ import closeIcon from '@/public/images/svgs/close.svg'
 import { Button } from '@radix-ui/themes'
 import { PersonIcon } from '@radix-ui/react-icons'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
-import { notify } from './ToastMessageTrigger'
+import useUserStore from '@/stores/useUserStore'
+import getUserImage from '@/apis/getUserImage'
 
 interface IProfileImageChangeModalProps {
   onClose: () => void
 }
 
 function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
+  const { accessToken } = useUserStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const profileImage = useEditProfileImageStore(
     (state) => state.profileImageUrl,
@@ -27,13 +29,16 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
     }
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files && event.target.files[0]
     if (file) {
       if (
         !file.type.includes('png') &&
         !file.type.includes('jpeg') &&
-        !file.type.includes('webp')
+        !file.type.includes('webp') &&
+        !file.type.includes('jpg')
       ) {
         // eslint-disable-next-line no-alert
         alert('이미지 파일만 업로드 가능합니다.')
@@ -47,12 +52,24 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
         )
         return
       }
-      const reader = new FileReader()
-      reader.onload = () => {
-        setProfileImage(reader.result as string)
-        notify('프로필 이미지가 성공적으로 변경되었어요.', 'default')
-      }
-      reader.readAsDataURL(file)
+      const response = await getUserImage({
+        accessToken,
+        imageFileExtension: file.type.split('/')[1].toUpperCase() as
+          | 'JPEG'
+          | 'JPG'
+          | 'PNG'
+          | 'WEBP',
+      })
+
+      const { presignedUrl, imageUrl } = await response.json()
+      await fetch(presignedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+        },
+      })
+      setProfileImage(imageUrl)
     }
     onClose()
   }

@@ -18,11 +18,10 @@ import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
 import postEditUserInfo from '@/apis/postEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
-import BASE_URL from '@/apis/apiConfig'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { TypeNickname } from 'types/types'
-import useUserDataStore from '@/stores/useUserDataStore'
+import getUser from '@/apis/getUser'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
 
@@ -34,8 +33,11 @@ interface IManagingMyInfoProps {
 
 interface IProfileFormInputs {
   detail: string
+  birthday: string
   email: string
-  nickname: string
+  name: string
+  introduce: string
+  profileImageUrl: string
 }
 function ManagingMyInfo({
   setIsPortalOpen,
@@ -43,37 +45,35 @@ function ManagingMyInfo({
   const { accessToken, hydrated } = useUserStore()
   const router = useRouter()
   const [isFormChanged, setIsFormChanged] = useState(false)
-
-  const { userData } = useUserDataStore()
-  const { email, name: userName, introduce, birthday } = userData
+  const [userData, setUserData] = useState<IProfileFormInputs | null>()
+  const { selectedDateTime, setSelectedDateTime } = useDate({
+    timeIntervals: 60,
+  })
 
   const {
     register,
     handleSubmit,
     watch,
-    setValue,
     setError,
+    // setValue,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm<IProfileFormInputs>({
     mode: 'onChange',
   })
 
-  const watchNickname = watch('nickname')
-  const watchDetail = watch('detail')
+  const watchNickname = watch('name')
+  const watchDetail = watch('birthday')
 
   useEffect(() => {
-    setValue('email', email)
-    setValue('detail', introduce)
-    setValue('nickname', userName)
-  }, [email, introduce, userName, setValue])
-
-  useEffect(() => {
-    setIsFormChanged(
-      (watchNickname !== userName && watchNickname !== '') ||
-        (watchDetail !== introduce && watchDetail !== ''),
-    )
-  }, [watchNickname, watchDetail, userName, introduce])
+    if (userData) {
+      setIsFormChanged(
+        (watchNickname !== userData.name && watchNickname !== '') ||
+          (watchDetail !== userData.introduce && watchDetail !== ''),
+      )
+    }
+  }, [watchNickname, watchDetail, userData])
 
   const {
     userInfoPortalRef,
@@ -102,13 +102,38 @@ function ManagingMyInfo({
 
     return data.duplicateName
   }
+
   useEffect(() => {
-    if (hydrated && !accessToken) {
+    if (!hydrated) return
+
+    if (!accessToken) {
       // eslint-disable-next-line no-alert
       alert('로그인이 필요한 서비스입니다.')
       router.push('/signin')
     }
-  }, [accessToken, router, hydrated])
+    const getUserData = async () => {
+      try {
+        const response = await getUser({ accessToken })
+        const data = await response.json()
+        setProfileImage(data.profileImageUrl)
+        reset({ name: data.name })
+        // setValue('name', data.name)
+        setSelectedDateTime(new Date(data.birthday))
+        console.log('받아온 유저 정보', data)
+        setUserData(data)
+      } catch (error) {
+        console.error('유저 정보를 가져오는데 실패했습니다.', error)
+      }
+    }
+    getUserData()
+  }, [
+    accessToken,
+    router,
+    hydrated,
+    setProfileImage,
+    setSelectedDateTime,
+    reset,
+  ])
 
   const handleModalClose = () => {
     setIsUserInfoPortalOpen(false)
@@ -117,73 +142,61 @@ function ManagingMyInfo({
     setIsUserInfoPortalOpen(true)
   }
 
-  const { selectedDateTime, setSelectedDateTime } = useDate({
-    timeIntervals: 60,
-  })
-
   useEffect(() => {
-    if (birthday) {
-      setSelectedDateTime(new Date(birthday))
+    if (userData?.birthday) {
+      setSelectedDateTime(new Date(userData.birthday))
     }
-  }, [birthday, setSelectedDateTime])
+  }, [userData, setSelectedDateTime])
 
   const onSubmit = async (data: IProfileFormInputs) => {
     if (!profileImage) return
 
-    const { detail, nickname } = data
+    const { introduce, name } = data
 
-    const birth = selectedDateTime
+    const birthday = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
     // eslint-disable-next-line no-console
-    console.log('제출 데이터', { detail, nickname, birth, profileImage })
+    console.log('제출 데이터', { introduce, name, birthday, profileImage })
 
     // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
     // nickname => 변경 데이터, userName => 기존 저장 데이터
 
     const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-      { name: nickname },
+      { name },
       postDuplicateNickname,
     )
 
     if (isDuplicateNickname) {
-      setError('nickname', {
+      setError('name', {
         type: 'validate',
         message: '중복된 닉네임입니다.',
       })
       return
     }
 
-    const formData = new FormData()
-    formData.append('file', profileImage)
-
     try {
-      const response = await fetch(`${BASE_URL}/auth/users`, {
-        method: 'PATCH',
-        body: formData,
-      })
-      const result = await response.json()
-
       const editUserInfoResponse = await postEditUserInfo({
         body: {
-          detail,
-          nickname,
-          birthday: birth,
-          profileImageUrl: result.imageUrl,
+          introduce,
+          name,
+          birthday,
+          profileImageUrl: profileImage,
         },
+        accessToken,
       })
 
       if (!editUserInfoResponse.ok) {
         return
       }
-      setProfileImage(null)
+
       handleOpenModal()
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('회원정보 수정에 실패했습니다.', error)
     }
   }
-  const hasErrors = !!errors.detail || !!errors.nickname
+  const hasErrors = !!errors.introduce || !!errors.name
   const isButtonActive = isFormChanged && !hasErrors
 
   if (!accessToken) return null
@@ -244,29 +257,29 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="nickname"
-            defaultValue={userData.name}
-            {...register('nickname', {
+            defaultValue={userData?.name}
+            {...register('name', {
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
               onBlur: async (e) => {
-                const nickname = e.target.value
+                const name = e.target.value
 
-                if (!nickname) return
+                if (!name) return
 
                 // 현재 닉네임과 동일한 경우 중복 체크 x
-                if (nickname === userName) {
-                  clearErrors('nickname')
+                if (name === userData?.name) {
+                  clearErrors('name')
                   return
                 }
 
                 const isDuplicateNickname =
                   await fetchIsDuplicated<TypeNickname>(
-                    { name: nickname },
+                    { name },
                     postDuplicateNickname,
                   )
 
                 if (isDuplicateNickname) {
-                  setError('nickname', {
+                  setError('name', {
                     type: 'validate',
                     message: '이미 중복된 닉네임입니다.',
                   })
@@ -275,9 +288,9 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.nickname ? 'border-0 ring-1 ring-error' : ''}`}
+            className={`mt-8pxr ${errors.name ? 'border-0 ring-1 ring-error' : ''}`}
           />
-          {(!errors.nickname || String(errors.nickname.message).length === 0) &&
+          {(!errors.name || String(errors.name.message).length === 0) &&
             showChecks && (
               <div className="mt-4pxr inline-flex">
                 <div className="flex gap-16pxr">
@@ -324,30 +337,30 @@ function ManagingMyInfo({
               </div>
             )}
 
-          {errors.nickname && String(errors.nickname.message).length !== 0 && (
+          {errors.name && String(errors.name.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">
-              {errors.nickname.message}
+              {errors.name.message}
             </small>
           )}
 
           <div className="mt-40pxr">
             <label
-              htmlFor="detail"
+              htmlFor="introduce"
               className="mb-8pxr text-gray-10 font-title-02"
             >
               한 줄 소개
             </label>
             <Input
               variant="border"
-              id="detail"
-              defaultValue={userData.introduce}
-              {...register('detail', {
+              id="introduce"
+              defaultValue={userData?.introduce}
+              {...register('introduce', {
                 required: '한 줄 소개를 입력해 주세요.',
                 pattern: detailPattern,
               })}
               type="text"
               placeholder="띄어쓰기 포함 80자 이내로 입력해 주세요."
-              className={`mt-8pxr ${errors.detail ? 'border-0 ring-1 ring-error' : ''}`}
+              className={`mt-8pxr ${errors.introduce ? 'border-0 ring-1 ring-error' : ''}`}
             />
           </div>
           <div className="mt-40pxr">
@@ -365,7 +378,7 @@ function ManagingMyInfo({
               placeholder="User@gmail.com"
               className="mt-8pxr bg-gray-03"
               color="gray"
-              defaultValue={email}
+              defaultValue={userData?.email}
               {...register('email')}
             />
           </div>
