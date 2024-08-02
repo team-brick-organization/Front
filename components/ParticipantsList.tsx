@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { IParticipants } from 'types/getSocialDetails'
 import { Participants } from './index'
 
 interface IParticipantsListProps {
