@@ -5,7 +5,7 @@ async function deleteSocial(
   id: number,
 ): Promise<Response> {
   const response = await fetch(`${BASE_URL}/socials/${id}`, {
-    method: 'delete',
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${accessToken}`,

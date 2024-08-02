@@ -13,7 +13,7 @@ async function deleteQnA(
   const response = await fetch(
     `${BASE_URL}/socials/${socialId}/qnas/${qnaId}`,
     {
-      method: 'delete',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${accessToken}`,
