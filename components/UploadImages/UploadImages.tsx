@@ -8,7 +8,15 @@ import { UploadImageCardsList } from '../index'
 interface IUploadImagesProps {
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
-  onImageFilesChange: (files: FileList | null) => void
+  onImageFilesChange: ({
+    socialId,
+    accessToken,
+    fileList,
+  }: {
+    socialId: number
+    accessToken: string
+    fileList: FileList | null
+  }) => void
   onThumbnailChange: (index: number) => void
   onImageDelete: (index: number) => void
   error: boolean
@@ -43,7 +51,11 @@ function UploadImages({
         accept="image/png, image/jpeg, image/webp"
         multiple
         onChange={(e) => {
-          handleImageFilesChange(e.target.files)
+          handleImageFilesChange({
+            socialId: 1,
+            accessToken: '1',
+            fileList: e.target.files,
+          })
           setError(false)
         }}
       />

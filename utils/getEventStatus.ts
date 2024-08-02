@@ -1,9 +1,11 @@
+import convertToKoreanTime from './convert-to-korean-time'
+
 function getEventStatus(
   date: string | Date,
   participantsCurrentCount: number,
   participantsMaxCount: number,
 ): string {
-  const eventDate = new Date(date)
+  const eventDate = convertToKoreanTime(new Date(date))
   const today = new Date()
 
   // 3일 이내로 임박

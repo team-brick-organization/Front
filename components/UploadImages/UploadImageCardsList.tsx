@@ -9,7 +9,15 @@ import { UploadImageCard } from '../index'
 interface IUploadImageCardsListProps {
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
-  onImageFilesChange: (files: FileList | null) => void
+  onImageFilesChange: ({
+    socialId,
+    accessToken,
+    fileList,
+  }: {
+    socialId: number
+    accessToken: string
+    fileList: FileList | null
+  }) => void
   onThumbnailChange: (index: number) => void
   onImageDelete: (index: number) => void
   onUploadButtonClick: () => void
@@ -19,6 +27,7 @@ interface IUploadImageCardsListProps {
 function UploadImageCardsList({
   inputRef,
   imageUrls,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onImageFilesChange: handleImageFilesChange,
   onThumbnailChange: handleThumbnailChange,
   onImageDelete: handleImageDelete,
@@ -40,8 +49,8 @@ function UploadImageCardsList({
             ref={ref}
             accept="image/png, image/jpeg, image/webp"
             multiple
-            onChange={(e) => {
-              handleImageFilesChange(e.target.files)
+            onChange={() => {
+              // handleImageFilesChange({ fileList: e.target.files })
               setError(false)
             }}
           />

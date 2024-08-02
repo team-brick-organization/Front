@@ -1,17 +1,25 @@
 /* eslint-disable no-alert */
-import { useEffect, useRef, useState } from 'react'
+import getSocialImages from '@/apis/getSocialImages'
+import { useRef, useState } from 'react'
 
 interface IUseImageFilesProps {
   imageLimit: number
-  initialImages?: string[]
 }
 
-function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
+function useImageFiles({ imageLimit }: IUseImageFilesProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [error, setError] = useState<boolean>(false)
 
-  const handleImageFilesChange = (fileList: FileList | null) => {
+  const handleImageFilesChange = ({
+    socialId,
+    accessToken,
+    fileList,
+  }: {
+    socialId: number
+    accessToken: string
+    fileList: FileList | null
+  }) => {
     if (fileList) {
       if (fileList.length > imageLimit) {
         alert(`이미지는 최대 ${imageLimit}장까지 업로드 가능합니다.`)
@@ -23,7 +31,7 @@ function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
         return
       }
 
-      Array.from(fileList).forEach((file) => {
+      Array.from(fileList).forEach(async (file) => {
         if (
           !file.type.includes('png') &&
           !file.type.includes('jpeg') &&
@@ -40,8 +48,16 @@ function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
           return
         }
 
-        const url = URL.createObjectURL(file)
-        setImageUrls((prevFiles) => [...prevFiles, url])
+        const uploadImage = await getSocialImages({
+          socialId,
+          accessToken,
+        })
+        const { presignedUrl, imageUrl } = await uploadImage.json()
+        await fetch(presignedUrl, {
+          method: 'PUT',
+          body: file,
+        })
+        setImageUrls((prevFiles) => [...prevFiles, imageUrl])
       })
     }
   }
@@ -59,11 +75,11 @@ function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
     setImageUrls((prevFiles) => prevFiles.filter((_, i) => i !== index))
   }
 
-  useEffect(() => {
+  const handleInitialImages = (initialImages: string[]) => {
     if (initialImages) {
       setImageUrls(initialImages)
     }
-  }, [initialImages])
+  }
 
   return {
     inputRef,
@@ -71,6 +87,7 @@ function useImageFiles({ imageLimit, initialImages }: IUseImageFilesProps) {
     handleImageFilesChange,
     handleThumbnailChange,
     handleImageDelete,
+    handleInitialImages,
     error,
     setError,
   }

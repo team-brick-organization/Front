@@ -10,8 +10,14 @@ import useDate from '@/hooks/useDate'
 import infoCircleIcon from '@/public/images/svgs/infoCircle.svg'
 import Image from 'next/image'
 import useSocialRegistrationStore from '@/stores/useSocialRegistrationStore'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import postSocial from '@/apis/postSocial'
+import useUserStore from '@/stores/useUserStore'
+import getSocialDetail from '@/apis/getSocialDetail'
+import useUserDataStore from '@/stores/useUserDataStore'
+import patchSocial from '@/apis/patchSocial'
 import { DisplayMaxLength, Input, SocialDateTime, UploadImages } from './index'
+import { notify } from './ToastMessageTrigger'
 
 export interface ISocialRegistrationInputs {
   socialName: string
@@ -22,21 +28,6 @@ export interface ISocialRegistrationInputs {
   socialDues: number
 }
 
-export interface IInitialData {
-  socialImages?: string[]
-  socialName?: string
-  socialIntroduce?: string
-  socialMinPeople?: number
-  socialMaxPeople?: number
-  socialDateTime?: string
-  socialAddress?: string
-  socialLat?: number
-  socialLng?: number
-  socialAddressDetail?: string
-  socialDues?: number
-  socialTags?: string[]
-}
-
 interface ISocialRegistrationFormProps {
   isEditForm?: boolean
 }
@@ -44,8 +35,11 @@ interface ISocialRegistrationFormProps {
 function SocialRegistrationForm({
   isEditForm = false,
 }: ISocialRegistrationFormProps) {
+  const { accessToken } = useUserStore()
+  const { userData } = useUserDataStore()
   const router = useRouter()
-  const [initialData, setInitialData] = useState<IInitialData | null>(null)
+  const params = useParams()
+  const [initialData, setInitialData] = useState<IGetSocialDetail | null>(null)
   const [address, setAddress] = useState<{
     address: string | null
     lat: number | null
@@ -58,7 +52,7 @@ function SocialRegistrationForm({
     isError: false,
   })
   const { selectedDateTime, setSelectedDateTime } = useDate({
-    timeIntervals: 59,
+    timeIntervals: 60,
   })
   const {
     inputRef,
@@ -66,34 +60,103 @@ function SocialRegistrationForm({
     handleImageFilesChange,
     handleThumbnailChange,
     handleImageDelete,
+    handleInitialImages,
     error,
     setError,
-  } = useImageFiles({ imageLimit: 5, initialImages: initialData?.socialImages })
+  } = useImageFiles({ imageLimit: 5 })
   const methods = useForm<ISocialRegistrationInputs>()
   const { registrationButtonRef, tags, setTags } = useSocialRegistrationStore()
 
-  const onSubmit = (data: ISocialRegistrationInputs) => {
+  const onSubmit = async (data: ISocialRegistrationInputs) => {
+    const gatheringDate = selectedDateTime?.toISOString()
+    const { address: socialAddress, lat, lng } = address
+    const isAddressValid = socialAddress && lat && lng
+
     if (
       imageUrls.length === 0 ||
-      address.address === null ||
-      data.socialMinPeople > data.socialMaxPeople
+      !isAddressValid ||
+      Number(data.socialMinPeople) > Number(data.socialMaxPeople) ||
+      !gatheringDate
     ) {
       setError(true)
-      setAddress((prev) => ({ ...prev, isError: address.address === null }))
-      methods.setError('socialMaxPeople', { type: 'min' })
+      setAddress((prev) => ({ ...prev, isError: !isAddressValid }))
+
+      if (Number(data.socialMinPeople) > Number(data.socialMaxPeople)) {
+        methods.setError('socialMaxPeople', {
+          type: 'min',
+          message: '최소 인원은 최대 인원보다 적을 수 없습니다.',
+        })
+      }
+
+      return
+    }
+
+    if (isEditForm) {
+      const body = {
+        name: data.socialName,
+        description: data.socialIntroduce,
+        place: {
+          address: socialAddress,
+          detailAddress: data.socialAddressDetail,
+          latitude: lat,
+          longitude: lng,
+        },
+        imageUrls: [''],
+      }
+
+      try {
+        const response = await patchSocial({
+          accessToken,
+          body,
+          socialId: Number(params.id),
+        })
+
+        if (!response.ok) {
+          notify('모임 수정에 실패했어요.', 'error')
+          return
+        }
+
+        router.push(`/socials/${params.id}`)
+      } catch (onSubmitError) {
+        notify('모임 수정 중 오류가 발생했습니다.', 'error')
+      }
+
       return
     }
 
     const body = {
-      ...data,
-      socialDateTime: selectedDateTime?.toISOString(),
-      socialAddress: address.address,
-      imageUrls,
+      name: data.socialName,
+      description: data.socialIntroduce,
+      gatheringDate,
+      participantCount: {
+        min: data.socialMinPeople,
+        max: data.socialMaxPeople,
+        current: 0,
+      },
+      place: {
+        address: socialAddress,
+        detailAddress: data.socialAddressDetail,
+        latitude: lat,
+        longitude: lng,
+      },
+      imageUrls: [''],
+      dues: data.socialDues,
       tags,
     }
 
-    console.log(body)
-    // router.push(`/social/1`) // 추후 api 연결 시 라우트 변경해야함
+    try {
+      const response = await postSocial({ accessToken, body })
+
+      if (!response.ok) {
+        notify('모임 등록에 실패했어요.', 'error')
+        return
+      }
+
+      const res = await response.json()
+      router.push(`/socials/${res.id}`)
+    } catch (onSubmitError) {
+      notify('모임 등록 중 오류가 발생했어요.', 'error')
+    }
   }
 
   const handleAddressSearch = () => {
@@ -116,44 +179,59 @@ function SocialRegistrationForm({
   }
 
   useEffect(() => {
-    if (!tags.length && !isEditForm) {
-      router.push('/registration')
+    if (!accessToken || !userData.name) return
+
+    if (!accessToken) {
+      router.push('/signin')
       return
     }
 
-    if (isEditForm) {
-      // 초기 데이터 설정 (API 연결 시 변경 필요)
-      const initData = {
-        socialImages: [
-          'https://cdn.discordapp.com/attachments/1246000777735176305/1265836655722365000/image.png?ex=66a2f5c0&is=66a1a440&hm=00cac0e6c01e636685d7931c2644673187d2bf536f238176dfae551d442e78e3&',
-          'https://cdn.discordapp.com/attachments/1246000777735176305/1265612602927616000/image.png?ex=66a2cdd6&is=66a17c56&hm=b2534b3a74ac7535cf3eab309b0dbf5d975db94c16d3a5298ee7e6f77045245c&',
-          'https://cdn.discordapp.com/attachments/1246000777735176305/1265612603195916319/image.png?ex=66a2cdd6&is=66a17c56&hm=f79f36d89826a51cb3fd12bd9ac55de7b0c5e10873cf9bdf0fbc955d7ba42124&',
-        ],
-        socialName: '모임 이름',
-        socialIntroduce: '모임 소개',
-        socialMinPeople: 2,
-        socialMaxPeople: 20,
-        socialDateTime: '2024-01-01T12:00:00.000Z',
-        socialAddress: '주소입니다.',
-        socialLat: 37.566826,
-        socialLng: 126.9786567,
-        socialAddressDetail: '상세 주소입니다.',
-        socialDues: 0,
-        socialTags: ['태그1', '태그2', '태그3'],
-      }
-
-      setInitialData(initData)
-      methods.reset(initData)
-      setAddress({
-        address: initData.socialAddress,
-        lat: initData.socialLat,
-        lng: initData.socialLng,
-        isError: false,
-      })
-      setTags(initData.socialTags)
-      setSelectedDateTime(new Date(initData.socialDateTime))
+    if (!isEditForm && !tags.length) {
+      router.push('/registration')
     }
-  }, [isEditForm, router, setTags, tags.length, methods, setSelectedDateTime])
+
+    if (!isEditForm) return
+
+    const fetchSocialData = async () => {
+      try {
+        const socialResponse = await getSocialDetail(Number(params.id))
+
+        if (!socialResponse.ok)
+          throw new Error('모임 정보를 불러오는데 실패했습니다.')
+
+        const socialData: IGetSocialDetail = await socialResponse.json()
+
+        if (socialData.owner.name !== userData.name) {
+          notify('본인이 작성한 모임만 수정할 수 있어요.', 'error')
+          router.push(`/socials/${params.id}`)
+          return
+        }
+
+        setInitialData(socialData)
+        methods.reset({
+          socialName: socialData.name,
+          socialIntroduce: socialData.description,
+          socialMinPeople: socialData.participantCount.min,
+          socialMaxPeople: socialData.participantCount.max,
+          socialAddressDetail: socialData.introduction.place.detailAddress,
+          socialDues: socialData.dues,
+        })
+        handleInitialImages(socialData.imageUrls)
+        setAddress({
+          address: socialData.introduction.place.address,
+          lat: socialData.introduction.place.latitude,
+          lng: socialData.introduction.place.longitude,
+          isError: false,
+        })
+        setTags(socialData.tags)
+        setSelectedDateTime(new Date(socialData.gatheringDate))
+      } catch (socialDataError) {
+        notify('모임 정보를 불러오는 중 오류가 발생했습니다.', 'error')
+      }
+    }
+
+    fetchSocialData()
+  }, [accessToken, userData, params.id, isEditForm, router, methods])
 
   return (
     <FormProvider {...methods}>
@@ -172,15 +250,13 @@ function SocialRegistrationForm({
         />
 
         <div className="flex flex-col gap-32pxr">
-          <SocialNameSection initialName={initialData?.socialName} />
+          <SocialNameSection initialName={initialData?.name} />
 
-          <SocialIntroduceSection
-            initialIntroduce={initialData?.socialIntroduce}
-          />
+          <SocialIntroduceSection initialIntroduce={initialData?.description} />
 
           <SocialCapacitySection
-            initialMin={initialData?.socialMinPeople}
-            initialMax={initialData?.socialMaxPeople}
+            initialMin={initialData?.participantCount.min}
+            initialMax={initialData?.participantCount.max}
           />
 
           <SocialDateTimeSection
@@ -192,16 +268,13 @@ function SocialRegistrationForm({
           <SocialPlaceSection
             address={address}
             onAddressSearch={handleAddressSearch}
-            initialAddress={initialData?.socialAddress}
-            initialAddressDetail={initialData?.socialAddressDetail}
+            initialAddress={initialData?.introduction.place.address}
+            initialAddressDetail={initialData?.introduction.place.detailAddress}
           />
 
-          <SocialDuesSection initialDues={initialData?.socialDues} />
+          <SocialDuesSection initialDues={initialData?.dues} />
 
-          <SocialTagsSection
-            tags={tags}
-            initialTags={initialData?.socialTags}
-          />
+          <SocialTagsSection tags={tags} initialTags={initialData?.tags} />
         </div>
         <button
           ref={registrationButtonRef}
@@ -210,10 +283,12 @@ function SocialRegistrationForm({
           onClick={() => {
             if (imageUrls.length === 0) {
               setError(true)
+              console.log('imageUrls.length === 0')
             }
 
             if (address.address === null) {
               setAddress((prev) => ({ ...prev, isError: true }))
+              console.log('address.address === null')
             }
           }}
         >
@@ -340,7 +415,6 @@ function SocialCapacitySection({
               onChange={(e) => {
                 const value = validateAndAdjustInputNumber({
                   e,
-                  min: 2,
                   max: 300,
                 })
                 setValue('socialMinPeople', value, {
