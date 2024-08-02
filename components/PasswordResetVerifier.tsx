@@ -6,12 +6,18 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Image from 'next/image'
 import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
+import checkedCheckBox from '@/public/images/svgs/checkedCheckBox.svg'
+import uncheckedCheckBox from '@/public/images/svgs/unCheckedCheckBox.svg'
+import deleteUserAccount from '@/apis/deleteUserAccount'
 import sendVerificationEmail from '@/utils/sendVerificationEmail'
+import { useRouter } from 'next/navigation'
 import { notify } from './ToastMessageTrigger'
 
 interface PasswordResetVerifierProps {
   name: string
   email: string
+  accessToken: string
+  setAccessToken: (accessToken: string) => void
 }
 
 /**
@@ -20,9 +26,16 @@ interface PasswordResetVerifierProps {
  * @param email 현제 유저의 이메일
  */
 
-function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
+function PasswordResetVerifier({
+  name,
+  email,
+  accessToken,
+  setAccessToken,
+}: PasswordResetVerifierProps) {
+  const [checked, setChecked] = useState(false)
   const [isInputFolded, setIsInputFolded] = useState(false)
   const [isPasswordInputFolded, setIsPassWordInputFolded] = useState(false)
+  const [isAccountDeletedFolded, setIsAccountDeletedFolded] = useState(false)
   const [newPasswordInputType, setNewPasswordInputType] = useState('password')
   const [confirmPasswordInputType, setConfirmPasswordInputType] =
     useState('password')
@@ -36,6 +49,8 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
   const verificationNumInputRef = useRef<HTMLInputElement>(null)
   const newPasswordInputRef = useRef<HTMLInputElement>(null)
   const passwordConfirmInputRef = useRef<HTMLInputElement>(null)
+
+  const router = useRouter()
 
   const disableCertificationButton =
     timeLeft <= 0 || verificationNumInputRef.current?.value.length !== 6
@@ -143,9 +158,28 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
     }
   }, [timeLeft, isInputFolded, isPasswordInputFolded])
 
+  const handleUserAccount = async () => {
+    if (!accessToken) {
+      notify('로그인 후 이용해주세요.', 'error')
+      router.push('/signin')
+      return
+    }
+
+    try {
+      await deleteUserAccount({ accessToken })
+      setAccessToken('')
+      notify('회원 탈퇴가 완료되었어요.')
+      router.push('/signin')
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('회원 탈퇴 중 오류 발생:', error)
+      notify('회원 탈퇴 중 오류가 발생했습니다. 다시 시도해 주세요.', 'error')
+    }
+  }
+
   return (
     <>
-      {!isPasswordInputFolded && (
+      {!isPasswordInputFolded && !isAccountDeletedFolded && (
         <div className="flex w-full max-w-510pxr flex-col gap-24pxr mb:mt-40pxr">
           <div className="flex flex-col gap-16pxr">
             <section className="flex flex-col gap-4pxr">
@@ -248,7 +282,7 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
           )}
         </div>
       )}
-      {isPasswordInputFolded && (
+      {isPasswordInputFolded && !isAccountDeletedFolded && (
         <div className="mt-24pxr flex w-full max-w-510pxr flex-col gap-24pxr">
           <div className="flex w-full flex-col gap-8pxr">
             <h4 className="text-gray-10 font-title-02">새로운 비밀번호</h4>
@@ -330,9 +364,74 @@ function PasswordResetVerifier({ name, email }: PasswordResetVerifierProps) {
           </div>
         </div>
       )}
-      <button type="button" className="mt-100pxr text-gray-10 font-title-02">
-        회원탈퇴
-      </button>
+      {!isAccountDeletedFolded && (
+        <button
+          type="button"
+          className="mt-100pxr text-gray-10 font-title-02"
+          onClick={() => setIsAccountDeletedFolded(true)}
+        >
+          회원탈퇴
+        </button>
+      )}
+      {isAccountDeletedFolded && (
+        <section className="ml-130pxr h-full w-fit max-w-480pxr mb:ml-0pxr mb:mt-80pxr mb:w-full">
+          <h1 className="font-headline-03">
+            {name}님,
+            <br />
+            정말 BRICK을 떠나실건가요?
+          </h1>
+
+          <p className="mt-40pxr text-gray-10 font-title-02">
+            탈퇴하기 전 아래 내용을 확인해 주세요.
+          </p>
+          <div className="mt-8pxr">
+            <li className="text-gray-08 font-title-02">
+              {name}님의 모든 활동 정보는 바로 삭제되며,삭제된 데이터는 복구할
+              수 없어요.
+            </li>
+            <li className="text-gray-08 font-title-02">
+              부정 이용 방지를 위해 탈퇴 후{' '}
+              <span className="text-gray-10">15일 동안</span> Brick에 다시
+              가입할 수 없어요.
+            </li>
+          </div>
+
+          <div className="mt-41pxr flex gap-8pxr">
+            {checked ? (
+              <Image
+                src={checkedCheckBox}
+                alt="탈퇴 동의 체크박스"
+                width={24}
+                height={24}
+                onClick={() => setChecked((prev) => !prev)}
+                className="cursor-pointer"
+              />
+            ) : (
+              <Image
+                src={uncheckedCheckBox}
+                alt="탈퇴 미동의 체크박스"
+                width={24}
+                height={24}
+                onClick={() => setChecked((prev) => !prev)}
+                className="cursor-pointer"
+              />
+            )}
+            <span className="text-gray-08 font-title-02">
+              안내 사항을 확인하였으며, 이에 동의합니다.
+            </span>
+          </div>
+          <div className="mt-85pxr flex items-center justify-center">
+            <Button
+              size="M"
+              className={`${checked ? 'bg-primary text-gray-01' : 'bg-gray-04 text-gray-01'}`}
+              onClick={handleUserAccount}
+              disabled={!checked}
+            >
+              회원 탈퇴
+            </Button>
+          </div>
+        </section>
+      )}
     </>
   )
 }
