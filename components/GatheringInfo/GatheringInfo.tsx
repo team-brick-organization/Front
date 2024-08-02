@@ -11,15 +11,15 @@ import {
   TagBadgeList,
 } from '@/components'
 import { Share2Icon } from '@radix-ui/react-icons'
-import locationIcon from '@/public/images/svgs/location.svg'
+import locationIcon from '@/public/images/svgs/locationSocialDetail.svg'
 import calendarIcon from '@/public/images/svgs/calendar.svg'
 import cardIcon from '@/public/images/svgs/card.svg'
 import formatDate from '@/utils/formatDate'
 import useFavorite from '@/hooks/useFavorite'
 import usePortal from '@/hooks/usePortal'
+import { useParams } from 'next/navigation'
 
 interface IGatheringInfoProps {
-  id: number
   tags: string[]
   title: string
   location: string
@@ -32,7 +32,6 @@ interface IGatheringInfoProps {
 }
 
 function GatheringInfo({
-  id,
   tags,
   title,
   location,
@@ -45,10 +44,13 @@ function GatheringInfo({
 }: IGatheringInfoProps) {
   const { handleOutsideClick, isPortalOpen, setIsPortalOpen, portalRef } =
     usePortal()
-  const { isFavoriteClicked, handleFavoriteClick } = useFavorite(id)
+  const params = useParams()
+  const { isFavoriteClicked, handleFavoriteClick } = useFavorite(
+    Number(params.id),
+  )
 
   return (
-    <div className="h-346pxr w-full max-w-480pxr rounded-[0.3125rem] bg-gray-01 p-24pxr shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.15)] mb:px-16pxr mb:py-24pxr tb:px-16pxr tb:py-24pxr max759Min480:max-w-full">
+    <div className="min-h-346pxr w-full max-w-480pxr rounded-[0.3125rem] bg-gray-01 p-24pxr shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.15)] mb:px-16pxr mb:py-24pxr tb:px-16pxr tb:py-24pxr max759Min480:max-w-full">
       <div className="mb-40pxr flex flex-col gap-14pxr border-b border-dashed border-[#C8C8C8] pb-40pxr">
         <div className="flex justify-between">
           <TagBadgeList tags={tags} />
@@ -56,6 +58,7 @@ function GatheringInfo({
             <FavoriteButton
               isFavoriteClicked={isFavoriteClicked}
               onFavoriteClick={handleFavoriteClick}
+              isSocialDetail
             />
             <button
               title="공유 버튼"

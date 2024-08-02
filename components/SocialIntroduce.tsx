@@ -5,12 +5,7 @@ interface ISocialIntroduceProps {
   location: string
   lat: number
   lng: number
-  participants: {
-    profileImage: string
-    name: string
-    description: string
-    role: 'host' | 'participant'
-  }[]
+  participants: IParticipants[]
 }
 
 function SocialIntroduce({

@@ -10,7 +10,7 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     const sizeClasses = {
       L: 'w-full max-w-400pxr py-12pxr px-16pxr font-title-04',
       M: 'w-full max-w-232pxr py-10pxr px-16pxr font-title-02',
-      S: 'w-full max-w-112pxr py-10pxr px-16pxr font-title-02',
+      S: 'w-full max-w-112pxr py-8pxr px-12pxr font-title-02',
       SCancel:
         'w-full max-w-112pxr py-10pxr px-16pxr font-title-02 !bg-gray-03 !text-black',
       XS: 'w-full max-w-78pxr py-8pxr px-16pxr font-body-01',

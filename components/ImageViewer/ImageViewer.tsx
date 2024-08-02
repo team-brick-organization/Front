@@ -6,13 +6,8 @@ import usePortal from '@/hooks/usePortal'
 import { ImageViewerModal, Portal } from '@/components'
 import moreImgIcon from '@/public/images/svgs/moreImg.svg'
 
-interface IImage {
-  // id: number
-  src: string
-}
-
 interface ImageViewerProps {
-  images: IImage[]
+  images: string[]
 }
 
 function ImageViewer({ images }: ImageViewerProps) {
@@ -25,7 +20,7 @@ function ImageViewer({ images }: ImageViewerProps) {
     <div className="flex gap-20pxr">
       <Box className="relative h-400pxr w-full max-w-680pxr cursor-pointer items-center overflow-hidden rounded-[10px] mb:h-200pxr">
         <Image
-          src={images[0].src}
+          src={images[0]}
           alt="대표 이미지"
           fill
           className="h-400pxr w-680pxr object-cover mb:h-200pxr mb:w-full tb:h-301pxr tb:w-319pxr"
@@ -49,7 +44,7 @@ function ImageViewer({ images }: ImageViewerProps) {
               key={`${index + 0}`}
             >
               <Image
-                src={image.src}
+                src={image}
                 alt={`이미지 ${index + 1}`}
                 width={235}
                 height={195}

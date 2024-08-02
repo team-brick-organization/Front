@@ -16,7 +16,7 @@ import useDate from '@/hooks/useDate'
 import { PersonIcon } from '@radix-ui/react-icons'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
-import postEditUserInfo from '@/apis/postEditUserInfo'
+import patchEditUserInfo from '@/apis/patchEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
 import BASE_URL from '@/apis/apiConfig'
 import { useRouter } from 'next/navigation'
@@ -164,7 +164,7 @@ function ManagingMyInfo({
       })
       const result = await response.json()
 
-      const editUserInfoResponse = await postEditUserInfo({
+      const editUserInfoResponse = await patchEditUserInfo({
         body: {
           detail,
           nickname,

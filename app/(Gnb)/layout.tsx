@@ -43,7 +43,7 @@ export default function RootLayout({
             <Gnb />
           </Suspense>
           {children}
-          <div id="portal" />
+          <div id="portal" className="flex" />
         </Theme>
       </body>
     </html>
