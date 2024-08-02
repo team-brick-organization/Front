@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { IQnADatas } from 'types/getSocialQnAs'
 import { Pagination, SocialQnaCard } from './index'
 
 interface ISocialQnaCardListProps {

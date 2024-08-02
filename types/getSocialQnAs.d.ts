@@ -1,4 +1,4 @@
-export interface IQnADatas {
+interface IQnADatas {
   id: number | null
   title: string
   content: string
@@ -9,7 +9,7 @@ export interface IQnADatas {
   updatedAt: string
 }
 
-export interface ISocialQnAs {
+interface ISocialQnAs {
   nextCursor: null | string
   data: IQnADatas[]
 }

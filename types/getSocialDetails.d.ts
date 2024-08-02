@@ -1,27 +1,27 @@
-export interface IParticipantCount {
+interface IParticipantCount {
   min: number
   max: number
   current: number
 }
 
-export interface IOwner {
+interface IOwner {
   name: string
   profileUrl: string
   role: 'host' | 'participant'
 }
-export interface IParticipants {
+interface IParticipants {
   name: string
   profileUrl: string
   role: 'OWNER' | 'PARTICIPANT'
   description: string
 }
 
-export interface IPlace {
+interface IPlace {
   address: string
   lat: number
   lng: number
 }
-export interface ISocialDetailData {
+interface ISocialDetailData {
   id: number
   name: string
   description: string

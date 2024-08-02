@@ -22,7 +22,6 @@ import postJoinSocial from '@/apis/postJoinSocial'
 import useUserStore from '@/stores/useUserStore'
 import deleteSocial from '@/apis/deleteSocial'
 import deleteCancelSocialParticipation from '@/apis/deleteSocialParticipation'
-import { ISocialDetailData } from 'types/getSocialDetails'
 import { notify } from '@/components/ToastMessageTrigger'
 
 const fetchData1 = {
@@ -75,7 +74,7 @@ function SocialDetailPage() {
   const fetchSocialCancel = async () => {
     if (!socialDetailData || !socialDetailData.id) return
     try {
-      const data = await deleteSocial(accessToken, socialDetailData?.id)
+      const data = await deleteSocial({ accessToken, id: socialDetailData?.id })
       if (!data.ok) {
         throw new Error('모임 취소를 실패했어요.')
       }
@@ -94,10 +93,10 @@ function SocialDetailPage() {
     }
 
     try {
-      const data = await deleteCancelSocialParticipation(
+      const data = await deleteCancelSocialParticipation({
         accessToken,
-        Number(params.id),
-      )
+        id: Number(params.id),
+      })
 
       if (!data.ok) {
         throw new Error('참가 취소를 실패했어요.')
@@ -141,15 +140,13 @@ function SocialDetailPage() {
     const getSocialDetailData = async (id: number) => {
       try {
         const data = await getSocialDetail(id)
-        console.log('data', data)
-
-        if (!data.ok) console.error('error: ', data.status)
-
+        if (!data.ok) {
+          throw new Error('소셜 불러오기에 실패했어요.')
+        }
         const jsonfied = await data.json()
-        console.log('jsonfied', jsonfied)
-
         setSocialDetailData(jsonfied)
       } catch (error) {
+        notify('소셜 불러오기에 실패했어요', 'error')
         // eslint-disable-next-line no-console
         console.error('Error fetching user data:', error)
       }

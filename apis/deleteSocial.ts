@@ -1,9 +1,13 @@
 import BASE_URL from './apiConfig'
 
-async function deleteSocial(
-  accessToken: string,
-  id: number,
-): Promise<Response> {
+interface DeleteSocialProps {
+  accessToken: string
+  id: number
+}
+async function deleteSocial({
+  accessToken,
+  id,
+}: DeleteSocialProps): Promise<Response> {
   const response = await fetch(`${BASE_URL}/socials/${id}`, {
     method: 'DELETE',
     headers: {

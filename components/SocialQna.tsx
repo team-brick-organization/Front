@@ -7,8 +7,8 @@ import useUserStore from '@/stores/useUserStore'
 import { useEffect, useState } from 'react'
 import getQnA from '@/apis/getQnA'
 import { useParams } from 'next/navigation'
-import { ISocialQnAs } from 'types/getSocialQnAs'
 import { Portal, QnaWriteModal, SocialQnaCardList } from './index'
+import { notify } from './ToastMessageTrigger'
 
 export interface ISocialQnaComment {
   commentId: number
@@ -60,12 +60,15 @@ function SocialQna() {
     const getQnAData = async () => {
       try {
         const data = await getQnA(Number(params.id), 8)
-        if (!data.ok) console.error('error: ', data.status)
+        if (!data.ok) {
+          throw new Error('QnA불러오기를 실패했어요')
+        }
         const jsonfied = await data.json()
-        console.log('jsonfied', jsonfied)
+
         setQnaData(jsonfied)
       } catch (error) {
-        console.error('Error fetching user data:', error)
+        notify('QnA불러오기를 실패했어요', 'error')
+        console.error(error)
       }
     }
 

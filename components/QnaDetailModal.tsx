@@ -53,7 +53,11 @@ function QnaDetailModal({
 
   const handleClickDeleteModalOk = async () => {
     try {
-      const data = await deleteQnA(accessToken, Number(params.id), qnaId!)
+      const data = await deleteQnA({
+        accessToken,
+        socialId: Number(params.id),
+        qnaId: Number(qnaId),
+      })
       const jsonfied = await data.json()
       if (!jsonfied.ok) {
         throw new Error('게시글 삭제에 실패했어요.')
@@ -198,6 +202,7 @@ function CommentForm({
         if (!res.ok) {
           throw new Error('댓글 등록에 실패했어요.')
         }
+        notify('댓글이 등록되었어요.')
       } catch (error) {
         notify('댓글 등록에 실패했어요.', 'error')
         // eslint-disable-next-line no-console
@@ -259,14 +264,13 @@ function CommentList({
 
   const onClickDeleteCommentOkButton = async (commentId: number) => {
     try {
-      const data = await deleteQnAComment(
+      const data = await deleteQnAComment({
         accessToken,
-        Number(params.id),
-        qnaId!,
+        socialId: Number(params.id),
+        qnaId: Number(qnaId),
         commentId,
-      )
-      console.log('data', data)
-      // eslint-disable-next-line no-console
+      })
+
       if (!data.ok) {
         throw new Error('댓글 삭제에 실패했어요.')
       }

@@ -21,16 +21,22 @@ function QnaWriteModal({ onClose }: IQnaWriteModalProps) {
   const { accessToken } = useUserStore()
   const params = useParams()
   const router = useRouter()
-  const onSubmit = (data: IQnaWriteFormInputs) => {
-    console.log(data)
-
+  const onSubmit = async (data: IQnaWriteFormInputs) => {
     try {
-      postQnA({ accessToken, id: Number(params.id), body: data })
+      const res = await postQnA({
+        accessToken,
+        id: Number(params.id),
+        body: data,
+      })
+      if (!res.ok) {
+        throw new Error('질문 등록에 실패했어요.')
+      }
       notify('질문 등록이 완료되었어요.')
       onClose()
       router.refresh()
     } catch (error) {
-      console.error('Error fetching user data:', error)
+      // eslint-disable-next-line no-console
+      console.error(error)
       notify('질문 등록에 실패했어요.')
     }
   }

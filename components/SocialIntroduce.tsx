@@ -1,4 +1,3 @@
-import { IParticipants } from 'types/getSocialDetails'
 import { LocationMap, ParticipantsList, SocialDescription } from './index'
 
 interface ISocialIntroduceProps {

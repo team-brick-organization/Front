@@ -1,11 +1,17 @@
 import BASE_URL from './apiConfig'
 
-async function deleteQnAComment(
-  accessToken: string,
-  socialId: number,
-  qnaId: number,
-  commentId: number,
-): Promise<Response> {
+interface DeleteQnACommentProps {
+  accessToken: string
+  socialId: number
+  qnaId: number
+  commentId: number
+}
+async function deleteQnAComment({
+  accessToken,
+  socialId,
+  qnaId,
+  commentId,
+}: DeleteQnACommentProps): Promise<Response> {
   const response = await fetch(
     `${BASE_URL}/socials/${socialId}/qnas/${qnaId}/comments/${commentId}`,
     {
