@@ -286,10 +286,12 @@ function SocialRegistrationForm({
           onClick={() => {
             if (imageUrls.length === 0) {
               setError(true)
+              console.log('imageUrls.length === 0')
             }
 
             if (address.address === null) {
               setAddress((prev) => ({ ...prev, isError: true }))
+              console.log('address.address === null')
             }
           }}
         >
