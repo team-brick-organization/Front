@@ -74,7 +74,6 @@ function Gnb() {
         path === '/socials',
     },
   ]
-  console.log(searchParams)
 
   const handleOpenSideMenu = () => {
     setSideMenu(true)

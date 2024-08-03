@@ -10,12 +10,16 @@ import doodleImage from '@/public/images/svgs/doodle.svg'
 import pinImage from '@/public/images/pngs/pin.png'
 import getSocials from '@/apis/getSocials'
 import chevronDownIcon from '@/public/images/svgs/chevronDown.svg'
+import { notify } from '@/components/ToastMessageTrigger'
+
+const LIMIT = 24
 
 function LikedSocialsListPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [socialsData, setSocialsData] = useState<GetSocialsType>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
   const [sort, setSort] = useState<'popularity' | 'latest'>(
     searchParams.get('sort') === 'popularity' ? 'popularity' : 'latest',
   )
@@ -62,21 +66,46 @@ function LikedSocialsListPage() {
 
   useEffect(() => {
     const fetchSocials = async () => {
+      const getLikedSocials =
+        typeof window !== 'undefined' && localStorage.getItem('favoriteSocials')
+
+      const likedSocials = getLikedSocials ? JSON.parse(getLikedSocials) : []
+
+      const ids = likedSocials.map((socialId: number) => socialId).join(',')
+
+      const filterBy = () => {
+        if (filter === '모집 중') {
+          return 'open'
+        }
+
+        if (filter === '모집 마감') {
+          return 'close'
+        }
+
+        return undefined
+      }
+
       const response = await getSocials({
         orderBy: sort === 'popularity' ? 'popularity' : undefined,
+        filterBy: filterBy(),
+        offset: (currentPage - 1) * LIMIT,
+        limit: LIMIT,
+        ids,
       })
 
       if (!response.ok) {
+        notify('모임을 불러오는데 실패했습니다.', 'error')
         console.error('Failed to fetch socials')
         return
       }
 
       const data = await response.json()
+      setTotalPages(24) // total page count 추가되면 수정 필요
       setSocialsData(data)
     }
 
     fetchSocials()
-  }, [sort])
+  }, [currentPage, filter, sort])
 
   return (
     <div className="flex w-full flex-col items-center gap-80pxr px-20pxr pb-160pxr pt-40pxr">
@@ -110,7 +139,7 @@ function LikedSocialsListPage() {
       </div>
       <Pagination
         currentPage={currentPage}
-        totalPages={socialsData.length / 24}
+        totalPages={totalPages}
         onPageChange={handlePageChange}
       />
     </div>

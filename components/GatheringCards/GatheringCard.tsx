@@ -7,6 +7,7 @@ import Link from 'next/link'
 import useFavorite from '@/hooks/useFavorite'
 import formatDate from '@/utils/formatDate'
 import getEventStatus from '@/utils/getEventStatus'
+import convertToKoreanTime from '@/utils/convert-to-korean-time'
 import TagBadgeList from '../CustomBadge/TagBadgeList'
 import CustomBadge from '../CustomBadge/CustomBadge'
 import FavoriteButton from '../FavoriteButton'
@@ -25,11 +26,14 @@ function GatheringCard({ data }: GatheringCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
   const isClickableFavorite =
-    new Date(data.gatheringDate) > new Date() || isFavoriteClicked
+    convertToKoreanTime(new Date(data.gatheringDate)) > new Date() ||
+    isFavoriteClicked
 
   const formattedAddress = data.address.split(' ')[1]
 
-  const formattedDate = formatDate(new Date(data.gatheringDate))
+  const formattedDate = formatDate(
+    convertToKoreanTime(new Date(data.gatheringDate)),
+  )
 
   const statusBadgeText = getEventStatus(
     data.gatheringDate,
