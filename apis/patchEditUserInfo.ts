@@ -1,6 +1,6 @@
 import BASE_URL from './apiConfig'
 
-interface IPostEditUserInfoProps {
+interface IPatchEditUserInfoProps {
   body: {
     introduce: string
     name?: string
@@ -10,15 +10,13 @@ interface IPostEditUserInfoProps {
   accessToken: string
 }
 
-async function postEditUserInfo({
+async function patchEditUserInfo({
   body,
-  accessToken,
-}: IPostEditUserInfoProps): Promise<Response> {
+}: IPatchEditUserInfoProps): Promise<Response> {
   const response = await fetch(`${BASE_URL}/auth/users`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({ ...body }),
     credentials: 'include',
@@ -27,4 +25,4 @@ async function postEditUserInfo({
   return response
 }
 
-export default postEditUserInfo
+export default patchEditUserInfo

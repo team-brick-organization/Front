@@ -2,36 +2,35 @@
 
 import { Avatar } from '@radix-ui/themes'
 import usePortal from '@/hooks/usePortal'
+import { PersonIcon } from '@radix-ui/react-icons'
 import shortFormatDate from '@/utils/shortFormatDate'
 import { Portal, QnaDetailModal } from './index'
-import { ISocialQnaComment } from './SocialQna'
 
 interface ISocialQnaCardProps {
-  // qnaId: number
-  // socialId: number
+  qnaId: number | null
   title: string
   content: string
   createdAt: string
   profileImageUrl: string
   name: string
   commentCount: number
-  comments: ISocialQnaComment[]
 }
+/**
+ * Q&A 카드 컴포넌트
+ * @todo qna댓글 불러오기,페이지네이션
+ */
 
 function SocialQnaCard({
-  // qnaId,
-  // socialId,
+  qnaId,
   title,
   content,
   createdAt,
   profileImageUrl,
   name,
   commentCount,
-  comments,
 }: ISocialQnaCardProps) {
   const { portalRef, isPortalOpen, setIsPortalOpen, handleOutsideClick } =
     usePortal()
-
   const formattedDate = shortFormatDate(new Date(createdAt))
 
   return (
@@ -55,8 +54,8 @@ function SocialQnaCard({
             className="h-21pxr w-21pxr rounded-full"
             src={profileImageUrl}
             fallback={
-              <div className="flex h-21pxr w-21pxr items-center justify-center rounded-full bg-gray-04 text-gray-10 font-caption-02">
-                {name.charAt(0)}
+              <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
               </div>
             }
           />
@@ -74,13 +73,13 @@ function SocialQnaCard({
         className="h-full w-full max-w-1017pxr px-20pxr pb-160pxr pt-80pxr"
       >
         <QnaDetailModal
+          qnaId={qnaId}
           title={title}
           profileImageUrl={profileImageUrl}
           name={name}
           createdAt={createdAt}
           content={content}
           commentCount={commentCount}
-          comments={comments}
         />
       </Portal>
     </div>

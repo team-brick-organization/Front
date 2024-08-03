@@ -1,11 +1,12 @@
 import { Avatar } from '@radix-ui/themes'
+import { PersonIcon } from '@radix-ui/react-icons'
 import CustomBadge from './CustomBadge/CustomBadge'
 
 interface IParticipantsProps {
   profileImage: string
   name: string
   description: string
-  role: 'host' | 'participant'
+  role: 'OWNER' | 'PARTICIPANT'
 }
 
 function Participants({
@@ -20,15 +21,15 @@ function Participants({
         className="h-45pxr w-45pxr rounded-full bg-[#D9D9D9]"
         src={profileImage}
         fallback={
-          <div className="h-45pxr w-45pxr content-center rounded-full bg-[#D9D9D9] text-center text-14pxr text-white">
-            BRICK
+          <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+            <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
           </div>
         }
       />
       <div className="flex flex-col gap-4pxr">
         <div className="flex items-center gap-8pxr">
           <h3 className="text-gray-10 font-body-02">{name}</h3>
-          {role === 'host' && (
+          {role === 'OWNER' && (
             <CustomBadge type="primary" size="small">
               호스트
             </CustomBadge>
