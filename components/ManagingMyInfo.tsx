@@ -9,8 +9,8 @@ import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
 import { detailPattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
-import checkedIcon from '@/public/images/svgs/checked.svg'
-import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
+// import checkedIcon from '@/public/images/svgs/checked.svg'
+// import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import { PersonIcon } from '@radix-ui/react-icons'
@@ -162,18 +162,18 @@ function ManagingMyInfo({
     // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
     // nickname => 변경 데이터, userName => 기존 저장 데이터
 
-    const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-      { name },
-      postDuplicateNickname,
-    )
+    // const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
+    //   { name },
+    //   postDuplicateNickname,
+    // )
 
-    if (isDuplicateNickname) {
-      setError('name', {
-        type: 'validate',
-        message: '중복된 닉네임입니다.',
-      })
-      return
-    }
+    // if (isDuplicateNickname) {
+    //   setError('name', {
+    //     type: 'validate',
+    //     message: '중복된 닉네임입니다.',
+    //   })
+    //   return
+    // }
 
     try {
       const editUserInfoResponse = await patchEditUserInfo({
@@ -201,11 +201,11 @@ function ManagingMyInfo({
 
   if (!accessToken) return null
 
-  const isLengthValid =
-    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
-  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
-  const hasNoWhitespace = !/\s/.test(watchNickname || '')
-  const showChecks = watchNickname && watchNickname.length >= 2
+  // const isLengthValid =
+  //   watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+  // const isValidPattern = nicknamePattern.value.test(watchNickname || '')
+  // const hasNoWhitespace = !/\s/.test(watchNickname || '')
+  // const showChecks = watchNickname && watchNickname.length >= 2
 
   return (
     <>
@@ -257,6 +257,7 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="nickname"
+            readOnly
             defaultValue={userData?.name}
             {...register('name', {
               required: '닉네임은 필수 입력입니다.',
@@ -288,9 +289,9 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.name ? 'border-0 ring-1 ring-error' : ''}`}
+            className={`mt-8pxr bg-gray-03 ${errors.name ? 'border-0 ring-1 ring-error' : ''}`}
           />
-          {(!errors.name || String(errors.name.message).length === 0) &&
+          {/* {(!errors.name || String(errors.name.message).length === 0) &&
             showChecks && (
               <div className="mt-4pxr inline-flex">
                 <div className="flex gap-16pxr">
@@ -335,7 +336,7 @@ function ManagingMyInfo({
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
           {errors.name && String(errors.name.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">

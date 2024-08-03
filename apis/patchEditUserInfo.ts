@@ -12,11 +12,13 @@ interface IPatchEditUserInfoProps {
 
 async function patchEditUserInfo({
   body,
+  accessToken,
 }: IPatchEditUserInfoProps): Promise<Response> {
   const response = await fetch(`${BASE_URL}/auth/users`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
+      authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({ ...body }),
     credentials: 'include',
