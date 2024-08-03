@@ -27,9 +27,11 @@ const useSocialDetailStore = create<ISocialDetailStore>((set) => ({
     dues: 0,
     tags: [],
     owner: {
+      id: 0,
       name: '',
       profileUrl: '',
-      role: 'host',
+      role: 'OWNER',
+      description: '',
     },
     participants: [],
   },
