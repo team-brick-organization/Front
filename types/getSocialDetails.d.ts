@@ -5,10 +5,13 @@ interface IParticipantCount {
 }
 
 interface IOwner {
-  name: string
-  profileUrl: string
+  id: number
+  name: 'string'
+  profileUrl: 'string'
   role: 'host' | 'participant'
+  description: 'string'
 }
+
 interface IParticipants {
   id?: number
   name: string
