@@ -6,8 +6,8 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import logo from '@/public/images/svgs/logo.svg'
 import Link from 'next/link'
-import getSearchResult from '@/apis/getSearchResult'
 import useSearchStore from '@/stores/useSearchStore'
+import mockSocialProps from '@/components/Gnb/moc'
 
 /** search 페이지
  * @todo api 나오면 총 개수 넣어주기, 인기순 최신순 정렬 넣어주기,  페이지네이션 적용
@@ -19,7 +19,7 @@ function SearchPage() {
   const { id } = useParams()
   const value = decodeURIComponent(Array.isArray(id) ? id[0] : id)
   const searchParam = value.length > 7 ? `${value.slice(0, 7)}...` : value
-  const data = getSearchResult() // searchValue 인자로 넣어줘야함
+  const data = mockSocialProps // searchValue 인자로 넣어줘야함
 
   console.log(searchValue) // 린트 방지 console.log() 나중에 api에 넣으면서 지워야함
 
