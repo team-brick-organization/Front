@@ -11,6 +11,8 @@ type UserData = {
 interface UserDataProps {
   userData: UserData
   setUserData: (userData: UserData) => void
+  refetchUserData: boolean
+  userDataReFetchTrigger: () => void
 }
 
 const useUserDataStore = create<UserDataProps>((set) => ({
@@ -22,6 +24,11 @@ const useUserDataStore = create<UserDataProps>((set) => ({
     profileImageUrl: '',
   },
   setUserData: (userData) => set({ userData }),
+  refetchUserData: false,
+  userDataReFetchTrigger: () =>
+    set((state) => ({
+      refetchUserData: !state.refetchUserData,
+    })),
 }))
 
 export default useUserDataStore

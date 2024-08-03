@@ -6,7 +6,7 @@ export default function MyPageEditLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="mx-auto flex max-w-1180pxr flex-row gap-16pxr px-20pxr mb:flex-col">
+    <div className="mx-auto flex w-full max-w-1180pxr flex-row gap-16pxr px-20pxr mb:flex-col">
       <MyInfoSideMenu />
       {children}
     </div>

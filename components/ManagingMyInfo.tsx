@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { TypeNickname } from 'types/types'
 import getUser from '@/apis/getUser'
+import useUserDataStore from '@/stores/useUserDataStore'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
 
@@ -49,6 +50,7 @@ function ManagingMyInfo({
   const { selectedDateTime, setSelectedDateTime } = useDate({
     timeIntervals: 60,
   })
+  const { userDataReFetchTrigger } = useUserDataStore()
 
   const {
     register,
@@ -133,6 +135,7 @@ function ManagingMyInfo({
     setProfileImage,
     setSelectedDateTime,
     reset,
+    userDataReFetchTrigger,
   ])
 
   const handleModalClose = () => {
@@ -187,9 +190,9 @@ function ManagingMyInfo({
       })
 
       if (!editUserInfoResponse.ok) {
-        return
+        throw new Error('회원정보 수정에 실패했습니다.')
       }
-
+      userDataReFetchTrigger()
       handleOpenModal()
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -211,7 +214,7 @@ function ManagingMyInfo({
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-984prx relative w-full"
+        className="relative w-full max-w-984pxr"
       >
         <div className="mb-40pxr mb:hidden">
           <h1 className="text-gray-10 font-headline-03">내 정보 관리</h1>
