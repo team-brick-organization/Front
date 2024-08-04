@@ -65,17 +65,19 @@ function ManagingMyInfo({
     mode: 'onChange',
   })
 
-  const watchNickname = watch('name')
-  const watchDetail = watch('birthday')
+  // const watchNickname = watch('name')
+  const watchBirthday = watch('birthday')
+  const watchIntroduce = watch('introduce')
 
-  useEffect(() => {
-    if (userData) {
-      setIsFormChanged(
-        (watchNickname !== userData.name && watchNickname !== '') ||
-          (watchDetail !== userData.introduce && watchDetail !== ''),
-      )
-    }
-  }, [watchNickname, watchDetail, userData])
+  // 닉네임 복구되면 주석해제 및 코드 이걸로 교체
+  // useEffect(() => {
+  //   if (userData) {
+  //     setIsFormChanged(
+  //       (watchNickname !== userData.name && watchNickname !== '') ||
+  //         (watchBirthday !== userData.introduce && watchBirthday !== ''),
+  //     )
+  //   }
+  // }, [watchNickname, watchBirthday, userData])
 
   const {
     userInfoPortalRef,
@@ -90,6 +92,17 @@ function ManagingMyInfo({
   const setProfileImage = useEditProfileImageStore(
     (state) => state.setProfileImageUrl,
   )
+
+  useEffect(() => {
+    if (userData) {
+      setIsFormChanged(
+        watchBirthday !== userData.birthday ||
+          watchIntroduce !== userData.introduce ||
+          profileImage !== userData.profileImageUrl,
+      )
+    }
+  }, [watchBirthday, watchIntroduce, userData, profileImage])
+
   async function fetchIsDuplicated<BodyType extends TypeNickname>(
     text: BodyType,
     fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
