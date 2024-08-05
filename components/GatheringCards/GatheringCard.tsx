@@ -13,7 +13,7 @@ import CustomBadge from '../CustomBadge/CustomBadge'
 import FavoriteButton from '../FavoriteButton'
 
 type GatheringCardProps = {
-  data: IGetSocial
+  data: ISocials
 }
 
 /**
