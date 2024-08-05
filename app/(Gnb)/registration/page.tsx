@@ -2,11 +2,20 @@
 
 import { BottomBar, CategoryTagList } from '@/components/index'
 import useSocialRegistrationStore from '@/stores/useSocialRegistrationStore'
+import useUserStore from '@/stores/useUserStore'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 function RegistrationPage() {
   const router = useRouter()
   const { tags } = useSocialRegistrationStore()
+  const { accessToken } = useUserStore()
+
+  useEffect(() => {
+    if (!accessToken || accessToken === '') {
+      router.push('/signin')
+    }
+  }, [accessToken, router])
 
   return (
     <>

@@ -1,14 +1,17 @@
 import Image from 'next/image'
 import formatDate from '@/utils/formatDate'
 import Link from 'next/link'
+import convertToKoreanTime from '@/utils/convert-to-korean-time'
 import { TagBadgeList } from '..'
 
 interface MainPageCardProps {
-  data: IGetSocial
+  data: ISocials
 }
 
 function MainPageCard({ data }: MainPageCardProps) {
-  const formattedDate = formatDate(new Date(data.gatheringDate))
+  const formattedDate = formatDate(
+    convertToKoreanTime(new Date(data.gatheringDate)),
+  )
   const formattedAddress = data.address.split(' ')[1]
 
   return (

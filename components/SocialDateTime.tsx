@@ -22,7 +22,7 @@ function SocialDateTime({
   return (
     <div className="flex gap-8pxr">
       <DatePicker
-        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
+        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 outline-gray-08 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
         shouldCloseOnSelect
         minDate={new Date()}
         selected={selectedDateTime}
@@ -41,7 +41,7 @@ function SocialDateTime({
         disabled={disabled}
       />
       <DatePicker
-        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
+        className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 outline-gray-08 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
         shouldCloseOnSelect
         minDate={new Date()}
         selected={selectedDateTime}
