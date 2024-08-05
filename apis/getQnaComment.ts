@@ -3,10 +3,11 @@ import BASE_URL from './apiConfig'
 async function getQnAComment(
   socialId: number,
   qnaId: number,
-  limit: number,
+  page: number,
+  size: number,
 ): Promise<Response> {
   const response = await fetch(
-    `${BASE_URL}/socials/${socialId}/qnas/${qnaId}/comments?limit=${limit}`,
+    `${BASE_URL}/socials/${socialId}/qnas/${qnaId}/comments?page=${page}&size=${size}`,
     {
       method: 'GET',
       headers: {

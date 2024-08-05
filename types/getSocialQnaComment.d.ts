@@ -1,8 +1,15 @@
-interface IQnACommentData {
+interface IComments {
   id: number
   content: string
   writerName: string
-  profileImageUrl?: string
+  writerProfileImageUrl: string
   createdAt: string
   updatedAt: string
+}
+
+interface IQnACommentData {
+  totalElement: number
+  totalPages: number
+  currentPage: number
+  socials: IComments[]
 }
