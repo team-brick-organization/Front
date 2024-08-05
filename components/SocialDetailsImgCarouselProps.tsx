@@ -6,13 +6,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { ImageViewerModal, Portal } from '@/components'
 import useDotBtn from '@/hooks/useDotBtn'
 
-interface IImage {
-  // id: number
-  src: string
-}
-
 interface SocialDetailsImgCarouselProps {
-  images: IImage[]
+  images: string[]
 }
 
 function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
@@ -31,7 +26,7 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
           <li key={`${index + 0}`} className="relative h-full w-full flex-none">
             <Image
               fill
-              src={image.src}
+              src={image}
               alt={`이미지 ${index + 1}`}
               className="h-full w-full object-cover"
               onClick={() => setIsPortalOpen(true)}
@@ -52,7 +47,7 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
           onClose={() => setIsPortalOpen(false)}
         />
       </Portal>
-      <div className="absolute bottom-50pxr left-1/2 flex -translate-x-1/2 -translate-y-1/2 rounded-full bg-black px-20pxr py-6pxr mb:bottom-16pxr tb:bottom-30pxr">
+      <div className="absolute bottom-24pxr left-1/2 flex -translate-x-1/2 -translate-y-1/2 rounded-full bg-black px-20pxr py-6pxr mb:bottom-16pxr tb:bottom-30pxr">
         <span className="flex items-center gap-8pxr text-gray-01 font-title-01">
           {selectedIndex + 1}
           <div className="h-12pxr w-1pxr bg-[#f9fafc]" />

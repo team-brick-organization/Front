@@ -9,19 +9,20 @@ import pencilIcon from '@/public/images/svgs/pencil.svg'
 import { useForm } from 'react-hook-form'
 import { detailPattern, nicknamePattern } from '@/constants/RegExr'
 import { Avatar, Button } from '@radix-ui/themes'
-import checkedIcon from '@/public/images/svgs/checked.svg'
-import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
+// import checkedIcon from '@/public/images/svgs/checked.svg'
+// import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import { PersonIcon } from '@radix-ui/react-icons'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
 import postDuplicateNickname from '@/apis/postDuplicateCheck'
-import postEditUserInfo from '@/apis/postEditUserInfo'
+import patchEditUserInfo from '@/apis/patchEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { TypeNickname } from 'types/types'
 import getUser from '@/apis/getUser'
+import useUserDataStore from '@/stores/useUserDataStore'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
 
@@ -49,6 +50,7 @@ function ManagingMyInfo({
   const { selectedDateTime, setSelectedDateTime } = useDate({
     timeIntervals: 60,
   })
+  const { userDataReFetchTrigger } = useUserDataStore()
 
   const {
     register,
@@ -63,17 +65,19 @@ function ManagingMyInfo({
     mode: 'onChange',
   })
 
-  const watchNickname = watch('name')
-  const watchDetail = watch('birthday')
+  // const watchNickname = watch('name')
+  const watchBirthday = watch('birthday')
+  const watchIntroduce = watch('introduce')
 
-  useEffect(() => {
-    if (userData) {
-      setIsFormChanged(
-        (watchNickname !== userData.name && watchNickname !== '') ||
-          (watchDetail !== userData.introduce && watchDetail !== ''),
-      )
-    }
-  }, [watchNickname, watchDetail, userData])
+  // 닉네임 복구되면 주석해제 및 코드 이걸로 교체
+  // useEffect(() => {
+  //   if (userData) {
+  //     setIsFormChanged(
+  //       (watchNickname !== userData.name && watchNickname !== '') ||
+  //         (watchBirthday !== userData.introduce && watchBirthday !== ''),
+  //     )
+  //   }
+  // }, [watchNickname, watchBirthday, userData])
 
   const {
     userInfoPortalRef,
@@ -88,6 +92,17 @@ function ManagingMyInfo({
   const setProfileImage = useEditProfileImageStore(
     (state) => state.setProfileImageUrl,
   )
+
+  useEffect(() => {
+    if (userData) {
+      setIsFormChanged(
+        watchBirthday !== userData.birthday ||
+          watchIntroduce !== userData.introduce ||
+          profileImage !== userData.profileImageUrl,
+      )
+    }
+  }, [watchBirthday, watchIntroduce, userData, profileImage])
+
   async function fetchIsDuplicated<BodyType extends TypeNickname>(
     text: BodyType,
     fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
@@ -133,6 +148,7 @@ function ManagingMyInfo({
     setProfileImage,
     setSelectedDateTime,
     reset,
+    userDataReFetchTrigger,
   ])
 
   const handleModalClose = () => {
@@ -162,21 +178,21 @@ function ManagingMyInfo({
     // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
     // nickname => 변경 데이터, userName => 기존 저장 데이터
 
-    const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-      { name },
-      postDuplicateNickname,
-    )
+    // const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
+    //   { name },
+    //   postDuplicateNickname,
+    // )
 
-    if (isDuplicateNickname) {
-      setError('name', {
-        type: 'validate',
-        message: '중복된 닉네임입니다.',
-      })
-      return
-    }
+    // if (isDuplicateNickname) {
+    //   setError('name', {
+    //     type: 'validate',
+    //     message: '중복된 닉네임입니다.',
+    //   })
+    //   return
+    // }
 
     try {
-      const editUserInfoResponse = await postEditUserInfo({
+      const editUserInfoResponse = await patchEditUserInfo({
         body: {
           introduce,
           name,
@@ -187,9 +203,9 @@ function ManagingMyInfo({
       })
 
       if (!editUserInfoResponse.ok) {
-        return
+        throw new Error('회원정보 수정에 실패했습니다.')
       }
-
+      userDataReFetchTrigger()
       handleOpenModal()
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -201,17 +217,17 @@ function ManagingMyInfo({
 
   if (!accessToken) return null
 
-  const isLengthValid =
-    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
-  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
-  const hasNoWhitespace = !/\s/.test(watchNickname || '')
-  const showChecks = watchNickname && watchNickname.length >= 2
+  // const isLengthValid =
+  //   watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+  // const isValidPattern = nicknamePattern.value.test(watchNickname || '')
+  // const hasNoWhitespace = !/\s/.test(watchNickname || '')
+  // const showChecks = watchNickname && watchNickname.length >= 2
 
   return (
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-984prx relative w-full"
+        className="relative w-full max-w-984pxr"
       >
         <div className="mb-40pxr mb:hidden">
           <h1 className="text-gray-10 font-headline-03">내 정보 관리</h1>
@@ -257,6 +273,7 @@ function ManagingMyInfo({
           <Input
             variant="border"
             id="nickname"
+            readOnly
             defaultValue={userData?.name}
             {...register('name', {
               required: '닉네임은 필수 입력입니다.',
@@ -288,9 +305,9 @@ function ManagingMyInfo({
             })}
             type="text"
             placeholder="User123"
-            className={`mt-8pxr ${errors.name ? 'border-0 ring-1 ring-error' : ''}`}
+            className={`mt-8pxr bg-gray-03 ${errors.name ? 'border-0 ring-1 ring-error' : ''}`}
           />
-          {(!errors.name || String(errors.name.message).length === 0) &&
+          {/* {(!errors.name || String(errors.name.message).length === 0) &&
             showChecks && (
               <div className="mt-4pxr inline-flex">
                 <div className="flex gap-16pxr">
@@ -335,7 +352,7 @@ function ManagingMyInfo({
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
           {errors.name && String(errors.name.message).length !== 0 && (
             <small className="mt-4pxr text-error font-caption-02" role="alert">

@@ -28,7 +28,7 @@ export default function NoGnbLayout({
       <body className={`h-full ${pretendard.className}`}>
         <Theme className="h-full">
           {children}
-          <div id="portal" />
+          <div id="portal" className="flex" />
         </Theme>
       </body>
     </html>

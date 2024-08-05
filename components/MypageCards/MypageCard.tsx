@@ -9,40 +9,11 @@ import { PersonIcon } from '@radix-ui/react-icons'
 import TagBadgeList from '../CustomBadge/TagBadgeList'
 import ParticipantsInfo from '../ParticipantsInfo'
 import CustomBadge from '../CustomBadge/CustomBadge'
-import NestingAvatar from '../NestingAvatar'
+// import NestingAvatar from '../NestingAvatar'
 import FavoriteButton from '../FavoriteButton'
 
-interface ParticipantCount {
-  minPeople: number
-  maxPeople: number
-  currentPeople: number
-}
-interface Participant {
-  userName: string
-  userProfileImg: string
-}
-
-interface Owner {
-  name: string
-  profileImageUrl: string
-}
-
-export interface Social {
-  id: number
-  type: 'social'
-  socialName: string
-  gatheringDate: string
-  joinedAt: string
-  address: string
-  participantCount: ParticipantCount
-  participant: Participant[]
-  imageUrl: string
-  tags: string[]
-  owner: Owner
-}
-
 interface MypageCardProps {
-  data: Social
+  data: IMySocials
 }
 
 /**
@@ -55,16 +26,12 @@ function MypageCard({ data }: MypageCardProps) {
 
   const isClosed =
     new Date(data.gatheringDate) < new Date() ||
-    data.participantCount.currentPeople === data.participantCount.maxPeople
+    data.participantCount.current === data.participantCount.max
 
   const isClickableFavorite =
     new Date(data.gatheringDate) > new Date() || isFavoriteClicked
 
   const url = `/social/${data.id}`
-  const participantProfileImagesConfig = data.participant.map((item) => ({
-    imageUrl: item.userProfileImg,
-    fallback: item.userName,
-  }))
 
   const formattedDate = formatDate(new Date(data.gatheringDate))
   const formattedAddress = data.address.split(' ')[1]
@@ -75,7 +42,7 @@ function MypageCard({ data }: MypageCardProps) {
         <section className="relative h-full w-280pxr shrink-0 rounded-[.3125rem] bg-gray-01 mb:h-158pxr mb:w-full">
           <Link href={url} className="h-fit w-fit">
             <Image
-              src={data.imageUrl}
+              src={data.thumbnail}
               alt="카드이미지"
               fill
               className="rounded-[.3125rem] object-cover transition-all duration-150 hover:scale-105 hover:shadow-lg"
@@ -117,7 +84,7 @@ function MypageCard({ data }: MypageCardProps) {
             <TagBadgeList tags={data.tags} />
             <Link href={url} className="h-fit w-fit">
               <h4 className="text-left text-gray-10 font-title-04">
-                {data.socialName}
+                {data.name}
               </h4>
             </Link>
             <div className="flex flex-row gap-4pxr">
@@ -136,9 +103,13 @@ function MypageCard({ data }: MypageCardProps) {
                 <Avatar
                   size="1"
                   className="h-20pxr w-20pxr"
-                  src={data.owner.profileImageUrl}
+                  src={data.owner.profileUrl}
                   radius="full"
-                  fallback={data.owner.name.charAt(0)}
+                  fallback={
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
+                      <PersonIcon className="h-80pxr w-80pxr px-10pxr py-10pxr text-gray-06" />
+                    </div>
+                  }
                 />
                 <p className="text-gray-06 font-caption-03">
                   {data.owner.name}
@@ -147,7 +118,7 @@ function MypageCard({ data }: MypageCardProps) {
               <div className="hidden flex-row items-center gap-4pxr mb:flex">
                 <PersonIcon width={20} height={20} />
                 <p className="text-gray-06 font-caption-03">
-                  {`${data.participantCount.currentPeople}/${data.participantCount.maxPeople}`}
+                  {`${data.participantCount.current}/${data.participantCount.max}`}
                 </p>
               </div>
             </div>
@@ -159,26 +130,24 @@ function MypageCard({ data }: MypageCardProps) {
                   같이 함께 한 친구
                 </p>
                 <span className="flex flex-row items-center gap-0pxr">
-                  <NestingAvatar
+                  {/* <NestingAvatar
                     config={participantProfileImagesConfig}
                     displayLimit={3}
                     showRemainingPeople={false}
-                  />
+                  /> */}
                   <p className="text-gray-08 font-caption-02">
-                    {data.participant[0].userName} 외{' '}
-                    {data.participantCount.currentPeople}명과 함께 했습니다.
+                    {data.participants[0].name} 외{' '}
+                    {data.participantCount.current}명과 함께 했습니다.
                   </p>
                 </span>
               </div>
             ) : (
               <div className="max-w-480pxr">
                 <ParticipantsInfo
-                  participantsCurrentCount={data.participantCount.currentPeople}
-                  participantsMaxCount={data.participantCount.maxPeople}
-                  participantsMinCount={data.participantCount.minPeople}
-                  participantProfileImagesConfig={
-                    participantProfileImagesConfig
-                  }
+                  participantsCurrentCount={data.participantCount.current}
+                  participantsMaxCount={data.participantCount.max}
+                  participantsMinCount={data.participantCount.min}
+                  participants={data.participants}
                 />
               </div>
             )}

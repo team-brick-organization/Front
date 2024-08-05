@@ -7,6 +7,7 @@ interface IPortalProps {
   isPortalOpen: boolean
   portalRef: ForwardedRef<HTMLDivElement>
   className?: string
+  zIndex?: number
 }
 
 function Portal({
@@ -15,11 +16,12 @@ function Portal({
   isPortalOpen,
   portalRef,
   className,
+  zIndex,
 }: IPortalProps) {
   if (!isPortalOpen) return null
 
   return ReactDOM.createPortal(
-    <div>
+    <div style={{ zIndex }}>
       <div
         ref={portalRef}
         className="fixed bottom-0pxr left-0pxr right-0pxr top-0pxr z-20 bg-[#1E1F20] opacity-30"

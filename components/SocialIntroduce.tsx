@@ -1,36 +1,25 @@
+import useSocialDetailStore from '@/stores/useSocialDetailStore'
 import { LocationMap, ParticipantsList, SocialDescription } from './index'
 
-interface ISocialIntroduceProps {
-  description: string
-  location: string
-  lat: number
-  lng: number
-  participants: {
-    profileImage: string
-    name: string
-    description: string
-    role: 'host' | 'participant'
-  }[]
-}
-
-function SocialIntroduce({
-  description,
-  location,
-  lat,
-  lng,
-  participants,
-}: ISocialIntroduceProps) {
+function SocialIntroduce() {
+  const { socialDetailData } = useSocialDetailStore()
   return (
     <div className="w-full">
       <section>
-        <SocialDescription>{description}</SocialDescription>
+        <SocialDescription>
+          {socialDetailData.introduction.description}
+        </SocialDescription>
       </section>
       <hr className="my-60pxr border-[#DDDEE0]" />
       <section className="w-full">
-        <LocationMap location={location} lat={lat} lng={lng} />
+        <LocationMap
+          location={socialDetailData.introduction.place.address}
+          lat={socialDetailData.introduction.place.latitude}
+          lng={socialDetailData.introduction.place.longitude}
+        />
       </section>
       <section className="mt-57pxr">
-        <ParticipantsList participants={participants} />
+        <ParticipantsList participants={socialDetailData.participants} />
       </section>
     </div>
   )

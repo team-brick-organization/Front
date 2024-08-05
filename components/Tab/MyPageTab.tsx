@@ -1,10 +1,8 @@
 'use client'
 
-import mockSocialProps from '@/components/Gnb/moc'
 import createTabStore from '@/stores/createTabStore'
 import { useEffect, useState } from 'react'
 import { MypageCardList, Pagination, Tab } from '../index'
-import { Social } from '../MypageCards/MypageCard'
 
 interface MyPageTabProps {
   type: 'my' | 'other'
@@ -18,13 +16,12 @@ interface MyPageTabProps {
 function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
   const [createdCurrentPageNum, setCreatedCurrentPageNum] = useState(1)
   const [myCurrentPageNum, setMyCurrentPageNum] = useState(1)
-  const [mySocialData, setMySocialData] = useState<Social[]>([])
-  const [createdSocialData, setCreatedSocialData] = useState<Social[]>([])
+  const [mySocialData, setMySocialData] = useState<IMySocials[]>([])
+  const [createdSocialData, setCreatedSocialData] = useState<IMySocials[]>([])
 
-  const data = mockSocialProps
   const tabs = [
     // 탭 이름과 탭에 들어갈 아이템 개수 넣어줘야함
-    { tabName: '참여', itemLength: data.length },
+    { tabName: '참여', itemLength: 3 },
     { tabName: `${type === 'my' ? '내가 ' : ''}만든 모임`, itemLength: 3 },
   ]
 
@@ -40,9 +37,69 @@ function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
 
   useEffect(() => {
     // API 호출넣어줘야함
-    setMySocialData(data)
-    setCreatedSocialData(data)
-  }, [data])
+    setMySocialData([
+      {
+        id: 100,
+        name: '놀러가기',
+        gatheringDate: '2024-08-01T18:00:00Z',
+        address: '경기도 고양시 덕양구 뭐시기 저시기',
+        participantCount: {
+          min: 5,
+          max: 20,
+          current: 10,
+        },
+        participants: [
+          {
+            id: 100,
+            name: '김씨',
+            profileUrl: '',
+            role: 'OWNER',
+            description: '아아아아아아',
+          },
+        ],
+        thumbnail: '',
+        tags: [],
+        owner: {
+          id: 100,
+          name: '김씨',
+          profileUrl: '',
+          role: 'OWNER',
+          description: '아아아아아아',
+        },
+      },
+    ])
+    setCreatedSocialData([
+      {
+        id: 100,
+        name: '놀러가기',
+        gatheringDate: '2024-08-01T18:00:00Z',
+        address: '경기도 고양시 덕양구 뭐시기 저시기',
+        participantCount: {
+          min: 5,
+          max: 20,
+          current: 10,
+        },
+        participants: [
+          {
+            id: 100,
+            name: '김씨',
+            profileUrl: '',
+            role: 'OWNER',
+            description: '아아아아아아',
+          },
+        ],
+        thumbnail: '',
+        tags: [],
+        owner: {
+          id: 100,
+          name: '김씨',
+          profileUrl: '',
+          role: 'OWNER',
+          description: '아아아아아아',
+        },
+      },
+    ])
+  }, [])
 
   return (
     <Tab.Provider tabUnderlineWidthFit store={tabStore}>
