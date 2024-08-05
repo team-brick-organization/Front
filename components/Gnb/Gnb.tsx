@@ -27,7 +27,7 @@ import useUserDataStore from '@/stores/useUserDataStore'
 
 function Gnb() {
   const { hydrated, accessToken, setAccessToken } = useUserStore()
-  const { userData, setUserData } = useUserDataStore()
+  const { userData, setUserData, refetchUserData } = useUserDataStore()
   const { onSearch, setOnSearch } = useSearchStore()
   const [sideMenu, setSideMenu] = useState(false)
 
@@ -107,9 +107,9 @@ function Gnb() {
         }
       }
     }
-
+    console.log('refetchuserData', refetchUserData)
     fetchUserData()
-  }, [accessToken, hydrated])
+  }, [accessToken, hydrated, setAccessToken, setUserData, refetchUserData])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -125,6 +125,7 @@ function Gnb() {
     }
   }, [setOnSearch])
 
+  console.log('userData', userData)
   return (
     <div className="relative w-full px-20pxr">
       <main

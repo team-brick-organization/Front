@@ -1,16 +1,23 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PasswordResetVerifier from '@/components/PasswordResetVerifier'
 import { useRouter, usePathname } from 'next/navigation'
 import gobackIcon from '@/public/images/svgs/goback.svg'
 import dropdownIcon from '@/public/images/svgs/dropdown.svg'
 import Link from 'next/link'
+import useUserStore from '@/stores/useUserStore'
+import useUserDataStore from '@/stores/useUserDataStore'
 
 function AccountPage() {
+  const { accessToken, setAccessToken, hydrated } = useUserStore()
+  const { userData } = useUserDataStore()
+  const { name, email } = userData
+
   const router = useRouter()
   const pathname = usePathname()
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const linkItems = [
@@ -18,8 +25,14 @@ function AccountPage() {
     { href: '/mypage/edit/account', text: '계정 설정' },
   ]
 
+  useEffect(() => {
+    if (hydrated && !accessToken) {
+      router.replace('/signin')
+    }
+  })
+
   return (
-    <div className="relative mt-80pxr mb:mt-0pxr">
+    <div className="mt-80pxr mb:mt-0pxr">
       <div className="hidden items-center mb:flex mb:justify-between mb:px-0pxr mb:pb-10pxr mb:pt-12pxr">
         <button type="button" title="뒤로가기 버튼">
           <Image
@@ -61,8 +74,12 @@ function AccountPage() {
           </div>
         )}
       </div>
-      <PasswordResetVerifier name="김참치" email="test1@naver.com" />
-      {/* 추후 변경해야합니다 */}
+      <PasswordResetVerifier
+        name={name}
+        email={email}
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+      />
     </div>
   )
 }
