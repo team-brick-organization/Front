@@ -12,6 +12,8 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    deviceSizes: [320, 767, 1200],
+    formats: ['image/avif', 'image/webp'],
   },
 }
 
