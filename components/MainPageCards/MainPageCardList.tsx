@@ -1,13 +1,15 @@
 import MainPageCard from './MainPageCard'
 
 interface MainPageCardListProps {
-  data?: GetSocialsType
+  socialsData?: ISocials[]
 }
 
-function MainPageCardList({ data = [] }: MainPageCardListProps) {
+function MainPageCardList({ socialsData }: MainPageCardListProps) {
+  if (!socialsData) return null
+
   const formattedData = Array.from(
-    { length: Math.ceil(data.length / 2) },
-    (_, i) => data.slice(i * 2, i * 2 + 2),
+    { length: Math.ceil(socialsData.length / 2) },
+    (_, i) => socialsData.slice(i * 2, i * 2 + 2),
   )
 
   const layouts = [

@@ -7,9 +7,16 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { UploadImageCard } from '../index'
 
 interface IUploadImageCardsListProps {
+  accessToken: string
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
-  onImageFilesChange: (files: FileList | null) => void
+  onImageFilesChange: ({
+    accessToken,
+    fileList,
+  }: {
+    accessToken: string
+    fileList: FileList | null
+  }) => void
   onThumbnailChange: (index: number) => void
   onImageDelete: (index: number) => void
   onUploadButtonClick: () => void
@@ -17,8 +24,10 @@ interface IUploadImageCardsListProps {
 }
 
 function UploadImageCardsList({
+  accessToken,
   inputRef,
   imageUrls,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onImageFilesChange: handleImageFilesChange,
   onThumbnailChange: handleThumbnailChange,
   onImageDelete: handleImageDelete,
@@ -41,7 +50,10 @@ function UploadImageCardsList({
             accept="image/png, image/jpeg, image/webp"
             multiple
             onChange={(e) => {
-              handleImageFilesChange(e.target.files)
+              handleImageFilesChange({
+                accessToken,
+                fileList: e.target.files,
+              })
               setError(false)
             }}
           />

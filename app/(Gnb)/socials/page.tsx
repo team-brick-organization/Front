@@ -11,11 +11,18 @@ import handsImage from '@/public/images/pngs/hands.png'
 import calendarImage from '@/public/images/pngs/calendar.png'
 import getSocials from '@/apis/getSocials'
 
+const LIMIT = 24
+
 function SocialsListPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const typeParams = searchParams.get('type')
-  const [socialsData, setSocialsData] = useState<GetSocialsType>([])
+  const [socialsData, setSocialsData] = useState<IGetSocials>({
+    currentPage: 1,
+    totalPages: 1,
+    totalElement: 0,
+    socials: [],
+  })
   const [currentPage, setCurrentPage] = useState(1)
   const [pageType, setPageType] = useState<'closed' | null>(
     typeParams as 'closed' | null,
@@ -50,6 +57,8 @@ function SocialsListPage() {
       const response = await getSocials({
         filterBy: typeParams === 'closed' ? 'close' : 'open',
         orderBy: sort === 'popularity' ? 'popularity' : undefined,
+        offset: currentPage - 1,
+        limit: LIMIT,
       })
 
       if (!response.ok) {
@@ -57,13 +66,18 @@ function SocialsListPage() {
         return
       }
 
-      const data = await response.json()
-      setSocialsData(data)
+      const data: IGetSocials = await response.json()
+      setSocialsData({
+        currentPage: data.currentPage + 1,
+        totalPages: data.totalPages,
+        totalElement: data.totalElement,
+        socials: data.socials,
+      })
     }
 
     setPageType(typeParams as 'closed' | null)
     fetchSocials()
-  }, [pageType, sort, typeParams])
+  }, [currentPage, pageType, sort, typeParams])
 
   return (
     <div className="flex w-full flex-col items-center gap-80pxr px-20pxr pb-160pxr pt-40pxr">
@@ -84,12 +98,12 @@ function SocialsListPage() {
           />
         </div>
         <div className="mt-24pxr w-full">
-          <GatheringCardList data={socialsData} />
+          <GatheringCardList socialsData={socialsData.socials} />
         </div>
       </div>
       <Pagination
-        currentPage={currentPage}
-        totalPages={socialsData.length / 24}
+        currentPage={socialsData?.currentPage}
+        totalPages={socialsData?.totalPages}
         onPageChange={handlePageChange}
       />
     </div>
