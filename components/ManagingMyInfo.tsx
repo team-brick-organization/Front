@@ -134,9 +134,9 @@ function ManagingMyInfo({
         reset({ name: data.name })
         // setValue('name', data.name)
         setSelectedDateTime(new Date(data.birthday))
-        console.log('받아온 유저 정보', data)
         setUserData(data)
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('유저 정보를 가져오는데 실패했습니다.', error)
       }
     }
