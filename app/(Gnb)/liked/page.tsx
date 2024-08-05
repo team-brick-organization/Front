@@ -17,9 +17,13 @@ const LIMIT = 24
 function LikedSocialsListPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [socialsData, setSocialsData] = useState<GetSocialsType>([])
+  const [socialsData, setSocialsData] = useState<IGetSocials>({
+    currentPage: 1,
+    totalPages: 1,
+    totalElement: 0,
+    socials: [],
+  })
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(0)
   const [sort, setSort] = useState<'popularity' | 'latest'>(
     searchParams.get('sort') === 'popularity' ? 'popularity' : 'latest',
   )
@@ -42,11 +46,15 @@ function LikedSocialsListPage() {
 
   const handleClickPopularity = () => {
     setSort('popularity')
-    router.push(`/liked?sort=popularity`)
+    router.push(
+      `/liked?${searchParams.get('type') ? `type=${searchParams.get('type')}` : ''}sort=popularity`,
+    )
   }
   const handleClickLatest = () => {
     setSort('latest')
-    router.push(`/liked`)
+    router.push(
+      `/liked${searchParams.get('type') ? `?type=${searchParams.get('type')}` : ''}`,
+    )
   }
 
   const titleText = '찜한 모임'
@@ -56,11 +64,18 @@ function LikedSocialsListPage() {
   useEffect(() => {
     if (searchParams.get('type') === 'closed') {
       setFilter('모집 마감')
+      setCurrentPage(1)
       return
     }
 
     if (searchParams.get('type') === 'recruiting') {
       setFilter('모집 중')
+      setCurrentPage(1)
+    }
+
+    if (!searchParams.get('type')) {
+      setFilter('전체')
+      setCurrentPage(1)
     }
   }, [searchParams])
 
@@ -88,7 +103,7 @@ function LikedSocialsListPage() {
       const response = await getSocials({
         orderBy: sort === 'popularity' ? 'popularity' : undefined,
         filterBy: filterBy(),
-        offset: (currentPage - 1) * LIMIT,
+        offset: currentPage - 1,
         limit: LIMIT,
         ids,
       })
@@ -99,9 +114,13 @@ function LikedSocialsListPage() {
         return
       }
 
-      const data = await response.json()
-      setTotalPages(24) // total page count 추가되면 수정 필요
-      setSocialsData(data)
+      const data: IGetSocials = await response.json()
+      setSocialsData({
+        currentPage: data.currentPage + 1,
+        totalPages: data.totalPages,
+        totalElement: data.totalElement,
+        socials: data.socials,
+      })
     }
 
     fetchSocials()
@@ -134,12 +153,12 @@ function LikedSocialsListPage() {
           />
         </div>
         <div className="mt-24pxr w-full">
-          <GatheringCardList data={socialsData} />
+          <GatheringCardList socialsData={socialsData?.socials} />
         </div>
       </div>
       <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
+        currentPage={socialsData.currentPage}
+        totalPages={socialsData.totalPages}
         onPageChange={handlePageChange}
       />
     </div>

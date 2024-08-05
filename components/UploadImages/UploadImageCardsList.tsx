@@ -7,16 +7,13 @@ import useEmblaCarousel from 'embla-carousel-react'
 import { UploadImageCard } from '../index'
 
 interface IUploadImageCardsListProps {
-  socialId: number
   accessToken: string
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
   onImageFilesChange: ({
-    socialId,
     accessToken,
     fileList,
   }: {
-    socialId: number
     accessToken: string
     fileList: FileList | null
   }) => void
@@ -27,7 +24,6 @@ interface IUploadImageCardsListProps {
 }
 
 function UploadImageCardsList({
-  socialId,
   accessToken,
   inputRef,
   imageUrls,
@@ -55,7 +51,6 @@ function UploadImageCardsList({
             multiple
             onChange={(e) => {
               handleImageFilesChange({
-                socialId,
                 accessToken,
                 fileList: e.target.files,
               })

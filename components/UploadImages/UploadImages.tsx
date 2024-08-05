@@ -6,16 +6,13 @@ import ImageIcon from '@/public/images/svgs/image.svg'
 import { UploadImageCardsList } from '../index'
 
 interface IUploadImagesProps {
-  socialId: number
   accessToken: string
   inputRef: RefObject<HTMLInputElement>
   imageUrls: string[]
   onImageFilesChange: ({
-    socialId,
     accessToken,
     fileList,
   }: {
-    socialId: number
     accessToken: string
     fileList: FileList | null
   }) => void
@@ -26,7 +23,6 @@ interface IUploadImagesProps {
 }
 
 function UploadImages({
-  socialId,
   accessToken,
   inputRef,
   imageUrls,
@@ -56,7 +52,6 @@ function UploadImages({
         multiple
         onChange={(e) => {
           handleImageFilesChange({
-            socialId,
             accessToken,
             fileList: e.target.files,
           })
@@ -100,7 +95,6 @@ function UploadImages({
             </p>
           </div>
           <UploadImageCardsList
-            socialId={socialId}
             accessToken={accessToken}
             inputRef={inputRef}
             imageUrls={imageUrls}

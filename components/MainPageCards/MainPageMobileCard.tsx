@@ -5,7 +5,7 @@ import convertToKoreanTime from '@/utils/convert-to-korean-time'
 import { TagBadgeList } from '..'
 
 interface MainPageMobileCardProps {
-  data: IGetSocial
+  data: ISocials
 }
 function MainPageMobileCard({ data }: MainPageMobileCardProps) {
   const formattedDate = formatDate(

@@ -12,11 +12,9 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
   const [error, setError] = useState<boolean>(false)
 
   const handleImageFilesChange = ({
-    socialId,
     accessToken,
     fileList,
   }: {
-    socialId: number
     accessToken: string
     fileList: FileList | null
   }) => {
@@ -50,7 +48,6 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
         }
 
         const uploadImage = await getSocialImage({
-          socialId,
           accessToken,
           imageFileExtension: file.type.split('/')[1].toUpperCase() as
             | 'JPG'

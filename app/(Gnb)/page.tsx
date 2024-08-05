@@ -8,19 +8,23 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 function Home() {
-  const [socialsData, setSocialsData] = useState<GetSocialsType>()
+  const [socialsData, setSocialsData] = useState<ISocials[]>()
 
   useEffect(() => {
     const fetchSocials = async () => {
-      const response = await getSocials({ orderBy: 'popularity' })
+      const response = await getSocials({
+        orderBy: 'popularity',
+        offset: 0,
+        limit: 7,
+      })
 
       if (!response.ok) {
         console.error('Failed to fetch socials')
         return
       }
 
-      const data = await response.json()
-      setSocialsData(data)
+      const data: IGetSocials = await response.json()
+      setSocialsData(data.socials)
     }
 
     fetchSocials()
@@ -51,9 +55,9 @@ function Home() {
                 더보기
               </Link>
             </div>
-            <MainPageCardList data={socialsData} />
+            <MainPageCardList socialsData={socialsData} />
           </div>
-          <MainPageMobileCardList data={socialsData} />
+          <MainPageMobileCardList socialsData={socialsData} />
         </section>
       </div>
       <div className="mt-300pxr">

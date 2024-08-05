@@ -1,4 +1,4 @@
-interface IGetSocial {
+interface ISocials {
   id: number
   name: string
   gatheringDate: string
@@ -17,4 +17,9 @@ interface IGetSocial {
   }
 }
 
-type GetSocialsType = IGetSocial[]
+interface IGetSocials {
+  currentPage: number
+  totalPages: number
+  totalElement: number
+  socials: ISocials[]
+}

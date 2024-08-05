@@ -171,7 +171,7 @@ function Gnb() {
               </Link>
               {accessToken ? (
                 <Link href="/mypage">
-                  <button type="button">
+                  <button title="프로필 이미지" type="button">
                     <Avatar
                       fallback={
                         <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-04">
