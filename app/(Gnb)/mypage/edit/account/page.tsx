@@ -32,7 +32,7 @@ function AccountPage() {
   })
 
   return (
-    <div className="mt-80pxr mb:mt-0pxr">
+    <div className="mt-80pxr w-full mb:mt-0pxr">
       <div className="hidden items-center mb:flex mb:justify-between mb:px-0pxr mb:pb-10pxr mb:pt-12pxr">
         <button type="button" title="뒤로가기 버튼">
           <Image

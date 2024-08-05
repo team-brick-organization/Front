@@ -4,68 +4,14 @@
 export const EMAIL_REGEX =
   /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
 
-// 이메일 검증 API
-// async function checkEmailExistence(email: string) {
-//   try {
-//     const response = await fetch('', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ email }),
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('API 요청 실패')
-//     }
-
-//     const data = await response.json()
-//     return data.exists
-//   } catch (error) {
-//     console.error('API 요청 중 에러 발생:', error)
-//     return false
-//   }
-// }
-
-// 이름 검증 API
-// async checkNameExistence(email: string) {
-//   try {
-//     const response = await fetch('', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ email }),
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('API 요청 실패')
-//     }
-
-//     const data = await response.json()
-//     return data.exists
-//   } catch (error) {
-//     console.error('API 요청 중 에러 발생:', error)
-//     return false
-//   }
-// }
-
 export const emailPattern = {
   value: EMAIL_REGEX,
   message: '이메일 형식에 맞지 않습니다.',
-  // validate: async (email: string) => {
-  //   const exists = await checkEmailExistence(email);
-  //   return exists || '존재하지 않는 이메일 입니다.';
-  // },
 }
 
 export const namePattern = {
   value: /^[가-힣]{2,8}$/,
   message: '이름을 입력해 주세요.',
-  // validate: async (name: string) => {
-  //   const exists = await checkNameExistence(name);
-  //   return !exists || '이름을 입력해 주세요.';
-  // },
 }
 
 export const nicknamePattern = {

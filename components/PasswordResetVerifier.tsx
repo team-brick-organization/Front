@@ -283,8 +283,11 @@ function PasswordResetVerifier({
         </div>
       )}
       {isPasswordInputFolded && !isAccountDeletedFolded && (
-        <div className="mt-24pxr flex w-full max-w-510pxr flex-col gap-24pxr">
+        <div className="flex w-full max-w-510pxr flex-col gap-24pxr mb:mt-40pxr">
           <div className="flex w-full flex-col gap-8pxr">
+            <h1 className="mb-40pxr text-gray-10 font-headline-03">
+              계정 설정
+            </h1>
             <h4 className="text-gray-10 font-title-02">새로운 비밀번호</h4>
             <section className="flex flex-row items-center gap-24pxr pr-77pxr">
               <div className="relative w-full max-w-370pxr">
