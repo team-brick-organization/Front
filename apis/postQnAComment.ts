@@ -1,11 +1,20 @@
 import BASE_URL from './apiConfig'
 
-async function postQnAComment(
-  accessToken: string,
-  socialId: number,
-  qnaId: number,
-  body: { comment: string },
-): Promise<Response> {
+type Body = { content: string }
+
+interface IPostQnACommentProps {
+  accessToken: string
+  socialId: number
+  qnaId: number
+  body: Body
+}
+
+async function postQnAComment({
+  accessToken,
+  socialId,
+  qnaId,
+  body,
+}: IPostQnACommentProps): Promise<Response> {
   const response = await fetch(
     `${BASE_URL}/socials/${socialId}/qnas/${qnaId}/comments`,
     {

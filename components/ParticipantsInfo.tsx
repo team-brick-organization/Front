@@ -6,14 +6,14 @@ interface IParticipantsInfoProps {
   participantsCurrentCount: number
   participantsMaxCount: number
   participantsMinCount: number
-  participantProfileImagesConfig: { imageUrl: string; fallback: string }[]
+  participants: IParticipants[]
 }
 
 function ParticipantsInfo({
   participantsCurrentCount,
   participantsMaxCount,
   participantsMinCount,
-  participantProfileImagesConfig,
+  participants,
 }: IParticipantsInfoProps) {
   return (
     <div className="flex flex-col gap-14pxr">
@@ -22,10 +22,7 @@ function ParticipantsInfo({
           <p className="text-gray-10 font-body-02">
             모임 정원 {participantsCurrentCount}명
           </p>
-          <NestingAvatar
-            config={participantProfileImagesConfig}
-            displayLimit={4}
-          />
+          <NestingAvatar config={participants} displayLimit={4} />
         </div>
         {participantsCurrentCount >= participantsMinCount && (
           <div className="flex items-center gap-4pxr">
