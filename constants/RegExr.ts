@@ -35,7 +35,7 @@ export const phoneNumberPattern = {
   message: '전화번호를 입력해 주세요.',
 }
 
-export const passwordMinLength = {
+export const passwordPattern = {
   value: 8,
   message: '8자리 이상 비밀번호를 입력하세요.',
 }

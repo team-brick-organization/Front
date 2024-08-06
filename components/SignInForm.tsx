@@ -110,7 +110,6 @@ function SignInForm(): JSX.Element {
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
               minLength: passwordPattern,
-              validate: passwordPattern.validate.password,
             })}
             type={showPassword ? 'text' : 'password'}
             placeholder="비밀번호를 입력해주세요."
