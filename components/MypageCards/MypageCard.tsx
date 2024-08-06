@@ -53,6 +53,7 @@ function MypageCard({ data }: MypageCardProps) {
         const jsonfied = await res.json()
         setParticipantsData(jsonfied.participants)
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
       }
     }
@@ -151,18 +152,7 @@ function MypageCard({ data }: MypageCardProps) {
                     showRemainingPeople={false}
                   />
                   <p className="text-gray-08 font-caption-02">
-                    {
-                      [
-                        {
-                          id: 1,
-                          name: '김아무개',
-                          profileUrl: '',
-                          role: 'OWNER',
-                          description: '',
-                        },
-                      ][0].name
-                    }{' '}
-                    외{' '}
+                    {participantsData[0]?.name} 외{' '}
                     {data.participantCount.current !== 0
                       ? data.participantCount.current - 1
                       : 0}
@@ -176,15 +166,7 @@ function MypageCard({ data }: MypageCardProps) {
                   participantsCurrentCount={data.participantCount.current}
                   participantsMaxCount={data.participantCount.max}
                   participantsMinCount={data.participantCount.min}
-                  participants={[
-                    {
-                      id: 1,
-                      name: '김아무개',
-                      profileUrl: '',
-                      role: 'OWNER',
-                      description: '',
-                    },
-                  ]}
+                  participants={participantsData}
                 />
               </div>
             )}

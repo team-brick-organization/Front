@@ -55,15 +55,14 @@ function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
         const res = await getCreatedSocial({
           accessToken,
           offset: createdCurrentPageNum - 1,
-          limit: 2,
+          limit: 10,
         })
-        console.log('res', res)
-        // eslint-disable-next-line no-console
+
         if (!res.ok) {
           throw new Error('내가 만든 모임 불러오기를 실패했어요.')
         }
         const jsonfied = await res.json()
-        console.log('jsonfied', jsonfied)
+
         setCreatedSocialData(jsonfied)
         setMySocialData(jsonfied)
       } catch (error) {
@@ -72,7 +71,6 @@ function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
         console.error('Error fetching user data:', error)
       }
     }
-    console.log('hydrated', hydrated)
 
     if (!hydrated) return
 
