@@ -9,16 +9,18 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 function MyPage() {
-  const { accessToken, setAccessToken, hydrated } = useUserStore()
+  const { accessToken, hydrated } = useUserStore()
   const { userData } = useUserDataStore()
   const tabStore = createTabStore()
   const router = useRouter()
 
   useEffect(() => {
-    if (!hydrated && accessToken === '') {
+    if (!hydrated) return
+
+    if (accessToken === '') {
       router.push('/signin')
     }
-  }, [accessToken, router, setAccessToken, hydrated])
+  }, [accessToken, router, hydrated])
 
   return (
     <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row gap-16pxr px-20pxr mb:mt-40pxr mb:flex-col mb:gap-32pxr mb:px-0pxr">
