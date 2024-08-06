@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { emailPattern, passwordMinLength } from '@/constants/RegExr'
+import { emailPattern, passwordPattern } from '@/constants/RegExr'
 import Image from 'next/image'
 import { Button } from '@radix-ui/themes'
 import kakaoTalk from '@/public/images/svgs/kakaoTalk.svg'
@@ -67,6 +67,7 @@ function SignInForm(): JSX.Element {
     windowWidth && windowWidth <= 400
       ? '카카오로 시작하기'
       : '카카오로 3초만에 시작하기'
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -83,7 +84,7 @@ function SignInForm(): JSX.Element {
           id="email"
           {...register('email', {
             required: '이메일은 필수 입력입니다.',
-            pattern: emailPattern,
+            validate: emailPattern.validate.email,
           })}
           type="email"
           placeholder="이메일을 입력해 주세요."
@@ -93,7 +94,7 @@ function SignInForm(): JSX.Element {
 
         {errors.email && (
           <small className="mt-4pxr text-error font-caption-02" role="alert">
-            {errors.email.message}
+            {emailPattern.message}
           </small>
         )}
       </div>
@@ -108,7 +109,8 @@ function SignInForm(): JSX.Element {
             id="password"
             {...register('password', {
               required: '비밀번호는 필수 입력입니다.',
-              minLength: passwordMinLength,
+              minLength: passwordPattern,
+              validate: passwordPattern.validate.password,
             })}
             type={showPassword ? 'text' : 'password'}
             placeholder="비밀번호를 입력해주세요."
@@ -136,7 +138,7 @@ function SignInForm(): JSX.Element {
         </div>
         {errors.password && (
           <small className="mt-4pxr text-error font-caption-02" role="alert">
-            {errors.password.message}
+            {passwordPattern.message}
           </small>
         )}
       </div>
