@@ -1,7 +1,7 @@
 .react-datepicker {
   border-radius: 0.3125rem;
   overflow: hidden;
-  border-color: #dddee0;
+  border-color: #dddee0 !important;
 }
 
 .react-datepicker-wrapper {

@@ -18,7 +18,7 @@ function MainPage({ socialsData }: IMainPageProps) {
           alt="배너이미지"
           className="mx-auto"
           objectFit="cover"
-          width={1180}
+          width={2000}
           height={450}
           priority
           blurDataURL="/images/avifs/bannerBlur.avif"

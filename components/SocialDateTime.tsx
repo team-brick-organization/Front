@@ -39,6 +39,7 @@ function SocialDateTime({
         dateFormatCalendar="yyyy년 M월"
         locale="ko"
         disabled={disabled}
+        popperClassName="!-top-6pxr"
       />
       <DatePicker
         className="rounded-[0.3125rem] bg-gray-01 px-20pxr py-14pxr text-start text-gray-10 outline-gray-08 font-body-02 disabled:bg-gray-03 disabled:text-gray-06"
@@ -63,6 +64,7 @@ function SocialDateTime({
         locale="ko"
         timeCaption="시간"
         disabled={disabled}
+        popperClassName="!-top-6pxr"
       />
     </div>
   )

@@ -34,6 +34,8 @@ interface IIntroduction {
 interface ISocialDetailData {
   id: number
   name: string
+  canceled: boolean
+  description: string
   introduction: IIntroduction
   gatheringDate: string
   participantCount: IParticipantCount

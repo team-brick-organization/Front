@@ -39,6 +39,7 @@ function GatheringCard({ data }: GatheringCardProps) {
     data.gatheringDate,
     data.participantCount.current,
     data.participantCount.max,
+    data.canceled,
   )
 
   return (
@@ -52,9 +53,9 @@ function GatheringCard({ data }: GatheringCardProps) {
             <Image
               src={data.thumbnail}
               alt="모임사진"
-              className="transition-transform duration-200 group-[.card]:group-hover:scale-110"
-              objectFit="cover"
+              className="object-cover transition-transform duration-200 group-[.card]:group-hover:scale-110"
               fill
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 208px, 100vw"
             />
             {statusBadgeText && (
               <CustomBadge

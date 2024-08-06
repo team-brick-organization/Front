@@ -18,12 +18,15 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
 
   return (
     <section
-      className="relative h-400pxr w-full max-w-1180pxr overflow-hidden mb:max-h-231pxr mb:max-w-439pxr"
+      className="relative h-400pxr w-full max-w-1180pxr overflow-hidden rounded-[0.3125rem] mb:max-h-231pxr mb:max-w-439pxr"
       ref={emblaRef}
     >
       <ul className="flex h-full w-full list-none flex-row p-0pxr">
         {images.map((image, index) => (
-          <li key={`${index + 0}`} className="relative h-full w-full flex-none">
+          <li
+            key={`${index + 0}`}
+            className="relative h-full w-full flex-none overflow-hidden rounded-[0.3125rem]"
+          >
             <Image
               fill
               src={image}
@@ -51,7 +54,7 @@ function SocialDetailsImgCarousel({ images }: SocialDetailsImgCarouselProps) {
         <span className="flex items-center gap-8pxr text-gray-01 font-title-01">
           {selectedIndex + 1}
           <div className="h-12pxr w-1pxr bg-[#f9fafc]" />
-          {images.length}
+          {images.length || 1}
         </span>
       </div>
     </section>

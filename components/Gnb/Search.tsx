@@ -2,74 +2,58 @@
 
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useSearchStore from '@/stores/useSearchStore'
 import useScrollLock from '@/hooks/useScrollLock'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import CustomBadge from '../CustomBadge/CustomBadge'
 
-/**
- * 돋보기 아이콘 눌렀을시 뜨는 검색창
- */
-
 function Search() {
-  const { searchValue, setSearchValue } = useSearchStore()
+  const searchParams = useSearchParams()
+  const { setSearchValue } = useSearchStore()
   const [recentSearch, setRecentSearch] = useState<string[]>([])
   const [isFolded, setIsFolded] = useState(true)
   const path = usePathname()
   const searchRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  const [inputValue, setInputValue] = useState('')
   useScrollLock(!isFolded)
 
-  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value)
+  const handleUnFold = () => setIsFolded(false)
+  const handleFold = () => setIsFolded(true)
+
+  const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
   }
 
-  const handleUnFold = () => {
-    setIsFolded(false)
-  }
-
-  const handleFold = () => {
-    setIsFolded(true)
-  }
-
-  const handleDeleteSearchItem = ({
-    searchItems,
-    index,
-  }: {
-    searchItems: string[]
-    index: number
-  }) => {
-    const updatedSearches = searchItems.filter((_, i) => {
-      return i !== index
-    })
+  const handleDeleteSearchItem = (index: number) => {
+    const updatedSearches = recentSearch.filter((_, i) => i !== index)
     setRecentSearch(updatedSearches)
     localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
   }
 
   const handleSearch = () => {
-    if (searchValue) {
-      let updatedSearches = [...recentSearch]
-      if (recentSearch[0] !== searchValue) {
-        updatedSearches.unshift(searchValue)
-        if (updatedSearches.length > 7) {
-          updatedSearches = updatedSearches.slice(0, 7)
-        }
-        localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
-        setIsFolded(true)
-      }
-      router.push(`/search/${encodeURIComponent(searchValue)}`)
+    if (inputValue) {
+      let updatedSearches = [
+        inputValue,
+        ...recentSearch.filter((item) => item !== inputValue),
+      ]
+      updatedSearches = updatedSearches.slice(0, 7)
+      setRecentSearch(updatedSearches)
+      localStorage.setItem('recentSearch', JSON.stringify(updatedSearches))
+      setIsFolded(true)
+      router.push(`/search?q=${encodeURIComponent(inputValue)}`)
+      setSearchValue(inputValue)
     }
   }
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    handleSearch()
   }
 
-  const handleRemoveRecents = () => {
+  const handleRemoveRecentItems = () => {
     setRecentSearch([])
     localStorage.removeItem('recentSearch')
   }
@@ -82,22 +66,24 @@ function Search() {
 
     const handleDocumentClick = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        setIsFolded(true)
+        e.preventDefault()
+        handleFold()
       }
     }
 
     document.addEventListener('click', handleDocumentClick)
     return () => {
-      document.removeEventListener('click', handleFold)
+      document.removeEventListener('click', handleDocumentClick)
     }
-  }, [path, setSearchValue])
+  }, [])
 
   useEffect(() => {
-    if (path.split('/')[1] === 'search' && path.split('/')[2]) {
-      const searchParam = decodeURIComponent(path.split('/')[2])
+    if (searchParams.has('q') || path.includes('search')) {
+      const searchParam = decodeURIComponent(searchParams.get('q') || '')
       setSearchValue(searchParam)
+      setInputValue(searchParam)
     }
-  }, [path, setSearchValue])
+  }, [path, searchParams, setSearchValue])
 
   return (
     <>
@@ -106,11 +92,10 @@ function Search() {
         className="absolute left-1/2 top-0pxr z-50 h-fit w-full max-w-540pxr -translate-x-1/2 transform rounded-b-[.625rem] bg-white opacity-100"
       >
         <div className="flex flex-col">
-          <section className="p-15pxr">
+          <form onSubmit={handleSubmit} className="p-15pxr">
             <TextField.Root
-              value={searchValue}
-              onChange={handleOnchange}
-              onKeyDown={onKeyDown}
+              value={inputValue}
+              onChange={handleInputValueChange}
               variant="soft"
               color="gray"
               className="h-40pxr w-full rounded-[.3125rem] border-[#DDDEE0] bg-[#F9FAFC] outline-none ring-1 ring-[#DDDEE0] focus:ring-black"
@@ -119,15 +104,16 @@ function Search() {
             >
               <TextField.Slot />
               <TextField.Slot>
-                <MagnifyingGlassIcon
-                  width="24"
-                  height="24"
-                  onClick={handleSearch}
-                  className="cursor-pointer"
-                />
+                <button title="검색 버튼" type="submit">
+                  <MagnifyingGlassIcon
+                    width="24"
+                    height="24"
+                    className="cursor-pointer"
+                  />
+                </button>
               </TextField.Slot>
             </TextField.Root>
-          </section>
+          </form>
           <section
             className={`${isFolded ? 'hidden' : ''} z-50 flex h-full w-full flex-col gap-24pxr p-24pxr`}
           >
@@ -135,7 +121,7 @@ function Search() {
               <h3 className="font-title-02">최근 검색어</h3>
               <button
                 className="text-10pxr text-zinc-200"
-                onClick={handleRemoveRecents}
+                onClick={handleRemoveRecentItems}
                 type="button"
               >
                 전체 삭제
@@ -145,19 +131,17 @@ function Search() {
             <div className="inline-flex flex-wrap gap-5pxr">
               {recentSearch.map((item, index) => (
                 <Link
-                  href={`/search/${encodeURIComponent(item)}`}
-                  key={`recent-${1 + index}`}
+                  href={`/search?q=${encodeURIComponent(item)}`}
+                  key={`recent-${index + 1}`}
                 >
                   <CustomBadge
+                    type="search"
                     onCrossClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
-                      handleDeleteSearchItem({
-                        searchItems: recentSearch,
-                        index,
-                      })
+                      handleDeleteSearchItem(index)
+                      setIsFolded(false)
                     }}
-                    type="search"
                   >
                     {item.length > 7 ? `${item.slice(0, 7)}...` : item}
                   </CustomBadge>
@@ -169,10 +153,10 @@ function Search() {
       </div>
       {!isFolded && path.includes('search') && (
         <>
-          <div onClick={handleFold} className="aboslute h-full w-full">
+          <div onClick={handleFold} className="absolute h-full w-full">
             <div
               className="absolute left-0pxr top-70pxr z-10 w-full cursor-default bg-black opacity-30"
-              style={{ height: 'calc(100% - 70px)' }}
+              style={{ height: 'calc(100vh - 70px)' }}
             />
           </div>
           <div className="absolute left-0pxr top-0pxr h-70pxr w-full bg-white" />
