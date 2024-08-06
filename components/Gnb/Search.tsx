@@ -63,18 +63,6 @@ function Search() {
     if (item) {
       setRecentSearch(JSON.parse(item))
     }
-
-    const handleDocumentClick = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
-        e.preventDefault()
-        handleFold()
-      }
-    }
-
-    document.addEventListener('click', handleDocumentClick)
-    return () => {
-      document.removeEventListener('click', handleDocumentClick)
-    }
   }, [])
 
   useEffect(() => {

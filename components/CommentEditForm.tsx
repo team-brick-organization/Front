@@ -54,7 +54,7 @@ function CommentEditForm({
       }
 
       socialQnACommentListDataReFetchTrigger()
-      notify('댓글 수정을 수정했어요')
+      notify('댓글을 수정했어요')
       onCancel()
     } catch (error) {
       notify('댓글 수정에 실패했어요', 'error')
