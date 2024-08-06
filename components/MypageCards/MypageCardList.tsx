@@ -1,7 +1,7 @@
 import MypageCard from './MypageCard'
 
 interface MypageCardListProps {
-  data: IMySocials[]
+  data: MyPageSocial[]
 }
 function MypageCardList({ data }: MypageCardListProps) {
   return (

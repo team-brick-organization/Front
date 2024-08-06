@@ -6,14 +6,17 @@ import { Avatar } from '@radix-ui/themes'
 import formatDate from '@/utils/formatDate'
 import useFavorite from '@/hooks/useFavorite'
 import { PersonIcon } from '@radix-ui/react-icons'
+import { useEffect, useState } from 'react'
+import getSocialDetail from '@/apis/getSocialDetail'
+import getEventStatus from '@/utils/getEventStatus'
 import TagBadgeList from '../CustomBadge/TagBadgeList'
 import ParticipantsInfo from '../ParticipantsInfo'
 import CustomBadge from '../CustomBadge/CustomBadge'
-// import NestingAvatar from '../NestingAvatar'
+import NestingAvatar from '../NestingAvatar'
 import FavoriteButton from '../FavoriteButton'
 
 interface MypageCardProps {
-  data: IMySocials
+  data: MyPageSocial
 }
 
 /**
@@ -23,49 +26,61 @@ interface MypageCardProps {
 
 function MypageCard({ data }: MypageCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
-
-  const isClosed =
-    new Date(data.gatheringDate) < new Date() ||
-    data.participantCount.current === data.participantCount.max
+  const [participantsData, setParticipantsData] = useState<IParticipants[]>([])
+  const badgeText = getEventStatus(
+    data.gatheringDate,
+    data.participantCount.current,
+    data.participantCount.max,
+    data.canceled,
+  )
 
   const isClickableFavorite =
-    new Date(data.gatheringDate) > new Date() || isFavoriteClicked
+    isFavoriteClicked || (!data.canceled && badgeText !== '모집 마감')
 
-  const url = `/social/${data.id}`
+  const url = `/socials/${data.id}`
 
   const formattedDate = formatDate(new Date(data.gatheringDate))
   const formattedAddress = data.address.split(' ')[1]
 
+  useEffect(() => {
+    const socialId = data.id
+    const getSocialDetailData = async () => {
+      try {
+        const res = await getSocialDetail(socialId)
+        if (!res.ok) {
+          throw new Error('소셜 불러오기에 실패했어요.')
+        }
+        const jsonfied = await res.json()
+        setParticipantsData(jsonfied.participants)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getSocialDetailData()
+  }, [data])
+
   return (
-    <div className="relative">
+    <div className="card group relative">
       <div className="mb:max-w-1920pxr flex h-208pxr w-full min-w-540pxr max-w-780pxr flex-row gap-20pxr mb:h-260pxr mb:w-212pxr mb:min-w-0pxr mb:flex-col mb:gap-8pxr">
-        <section className="relative h-full w-280pxr shrink-0 rounded-[.3125rem] bg-gray-01 mb:h-158pxr mb:w-full">
+        <section className="relative h-full w-280pxr shrink-0 overflow-hidden rounded-[.3125rem] bg-gray-01 mb:h-158pxr mb:w-full">
           <Link href={url} className="h-fit w-fit">
             <Image
               src={data.thumbnail}
               alt="카드이미지"
               fill
-              className="rounded-[.3125rem] object-cover transition-all duration-150 hover:scale-105 hover:shadow-lg"
+              className="rounded-[.3125rem] object-cover transition-all duration-200 group-[.card]:group-hover:scale-110 group-[.card]:group-hover:shadow-lg"
             />
-            {/* 회의때 정해서 값넣어주기(false 대신) */}
-            {false && (
-              <CustomBadge
-                type="primary"
-                size="large"
-                className="absolute left-16pxr top-16pxr"
-              >
-                마감 임박
-              </CustomBadge>
-            )}
-            {isClosed && (
+            {badgeText && (
               <>
-                <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
+                {badgeText !== '마감 임박' && (
+                  <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
+                )}
                 <CustomBadge
                   type="primary"
                   size="large"
                   className="absolute left-16pxr top-16pxr"
                 >
-                  모집 마감
+                  {badgeText}
                 </CustomBadge>
               </>
             )}
@@ -130,14 +145,28 @@ function MypageCard({ data }: MypageCardProps) {
                   같이 함께 한 친구
                 </p>
                 <span className="flex flex-row items-center gap-0pxr">
-                  {/* <NestingAvatar
-                    config={participantProfileImagesConfig}
+                  <NestingAvatar
+                    config={participantsData}
                     displayLimit={3}
                     showRemainingPeople={false}
-                  /> */}
+                  />
                   <p className="text-gray-08 font-caption-02">
-                    {data.participants[0].name} 외{' '}
-                    {data.participantCount.current}명과 함께 했습니다.
+                    {
+                      [
+                        {
+                          id: 1,
+                          name: '김아무개',
+                          profileUrl: '',
+                          role: 'OWNER',
+                          description: '',
+                        },
+                      ][0].name
+                    }{' '}
+                    외{' '}
+                    {data.participantCount.current !== 0
+                      ? data.participantCount.current - 1
+                      : 0}
+                    명과 함께 했습니다.
                   </p>
                 </span>
               </div>
@@ -147,7 +176,15 @@ function MypageCard({ data }: MypageCardProps) {
                   participantsCurrentCount={data.participantCount.current}
                   participantsMaxCount={data.participantCount.max}
                   participantsMinCount={data.participantCount.min}
-                  participants={data.participants}
+                  participants={[
+                    {
+                      id: 1,
+                      name: '김아무개',
+                      profileUrl: '',
+                      role: 'OWNER',
+                      description: '',
+                    },
+                  ]}
                 />
               </div>
             )}

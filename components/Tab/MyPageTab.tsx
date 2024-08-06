@@ -2,7 +2,11 @@
 
 import createTabStore from '@/stores/createTabStore'
 import { useEffect, useState } from 'react'
+import useMyPageStore from '@/stores/useMyPageStore'
+import useUserStore from '@/stores/useUserStore'
+import getCreatedSocial from '@/apis/getCreatedSocial'
 import { MypageCardList, Pagination, Tab } from '../index'
+import { notify } from '../ToastMessageTrigger'
 
 interface MyPageTabProps {
   type: 'my' | 'other'
@@ -15,20 +19,29 @@ interface MyPageTabProps {
 
 function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
   const [createdCurrentPageNum, setCreatedCurrentPageNum] = useState(1)
-  const [myCurrentPageNum, setMyCurrentPageNum] = useState(1)
-  const [mySocialData, setMySocialData] = useState<IMySocials[]>([])
-  const [createdSocialData, setCreatedSocialData] = useState<IMySocials[]>([])
+  // const [myCurrentPageNum, setMyCurrentPageNum] = useState(1)
+  const { accessToken, hydrated } = useUserStore()
+  const { activeTab } = tabStore()
+  const {
+    mySocialData,
+    setMySocialData,
+    createdSocialData,
+    setCreatedSocialData,
+  } = useMyPageStore()
 
   const tabs = [
     // 탭 이름과 탭에 들어갈 아이템 개수 넣어줘야함
-    { tabName: '참여', itemLength: 3 },
-    { tabName: `${type === 'my' ? '내가 ' : ''}만든 모임`, itemLength: 3 },
+    { tabName: '참여', itemLength: createdSocialData.totalElement },
+    {
+      tabName: `${type === 'my' ? '내가 ' : ''}만든 모임`,
+      itemLength: createdSocialData.totalElement,
+    },
   ]
 
-  const handleMyCurrentPageChange = (page: number) => {
-    // 페이지 변경 로직
-    setMyCurrentPageNum(page)
-  }
+  // const handleMyCurrentPageChange = (page: number) => {
+  //   // 페이지 변경 로직
+  //   setMyCurrentPageNum(page)
+  // }
 
   const handleCreatedCurrentPageChange = (page: number) => {
     // 페이지 변경 로직
@@ -37,69 +50,41 @@ function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
 
   useEffect(() => {
     // API 호출넣어줘야함
-    setMySocialData([
-      {
-        id: 100,
-        name: '놀러가기',
-        gatheringDate: '2024-08-01T18:00:00Z',
-        address: '경기도 고양시 덕양구 뭐시기 저시기',
-        participantCount: {
-          min: 5,
-          max: 20,
-          current: 10,
-        },
-        participants: [
-          {
-            id: 100,
-            name: '김씨',
-            profileUrl: '',
-            role: 'OWNER',
-            description: '아아아아아아',
-          },
-        ],
-        thumbnail: '',
-        tags: [],
-        owner: {
-          id: 100,
-          name: '김씨',
-          profileUrl: '',
-          role: 'OWNER',
-          description: '아아아아아아',
-        },
-      },
-    ])
-    setCreatedSocialData([
-      {
-        id: 100,
-        name: '놀러가기',
-        gatheringDate: '2024-08-01T18:00:00Z',
-        address: '경기도 고양시 덕양구 뭐시기 저시기',
-        participantCount: {
-          min: 5,
-          max: 20,
-          current: 10,
-        },
-        participants: [
-          {
-            id: 100,
-            name: '김씨',
-            profileUrl: '',
-            role: 'OWNER',
-            description: '아아아아아아',
-          },
-        ],
-        thumbnail: '',
-        tags: [],
-        owner: {
-          id: 100,
-          name: '김씨',
-          profileUrl: '',
-          role: 'OWNER',
-          description: '아아아아아아',
-        },
-      },
-    ])
-  }, [])
+    const getCreatedSocialData = async () => {
+      try {
+        const res = await getCreatedSocial({
+          accessToken,
+          offset: createdCurrentPageNum - 1,
+          limit: 2,
+        })
+        console.log('res', res)
+        // eslint-disable-next-line no-console
+        if (!res.ok) {
+          throw new Error('내가 만든 모임 불러오기를 실패했어요.')
+        }
+        const jsonfied = await res.json()
+        console.log('jsonfied', jsonfied)
+        setCreatedSocialData(jsonfied)
+        setMySocialData(jsonfied)
+      } catch (error) {
+        notify('내가 만든 모임 불러오기를 실패했어요.', 'error')
+        // eslint-disable-next-line no-console
+        console.error('Error fetching user data:', error)
+      }
+    }
+    console.log('hydrated', hydrated)
+
+    if (!hydrated) return
+
+    getCreatedSocialData()
+  }, [
+    activeTab,
+    hydrated,
+    createdCurrentPageNum,
+    accessToken,
+    setCreatedSocialData,
+    setMySocialData,
+  ])
 
   return (
     <Tab.Provider tabUnderlineWidthFit store={tabStore}>
@@ -123,24 +108,24 @@ function MyPageTab({ type = 'my', tabStore }: MyPageTabProps) {
       </Tab.List>
       <Tab.Panel index={0} store={tabStore}>
         <div className="px-20pxr mb:px-0pxr">
-          <MypageCardList data={mySocialData} />
+          <MypageCardList data={mySocialData.socials} />
         </div>
         <div className="mx-auto flex flex-row justify-center pt-40pxr">
           <Pagination
-            currentPage={myCurrentPageNum}
-            totalPages={12}
-            onPageChange={handleMyCurrentPageChange}
+            currentPage={createdCurrentPageNum}
+            totalPages={createdSocialData.totalPages}
+            onPageChange={handleCreatedCurrentPageChange}
           />
         </div>
       </Tab.Panel>
       <Tab.Panel index={1} store={tabStore}>
         <div className="px-20pxr mb:px-0pxr">
-          <MypageCardList data={createdSocialData} />
+          <MypageCardList data={createdSocialData.socials} />
         </div>
         <div className="mx-auto flex flex-row justify-center pt-40pxr">
           <Pagination
             currentPage={createdCurrentPageNum}
-            totalPages={12}
+            totalPages={createdSocialData.totalPages}
             onPageChange={handleCreatedCurrentPageChange}
           />
         </div>
