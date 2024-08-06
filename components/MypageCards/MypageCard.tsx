@@ -62,9 +62,9 @@ function MypageCard({ data }: MypageCardProps) {
 
   return (
     <div className="card group relative">
-      <div className="mb:max-w-1920pxr flex h-208pxr w-full min-w-540pxr max-w-780pxr flex-row gap-20pxr mb:h-260pxr mb:w-212pxr mb:min-w-0pxr mb:flex-col mb:gap-8pxr">
-        <section className="relative h-full w-280pxr shrink-0 overflow-hidden rounded-[.3125rem] bg-gray-01 mb:h-158pxr mb:w-full">
-          <Link href={url} className="h-fit w-fit">
+      <div className="max599:max-w-1920pxr flex h-208pxr w-full min-w-540pxr max-w-780pxr flex-row gap-20pxr max599:h-full max599:w-full max599:min-w-0pxr max599:flex-col max599:gap-8pxr">
+        <section className="relative h-full w-280pxr shrink-0 overflow-hidden rounded-[.3125rem] bg-gray-01 max599:aspect-[212/158] max599:w-full">
+          <Link href={url}>
             <Image
               src={data.thumbnail}
               alt="카드이미지"
@@ -87,7 +87,7 @@ function MypageCard({ data }: MypageCardProps) {
             )}
           </Link>
           {isClickableFavorite && (
-            <div className="absolute right-16pxr top-16pxr mb:right-16pxr mb:top-16pxr">
+            <div className="absolute right-16pxr top-16pxr max599:right-16pxr max599:top-16pxr">
               <FavoriteButton
                 isFavoriteClicked={isFavoriteClicked}
                 onFavoriteClick={handleFavoriteClick}
@@ -131,7 +131,7 @@ function MypageCard({ data }: MypageCardProps) {
                   {data.owner.name}
                 </p>
               </div>
-              <div className="hidden flex-row items-center gap-4pxr mb:flex">
+              <div className="hidden flex-row items-center gap-4pxr max599:flex">
                 <PersonIcon width={20} height={20} />
                 <p className="text-gray-06 font-caption-03">
                   {`${data.participantCount.current}/${data.participantCount.max}`}
@@ -139,7 +139,7 @@ function MypageCard({ data }: MypageCardProps) {
               </div>
             </div>
           </section>
-          <div className="mb:hidden">
+          <div className="max599:hidden">
             {new Date(data.gatheringDate) < new Date() ? (
               <div className="flex flex-col gap-8pxr">
                 <p className="text-left text-gray-10 font-body-01">

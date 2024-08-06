@@ -19,6 +19,7 @@ import useFavorite from '@/hooks/useFavorite'
 import usePortal from '@/hooks/usePortal'
 import { useParams } from 'next/navigation'
 import useSocialDetailStore from '@/stores/useSocialDetailStore'
+import getEventStatus from '@/utils/getEventStatus'
 
 function GatheringInfo() {
   const { handleOutsideClick, isPortalOpen, setIsPortalOpen, portalRef } =
@@ -29,12 +30,19 @@ function GatheringInfo() {
     Number(params.id),
   )
 
+  const badgeText = getEventStatus(
+    socialDetailData.gatheringDate,
+    socialDetailData.participantCount.current,
+    socialDetailData.participantCount.max,
+    socialDetailData.canceled,
+  )
+
   return (
     <div className="min-h-346pxr w-full max-w-480pxr rounded-[0.3125rem] bg-gray-01 p-24pxr shadow-[0rem_0.25rem_0.625rem_0rem_rgba(0,0,0,0.15)] mb:px-16pxr mb:py-24pxr tb:px-16pxr tb:py-24pxr max759Min480:max-w-full">
       <div className="mb-40pxr flex flex-col gap-14pxr border-b border-dashed border-[#C8C8C8] pb-40pxr">
         <div className="flex justify-between">
           <TagBadgeList tags={socialDetailData.tags} />
-          {!socialDetailData.canceled && (
+          {!socialDetailData.canceled && badgeText !== '모집 마감' && (
             <div className="flex gap-8pxr">
               <FavoriteButton
                 isFavoriteClicked={isFavoriteClicked}
