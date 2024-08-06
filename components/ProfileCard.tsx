@@ -17,7 +17,7 @@ function ProfileCard({
   description,
 }: IProfileCardProps) {
   return (
-    <div className="flex w-279pxr flex-col items-center rounded-[0.3125rem] border border-gray-04 bg-gray-01 px-24pxr py-50pxr mb:w-full tb:w-375pxr">
+    <div className="flex w-279pxr flex-col items-center rounded-[0.3125rem] border border-gray-04 bg-gray-01 px-24pxr py-50pxr tb:w-375pxr max1020:w-full">
       <Avatar
         className="h-109pxr w-109pxr rounded-full bg-gray-04"
         src={profileImageUrl}

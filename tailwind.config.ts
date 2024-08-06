@@ -83,6 +83,7 @@ const config = {
         max700Min480: { max: '700px', min: '480px' },
         max862Min480: { max: '862px', min: '480px' },
         max900Min480: { max: '900px', min: '480px' },
+        max1020: { max: '1020px' },
       },
     },
   },

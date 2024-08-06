@@ -23,8 +23,8 @@ function MyPage() {
   }, [accessToken, router, hydrated])
 
   return (
-    <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row gap-16pxr px-20pxr mb:mt-40pxr mb:flex-col mb:gap-32pxr mb:px-0pxr">
-      <section className="h-400pxr mb:px-20pxr">
+    <div className="mx-auto mt-80pxr flex w-full max-w-1200pxr flex-row gap-16pxr px-20pxr max1020:mt-40pxr max1020:flex-col max1020:gap-32pxr max1020:px-0pxr">
+      <section className="h-400pxr max1020:px-20pxr">
         <ProfileCard
           type="user"
           profileImageUrl={userData.profileImageUrl}
