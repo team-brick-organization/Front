@@ -106,7 +106,7 @@ page.tsx에 export const runtime = ‘edge’, 적용 - 실패
 | 조욱희 | FE | [GITHUB](https://github.com/AshtonJo) |
 | 김유정 | BE | [GITHUB](https://github.com/kimyu0218) |
 | 허지원 | BE | [GITHUB](https://github.com/hunnypooh) |   
-| 김예담 | DE |  |
+| 김예담 | DE | [rocketpunch](https://www.rocketpunch.com/@yedamn000504)|
 
 </div>
 
