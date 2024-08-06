@@ -173,7 +173,7 @@ function ManagingMyInfo({
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
     // eslint-disable-next-line no-console
-    console.log('제출 데이터', { introduce, name, birthday, profileImage })
+    // console.log('제출 데이터', { introduce, name, birthday, profileImage })
 
     // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
     // nickname => 변경 데이터, userName => 기존 저장 데이터
