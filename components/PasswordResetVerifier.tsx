@@ -10,6 +10,7 @@ import checkedCheckBox from '@/public/images/svgs/checkedCheckBox.svg'
 import uncheckedCheckBox from '@/public/images/svgs/unCheckedCheckBox.svg'
 import deleteUserAccount from '@/apis/deleteUserAccount'
 import sendVerificationEmail from '@/utils/sendVerificationEmail'
+// import PutPasswordChange from '@/apis/putPasswordChange'
 import { useRouter } from 'next/navigation'
 import { notify } from './ToastMessageTrigger'
 
@@ -134,7 +135,9 @@ function PasswordResetVerifier({
       return
     }
     // 비밀번호 변경 api 호출
+    // PutPasswordChange({accessToken, body: { password: newPassword?.value }})
     notify('비밀번호 재설정이 완료되었어요.')
+    // document.location.reload()
   }
 
   useEffect(() => {
