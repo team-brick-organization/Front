@@ -12,20 +12,20 @@ interface IMainPageProps {
 function MainPage({ socialsData }: IMainPageProps) {
   return (
     <>
-      <div className="flex flex-col gap-160pxr max599:gap-60pxr">
+      <div className="flex flex-col">
         <Image
-          src="/images/avifs/banner.avif"
+          src="/images/svgs/banner.svg"
           alt="배너이미지"
           className="mx-auto"
           objectFit="cover"
-          width={2000}
-          height={450}
+          width={2880}
+          height={600}
           priority
-          blurDataURL="/images/avifs/bannerBlur.avif"
-          placeholder="blur"
         />
-        <MainPageTopButtonGroup />
-        <section className="max599Min480:px-0pxr mx-auto w-full max-w-1160pxr px-20pxr">
+        <div className="mt-80pxr max599:hidden">
+          <MainPageTopButtonGroup />
+        </div>
+        <section className="max599Min480:px-0pxr mx-auto mt-100pxr w-full max-w-1160pxr px-20pxr max599:mt-40pxr">
           <div className="max599Min480:hidden flex flex-col gap-40pxr">
             <div className="flex flex-row items-center justify-between max599:hidden">
               <h1 className="text-gray-10 font-headline-03">
@@ -43,7 +43,7 @@ function MainPage({ socialsData }: IMainPageProps) {
           <MainPageMobileCardList socialsData={socialsData} />
         </section>
       </div>
-      <div className="mt-300pxr">
+      <div className="mt-400pxr">
         <Footer />
       </div>
     </>
