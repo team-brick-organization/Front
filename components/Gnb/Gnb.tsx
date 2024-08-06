@@ -67,7 +67,7 @@ function Gnb() {
         path === '/liked',
     },
     {
-      name: '찜한 소셜',
+      name: '찜한 모임',
       link: '/liked',
       pathName:
         (path === '/socials' && searchParams.get('type') === 'closed') ||
