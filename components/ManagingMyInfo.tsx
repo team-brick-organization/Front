@@ -424,6 +424,7 @@ function ManagingMyInfo({
               showYearDropdown
               scrollableYearDropdown
               yearDropdownItemNumber={100}
+              popperClassName="!-top-6pxr"
             />
           </div>
         </div>

@@ -1,4 +1,6 @@
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
+import heartOutlineFillIcon from '@/public/images/svgs/heartOutlineFill.svg'
+import Image from 'next/image'
 
 interface IFavoriteButtonProps {
   isFavoriteClicked: boolean
@@ -13,11 +15,13 @@ function FavoriteButton({
 }: IFavoriteButtonProps) {
   const heartIcons = [
     <HeartIcon width={24} height={24} key="HeartIcon" />,
-    <HeartFilledIcon
+    <Image
+      src={heartOutlineFillIcon}
       className="text-gray-01 opacity-[0.6]"
       width={24}
       height={24}
       key="HeartFilledIcon"
+      alt="찜하기 아이콘"
     />,
   ]
   const RenderHeartIcon = () => (isSocialDetail ? heartIcons[0] : heartIcons[1])

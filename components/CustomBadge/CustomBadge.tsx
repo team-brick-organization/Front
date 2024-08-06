@@ -47,7 +47,7 @@ function CustomBadge({
         return 'text-nowrap rounded-[.3125rem] border border-gray-04 !bg-gray-01 px-10pxr py-4pxr  mb:py-2pxr text-gray-06 font-caption-02'
 
       case 'search':
-        return 'px-14pxr py-4pxr !bg-gray-02 flex gap-8pxr items-center w-fit rounded-full text-gray-08'
+        return 'px-14pxr h-33pxr py-4pxr !bg-gray-02 flex gap-8pxr items-center w-fit rounded-full text-gray-08'
 
       default:
         return sizeClass()
@@ -60,11 +60,11 @@ function CustomBadge({
       {type === 'search' && (
         <button
           title="뱃지 삭제 버튼"
-          className="outline-none"
+          className="flex h-33pxr w-17pxr items-center justify-center outline-none"
           type="button"
           onClick={onCrossClick}
         >
-          <Cross1Icon width={15} height={15} />
+          <Cross1Icon width={17} height={17} />
         </button>
       )}
     </div>

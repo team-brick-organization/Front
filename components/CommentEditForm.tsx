@@ -45,17 +45,16 @@ function CommentEditForm({
         socialId: Number(params.id),
         qnaId: Number(qnaId),
         commentId,
-        body: data,
+        body: { content: data.comment },
       })
-      console.log('res', res)
+
       // eslint-disable-next-line no-console
       if (!res.ok) {
-        throw new Error('댓글 수정에 실패했습니다.')
+        notify('댓글 수정에 실패했어요', 'error')
       }
-      const jsonfied = await res.json()
-      console.log('jsonfied', jsonfied)
+
       socialQnACommentListDataReFetchTrigger()
-      notify('댓글 수정을 수정했어요')
+      notify('댓글을 수정했어요')
       onCancel()
     } catch (error) {
       notify('댓글 수정에 실패했어요', 'error')

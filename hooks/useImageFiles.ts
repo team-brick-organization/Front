@@ -59,6 +59,7 @@ function useImageFiles({ imageLimit }: IUseImageFilesProps) {
         await fetch(presignedUrl, {
           method: 'PUT',
           body: file,
+          credentials: 'include',
         })
         setImageUrls((prevFiles) => [...prevFiles, imageUrl])
       })

@@ -181,6 +181,7 @@ function SocialDetailPage() {
     socialDetailData.gatheringDate,
     socialDetailData.participantCount.current,
     socialDetailData.participantCount.max,
+    socialDetailData.canceled,
   )
 
   return (
@@ -191,8 +192,6 @@ function SocialDetailPage() {
         ) : (
           <ImageViewer images={socialDetailData.imageUrls} />
         )}
-        {/* <ImageViewer images={images} />
-        {/* <SocialDetailsImgCarouselProps images={images} /> */}
         <div className="flex flex-col gap-16pxr">
           <div className="flex w-full flex-row items-center justify-between">
             <div className="flex items-center gap-8pxr">
@@ -205,7 +204,7 @@ function SocialDetailPage() {
                 </p>
               )}
             </div>
-            {isParticipant && (
+            {isParticipant && !badgeText && (
               <DotsDropDownMenu
                 direction="vertical"
                 menuItems={dropDownMenuItems}

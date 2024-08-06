@@ -6,7 +6,7 @@ interface IPatchEditCommentProps {
   qnaId: number
   commentId: number
   body: {
-    comment: string
+    content: string
   }
 }
 

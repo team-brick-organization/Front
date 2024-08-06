@@ -34,20 +34,23 @@ function GatheringInfo() {
       <div className="mb-40pxr flex flex-col gap-14pxr border-b border-dashed border-[#C8C8C8] pb-40pxr">
         <div className="flex justify-between">
           <TagBadgeList tags={socialDetailData.tags} />
-          <div className="flex gap-8pxr">
-            <FavoriteButton
-              isFavoriteClicked={isFavoriteClicked}
-              onFavoriteClick={handleFavoriteClick}
-              isSocialDetail
-            />
-            <button
-              title="공유 버튼"
-              type="button"
-              onClick={() => setIsPortalOpen(true)}
-            >
-              <Share2Icon className="h-24pxr w-24pxr" />
-            </button>
-          </div>
+          {!socialDetailData.canceled && (
+            <div className="flex gap-8pxr">
+              <FavoriteButton
+                isFavoriteClicked={isFavoriteClicked}
+                onFavoriteClick={handleFavoriteClick}
+                isSocialDetail
+              />
+
+              <button
+                title="공유 버튼"
+                type="button"
+                onClick={() => setIsPortalOpen(true)}
+              >
+                <Share2Icon className="h-24pxr w-24pxr" />
+              </button>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-16pxr">
           <h2 className="text-gray-10 font-headline-02">
