@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import {
   emailPattern,
   nicknamePattern,
-  passwordMinLength,
+  passwordPattern,
 } from '@/constants/RegExr'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -299,7 +299,7 @@ function SignUpEmailForm(): JSX.Element {
               id="password"
               {...register('password', {
                 required: '비밀번호는 필수 입력입니다.',
-                minLength: passwordMinLength,
+                minLength: passwordPattern,
               })}
               type={showPassword ? 'text' : 'password'}
               placeholder="비밀번호를 입력해주세요."
@@ -346,7 +346,7 @@ function SignUpEmailForm(): JSX.Element {
               id="passwordCheck"
               {...register('passwordCheck', {
                 required: '비밀번호 확인은 필수 입력입니다.',
-                minLength: passwordMinLength,
+                minLength: passwordPattern,
                 validate: passwordCheckValidate,
               })}
               type={showPasswordCheck ? 'text' : 'password'}
