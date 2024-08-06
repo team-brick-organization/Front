@@ -12,7 +12,7 @@ function SocialNameSection({ initialName }: { initialName?: string }) {
       <label className="text-gray-10 font-title-04" htmlFor="socialName">
         모임 이름
       </label>
-      <div>
+      <div className="flex flex-col gap-4pxr">
         <Input
           {...register('socialName', {
             required: '모임 이름은 필수 입력입니다.',
@@ -28,12 +28,10 @@ function SocialNameSection({ initialName }: { initialName?: string }) {
           placeholder="모임 이름을 입력해 주세요."
           defaultValue={initialName}
         />
-        <div className="mt-4pxr">
-          <DisplayMaxLength
-            currentLength={watch('socialName') ? watch('socialName').length : 0}
-            maxLength={20}
-          />
-        </div>
+        <DisplayMaxLength
+          currentLength={watch('socialName') ? watch('socialName').length : 0}
+          maxLength={20}
+        />
       </div>
     </div>
   )

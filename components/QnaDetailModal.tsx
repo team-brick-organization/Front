@@ -15,6 +15,7 @@ import { PersonIcon } from '@radix-ui/react-icons'
 import postQnAComment from '@/apis/postQnAComment'
 import deleteQnAComment from '@/apis/deleteQnAComment'
 import useSocialQnACommentListStore from '@/stores/useSocialQnACommentListStore'
+import useSocialDetailStore from '@/stores/useSocialDetailStore'
 import {
   Button,
   CommentEditForm,
@@ -56,6 +57,7 @@ function QnaDetailModal({
     setSocialQnACommentListData,
     fetchSocialQnACommentListData,
   } = useSocialQnACommentListStore()
+  const { socialDetailData } = useSocialDetailStore()
   const { accessToken } = useUserStore()
   const { userData } = useUserDataStore()
   const [pageNum, setPageNum] = useState(0)
@@ -111,13 +113,11 @@ function QnaDetailModal({
 
       try {
         const data = await getQnAComment(Number(params.id), qnaId, pageNum, 10)
-        console.log('data', data)
 
         // eslint-disable-next-line no-console
         if (!data.ok) console.error('error: ', data.status)
 
         const jsonfied = await data.json()
-        console.log('commentData', jsonfied)
 
         setSocialQnACommentListData(jsonfied)
       } catch (error) {
@@ -140,7 +140,7 @@ function QnaDetailModal({
         <div className="flex flex-col gap-16pxr">
           <div className="flex items-center justify-between">
             <h1 className="text-gray-10 font-headline-03">{title}</h1>
-            {userData.name === name && (
+            {userData.name === name && !socialDetailData.canceled && (
               <DotsDropDownMenu direction="horizontal" menuItems={menuItems} />
             )}
           </div>
@@ -172,13 +172,15 @@ function QnaDetailModal({
       </div>
 
       <CommentList qnaId={qnaId} />
-      <section className="mt-80pxr flex w-full flex-col items-center gap-30pxr">
-        <Pagination
-          currentPage={socialQnACommentListData.currentPage + 1}
-          totalPages={socialQnACommentListData.totalPages}
-          onPageChange={onClickPageNum}
-        />
-      </section>
+      {socialQnACommentListData.totalElement !== 0 && (
+        <section className="mt-80pxr flex w-full flex-col items-center gap-30pxr">
+          <Pagination
+            currentPage={socialQnACommentListData.currentPage + 1}
+            totalPages={socialQnACommentListData.totalPages}
+            onPageChange={onClickPageNum}
+          />
+        </section>
+      )}
       <Portal
         handleOutsideClick={handleOutsideClick}
         isPortalOpen={isPortalOpen}
@@ -230,6 +232,7 @@ function CommentForm({
     useForm<IQnaDetailFormInputs>()
   const { socialQnACommentListData, socialQnACommentListDataReFetchTrigger } =
     useSocialQnACommentListStore()
+  const { socialDetailData } = useSocialDetailStore()
   const { accessToken } = useUserStore()
   const disabled = !watch('comment')
   const params = useParams()
@@ -256,7 +259,7 @@ function CommentForm({
   }
 
   const onSubmit = (data: IQnaDetailFormInputs) => {
-    if (qnaId === null) return
+    if (qnaId === null || disabled || socialDetailData.canceled) return
 
     postComment(data)
   }
@@ -283,11 +286,17 @@ function CommentForm({
             {...register('comment', {
               required: '답변은 필수 입력입니다.',
               maxLength: { value: 600, message: '600자 이내로 작성해 주세요.' },
+              disabled: socialDetailData.canceled,
             })}
             placeholder="답변을 작성해 주세요."
             maxLength={600}
+            disabled={socialDetailData.canceled}
           />
-          <Button size="XS" type="submit" disabled={disabled}>
+          <Button
+            size="XS"
+            type="submit"
+            disabled={disabled || socialDetailData.canceled}
+          >
             등록
           </Button>
         </div>
@@ -354,6 +363,7 @@ function Comment({
     usePortal()
   const { socialQnACommentListDataReFetchTrigger } =
     useSocialQnACommentListStore()
+  const { socialDetailData } = useSocialDetailStore()
   const [isEditing, setIsEditing] = useState(false)
   const { userData } = useUserDataStore()
   const { accessToken } = useUserStore()
@@ -416,7 +426,7 @@ function Comment({
                 {commentFormattedDate}
               </span>
             </div>
-            {commentName === userData.name && (
+            {commentName === userData.name && !socialDetailData.canceled && (
               <DotsDropDownMenu direction="horizontal" menuItems={menuItems} />
             )}
           </div>

@@ -16,7 +16,7 @@ function SocialIntroduceSection({
       <label className="text-gray-10 font-title-04" htmlFor="socialIntroduce">
         모임 소개
       </label>
-      <div>
+      <div className="flex flex-col gap-4pxr">
         <textarea
           {...register('socialIntroduce', {
             required: '모임 소개는 필수 입력입니다.',
@@ -27,14 +27,12 @@ function SocialIntroduceSection({
           placeholder="모임 소개를 입력해 주세요."
           defaultValue={initialIntroduce}
         />
-        <div className="mt-4pxr">
-          <DisplayMaxLength
-            currentLength={
-              watch('socialIntroduce') ? watch('socialIntroduce').length : 0
-            }
-            maxLength={3000}
-          />
-        </div>
+        <DisplayMaxLength
+          currentLength={
+            watch('socialIntroduce') ? watch('socialIntroduce').length : 0
+          }
+          maxLength={3000}
+        />
       </div>
     </div>
   )

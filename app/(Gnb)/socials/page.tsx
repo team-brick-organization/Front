@@ -52,6 +52,19 @@ function SocialsListPage() {
       : '공통 관심사를 가진 사람들과의 모임, 지금 모집중!'
 
   const bannerImage = pageType === 'closed' ? calendarImage : handsImage
+
+  useEffect(() => {
+    if (searchParams.get('sort') === 'popularity') {
+      setSort('popularity')
+      setCurrentPage(1)
+      return
+    }
+    if (!searchParams.get('type')) {
+      setSort('latest')
+      setCurrentPage(1)
+    }
+  }, [searchParams])
+
   useEffect(() => {
     const fetchSocials = async () => {
       const response = await getSocials({

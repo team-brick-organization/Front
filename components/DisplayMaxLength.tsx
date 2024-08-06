@@ -8,9 +8,9 @@ function DisplayMaxLength({
   maxLength,
 }: IDisplayMaxLengthProps) {
   return (
-    <span className="inline-block w-full text-end text-gray-06 font-caption-02">
+    <p className="text-end text-gray-06 font-caption-02">
       {currentLength}/{maxLength}
-    </span>
+    </p>
   )
 }
 

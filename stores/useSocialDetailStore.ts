@@ -9,6 +9,8 @@ const useSocialDetailStore = create<ISocialDetailStore>((set) => ({
   socialDetailData: {
     id: 0,
     name: '',
+    canceled: false,
+    description: '',
     introduction: {
       description: '',
       place: {

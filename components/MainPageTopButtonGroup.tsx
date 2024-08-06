@@ -13,7 +13,7 @@ function MainPageTopButtonGroup() {
           style={{ objectFit: 'cover' }}
         />
       </Link>
-      <Link href="/socials" className="relative">
+      <Link href="/socials?type=closed" className="relative">
         <Image
           src="/images/svgs/main_imminent.svg"
           alt="모집마감"
@@ -22,7 +22,7 @@ function MainPageTopButtonGroup() {
           style={{ objectFit: 'cover' }}
         />
       </Link>
-      <Link href="/socials" className="relative">
+      <Link href="/liked" className="relative">
         <Image
           src="/images/svgs/main_likedButton.svg"
           alt="찜한모임"

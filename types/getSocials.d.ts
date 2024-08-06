@@ -1,6 +1,7 @@
 interface ISocials {
   id: number
   name: string
+  canceled: boolean
   gatheringDate: string
   address: string
   participantCount: {

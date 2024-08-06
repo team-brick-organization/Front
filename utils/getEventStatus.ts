@@ -4,6 +4,7 @@ function getEventStatus(
   date: string | Date,
   participantsCurrentCount: number,
   participantsMaxCount: number,
+  canceled: boolean = false,
 ): string {
   const eventDate = convertToKoreanTime(new Date(date))
   const today = new Date()
@@ -20,6 +21,11 @@ function getEventStatus(
 
   // 기간이 이미 지난 경우
   const isPast = eventDate.getTime() < today.getTime()
+
+  // 취소된 경우
+  if (canceled) {
+    return '모임 취소'
+  }
 
   if (isFull || isPast) {
     return '모집 마감'

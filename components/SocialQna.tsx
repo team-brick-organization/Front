@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import getQnA from '@/apis/getQnA'
 import { useParams } from 'next/navigation'
 import useSocialQnAListStore from '@/stores/useSocialQnAListStore'
+import useSocialDetailStore from '@/stores/useSocialDetailStore'
 import { Portal, Pagination, QnaWriteModal, SocialQnaCardList } from './index'
 import { notify } from './ToastMessageTrigger'
 
@@ -41,6 +42,7 @@ function SocialQna() {
     usePortal()
   const { SocialQnAListData, setSocialQnAListData, fetchSocialQnAListData } =
     useSocialQnAListStore()
+  const { socialDetailData } = useSocialDetailStore()
   const [pageNum, setPageNum] = useState(0)
   const { accessToken } = useUserStore()
   const params = useParams()
@@ -81,7 +83,7 @@ function SocialQna() {
             {SocialQnAListData?.totalElement}
           </span>
         </h3>
-        {accessToken !== '' && (
+        {accessToken !== '' && !socialDetailData.canceled && (
           <button
             className="flex items-center gap-4pxr font-body-02"
             type="button"
@@ -93,13 +95,15 @@ function SocialQna() {
       </div>
       <div className="mt-24pxr">
         <SocialQnaCardList contents={SocialQnAListData.socials} />
-        <div className="mt-80pxr flex justify-center">
-          <Pagination
-            currentPage={SocialQnAListData.currentPage + 1}
-            totalPages={SocialQnAListData.totalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
+        {SocialQnAListData.totalElement > 0 && (
+          <div className="mt-80pxr flex justify-center">
+            <Pagination
+              currentPage={SocialQnAListData.currentPage + 1}
+              totalPages={SocialQnAListData.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
       <Portal
         portalRef={portalRef}

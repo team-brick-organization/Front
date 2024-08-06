@@ -10,6 +10,7 @@ interface IGetSocialsProps {
   offset?: number
   limit?: number
   ids?: string
+  name?: string
 }
 
 async function getSocials({
@@ -18,8 +19,16 @@ async function getSocials({
   offset,
   limit,
   ids,
+  name,
 }: IGetSocialsProps): Promise<Response> {
-  const query = buildQueryString({ filterBy, orderBy, offset, limit, ids })
+  const query = buildQueryString({
+    filterBy,
+    orderBy,
+    offset,
+    limit,
+    ids,
+    name,
+  })
 
   const response = await fetch(
     `${BASE_URL}/socials${query ? `?${query}` : ''}`,
