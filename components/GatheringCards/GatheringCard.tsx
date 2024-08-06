@@ -25,22 +25,21 @@ type GatheringCardProps = {
 function GatheringCard({ data }: GatheringCardProps) {
   const { isFavoriteClicked, handleFavoriteClick } = useFavorite(data.id)
 
-  const isClickableFavorite =
-    convertToKoreanTime(new Date(data.gatheringDate)) > new Date() ||
-    isFavoriteClicked
-
   const formattedAddress = data.address.split(' ')[1]
 
   const formattedDate = formatDate(
     convertToKoreanTime(new Date(data.gatheringDate)),
   )
 
-  const statusBadgeText = getEventStatus(
+  const badgeText = getEventStatus(
     data.gatheringDate,
     data.participantCount.current,
     data.participantCount.max,
     data.canceled,
   )
+
+  const isClickableFavorite =
+    isFavoriteClicked || (!data.canceled && badgeText !== '모집 마감')
 
   return (
     <div className="card group relative">
@@ -57,14 +56,19 @@ function GatheringCard({ data }: GatheringCardProps) {
               fill
               sizes="(min-width: 1024px) 280px, (min-width: 768px) 208px, 100vw"
             />
-            {statusBadgeText && (
-              <CustomBadge
-                type="primary"
-                size="large"
-                className="absolute left-16pxr top-16pxr"
-              >
-                {statusBadgeText}
-              </CustomBadge>
+            {badgeText && (
+              <>
+                {badgeText !== '마감 임박' && (
+                  <div className="absolute h-full w-full rounded-[.3125rem] bg-black opacity-30" />
+                )}
+                <CustomBadge
+                  type="primary"
+                  size="large"
+                  className="absolute left-16pxr top-16pxr"
+                >
+                  {badgeText}
+                </CustomBadge>
+              </>
             )}
           </section>
           <div className="flex w-full flex-col gap-4pxr">
