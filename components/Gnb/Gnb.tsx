@@ -198,18 +198,6 @@ function Gnb() {
                   </button>
                 </Link>
               )}
-              {accessToken && ( // 추후에 지워야함
-                <button
-                  type="button"
-                  className="text-nowrap text-gray-10 font-title-04 tb:font-title-02"
-                  onClick={async () => {
-                    await getSignOut({ accessToken })
-                    setAccessToken('')
-                  }}
-                >
-                  로그아웃
-                </button>
-              )}
             </div>
           )}
         </div>
