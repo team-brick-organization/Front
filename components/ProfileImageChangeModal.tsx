@@ -67,8 +67,8 @@ function ProfileImageChangeModal({ onClose }: IProfileImageChangeModalProps) {
         body: file,
         headers: {
           'Content-Type': file.type,
-          credentials: 'include',
         },
+        credentials: 'include',
       })
       setProfileImage(imageUrl)
     }
