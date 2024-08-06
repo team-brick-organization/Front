@@ -65,7 +65,6 @@ function QnaDetailModal({
   const formattedDate = shortFormatDate(new Date(createdAt))
 
   const onClickPageNum = (page: number) => {
-    console.log(page)
     setPageNum(page - 1)
   }
 
