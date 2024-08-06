@@ -80,10 +80,10 @@ function SocialDetailPage() {
   }
 
   const fetchSocialJoinCancel = async () => {
-    if (!socialDetailData?.participants.some((i) => i.name === userData.name)) {
-      setIsPortalOpen(false)
-      return
-    }
+    // if (!socialDetailData?.participants.some((i) => i.name === userData.name)) {
+    //   setIsPortalOpen(false)
+    //   return
+    // }
 
     try {
       const data = await deleteCancelSocialParticipation({
@@ -110,8 +110,8 @@ function SocialDetailPage() {
 
   // 소셜취소 확인 버튼
   const onClickSocialCancelOkButton = async () => {
-    setIsPortalOpen(false)
     await fetchSocialCancel()
+    setIsPortalOpen(false)
   }
 
   // 소셜 참가 취소 확인 버튼
@@ -137,6 +137,7 @@ function SocialDetailPage() {
           throw new Error('소셜 불러오기에 실패했어요.')
         }
         const jsonfied = await data.json()
+        console.log('디테일', jsonfied)
         setSocialDetailData(jsonfied)
       } catch (error) {
         notify('소셜 불러오기에 실패했어요', 'error')
