@@ -17,10 +17,28 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/app/*": ["./app/*"],
+      "@/components/*": ["./components/*"],
+      "@/components": ["./components/index"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/cypress/*": ["./cypress/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/apis/*": ["./apis/*"],
+      "@/public/*": ["./public/*"],
+      "@/constants/*": ["./constants/*"],
+      "@/stores/*": ["./stores/*"]
+    },
+    "types": ["kakao.maps.d.ts"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "prettier.config.js"
+  ],
   "exclude": ["node_modules"]
 }
