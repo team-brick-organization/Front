@@ -17,6 +17,7 @@ import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import checkedIcon from '@/public/images/svgs/checked.svg'
 import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
+import useNicknameValidation from '@/hooks/useNicknameValidation'
 import postDuplicateCheck from '@/apis/postDuplicateCheck'
 import postSignUp from '@/apis/postSignUp'
 import Input from './Input'
@@ -41,15 +42,9 @@ function SignUpEmailForm(): JSX.Element {
   const watchNickname = watch('nickname')
   const password = watch('password')
 
-  async function fetchIsDuplicatedEmail<
-    BodyType extends TypeEmail | TypeNickname,
-  >(
+  async function fetchIsDuplicatedEmail<BodyType extends TypeEmail>(
     text: BodyType,
-    fetcher: ({
-      body,
-    }: {
-      body: TypeEmail | TypeNickname
-    }) => Promise<Response>,
+    fetcher: ({ body }: { body: TypeEmail }) => Promise<Response>,
   ) {
     const response = await fetcher({
       body: text,
@@ -63,15 +58,9 @@ function SignUpEmailForm(): JSX.Element {
     return data.duplicateEmail
   }
 
-  async function fetchIsDuplicatedNickname<
-    BodyType extends TypeEmail | TypeNickname,
-  >(
+  async function fetchIsDuplicatedNickname<BodyType extends TypeNickname>(
     text: BodyType,
-    fetcher: ({
-      body,
-    }: {
-      body: TypeEmail | TypeNickname
-    }) => Promise<Response>,
+    fetcher: ({ body }: { body: TypeNickname }) => Promise<Response>,
   ) {
     const response = await fetcher({
       body: text,
@@ -143,11 +132,9 @@ function SignUpEmailForm(): JSX.Element {
     togglePasswordCheckVisibility,
   } = usePasswordVisibility()
 
-  const isLengthValid =
-    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
-  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
-  const hasNoWhitespace = !/\s/.test(watchNickname || '')
-  const showChecks = watchNickname && watchNickname.length >= 2
+  const { isLengthValid, isValidPattern, hasNoWhitespace, showChecks } =
+    useNicknameValidation({ watchNickname })
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
