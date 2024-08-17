@@ -18,6 +18,7 @@ import checkedIcon from '@/public/images/svgs/checked.svg'
 import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import useNicknameValidation from '@/hooks/useNicknameValidation'
+import fetchIsDuplicated from '@/utils/fetchIsDuplicated'
 import postDuplicateCheck from '@/apis/postDuplicateCheck'
 import postSignUp from '@/apis/postSignUp'
 import Input from './Input'
@@ -42,45 +43,13 @@ function SignUpEmailForm(): JSX.Element {
   const watchNickname = watch('nickname')
   const password = watch('password')
 
-  async function fetchIsDuplicatedEmail<BodyType extends TypeEmail>(
-    text: BodyType,
-    fetcher: ({ body }: { body: TypeEmail }) => Promise<Response>,
-  ) {
-    const response = await fetcher({
-      body: text,
-    })
-
-    if (!response.ok) {
-      throw new Error('이메일 중복 확인에 실패했습니다.')
-    }
-    const data: IPostDuplicateEmailResponse = await response.json()
-
-    return data.duplicateEmail
-  }
-
-  async function fetchIsDuplicatedNickname<BodyType extends TypeNickname>(
-    text: BodyType,
-    fetcher: ({ body }: { body: TypeNickname }) => Promise<Response>,
-  ) {
-    const response = await fetcher({
-      body: text,
-    })
-
-    if (!response.ok) {
-      throw new Error('닉네임 중복 확인에 실패했습니다.')
-    }
-    const data: IPostDuplicateNicknameResponse = await response.json()
-
-    return data.duplicateName
-  }
-
   const onSubmit = async (data: ISignUpFormInputs) => {
     const { email, password: dataPassword, nickname } = data
 
-    const isDuplicateNickname = await fetchIsDuplicatedNickname<TypeNickname>(
-      { name: nickname },
-      postDuplicateCheck,
-    )
+    const isDuplicateNickname = await fetchIsDuplicated<
+      TypeNickname,
+      IPostDuplicateNicknameResponse
+    >({ name: nickname }, postDuplicateCheck, 'duplicateName')
 
     if (isDuplicateNickname) {
       setError('nickname', {
@@ -90,10 +59,10 @@ function SignUpEmailForm(): JSX.Element {
       return
     }
 
-    const isDuplicateEmail = await fetchIsDuplicatedEmail<TypeEmail>(
-      { email },
-      postDuplicateCheck,
-    )
+    const isDuplicateEmail = await fetchIsDuplicated<
+      TypeEmail,
+      IPostDuplicateEmailResponse
+    >({ email }, postDuplicateCheck, 'duplicateEmail')
 
     if (isDuplicateEmail) {
       setError('email', {
@@ -160,10 +129,10 @@ function SignUpEmailForm(): JSX.Element {
 
                 if (!nickname) return
 
-                const isDuplicateNickname = await fetchIsDuplicatedNickname(
-                  { name: nickname },
-                  postDuplicateCheck,
-                )
+                const isDuplicateNickname = await fetchIsDuplicated<
+                  TypeNickname,
+                  IPostDuplicateNicknameResponse
+                >({ name: nickname }, postDuplicateCheck, 'duplicateName')
 
                 if (isDuplicateNickname) {
                   setError('nickname', {
@@ -247,10 +216,10 @@ function SignUpEmailForm(): JSX.Element {
 
                 if (!email) return
 
-                const isDuplicateEmail = await fetchIsDuplicatedEmail(
-                  { email },
-                  postDuplicateCheck,
-                )
+                const isDuplicateEmail = await fetchIsDuplicated<
+                  TypeEmail,
+                  IPostDuplicateEmailResponse
+                >({ email }, postDuplicateCheck, 'duplicateEmail')
 
                 if (isDuplicateEmail) {
                   setError('email', {
