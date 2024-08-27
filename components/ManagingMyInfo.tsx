@@ -171,13 +171,15 @@ function ManagingMyInfo({
       if (!editUserInfoResponse.ok) {
         throw new Error('회원정보 수정에 실패했습니다.')
       }
-      userDataReFetchTrigger()
+      userDataReFetchTrigger() // 렌더링시 유저정보가 업데이트 안되는걸 방지
       handleOpenModal()
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('회원정보 수정에 실패했습니다.', error)
     }
   }
+
+  // 폼이 변경되거나 에러가 없을경우 변경버튼 활성화
   const hasErrors = !!errors.introduce || !!errors.name
   const isButtonActive = isFormChanged && !hasErrors
 

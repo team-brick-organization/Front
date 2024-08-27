@@ -23,8 +23,8 @@ interface PasswordResetVerifierProps {
 
 /**
  * 비밀번호 재설정을 위한 이메일을 전송하는 컴포넌트
- * @param name 현제 유저의 이름
- * @param email 현제 유저의 이메일
+ * @param name 현재 유저의 이름
+ * @param email 현재 유저의 이메일
  */
 
 function PasswordResetVerifier({
