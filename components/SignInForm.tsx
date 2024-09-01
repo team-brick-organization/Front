@@ -6,14 +6,18 @@ import { emailPattern, passwordPattern } from '@/constants/RegExr'
 import Image from 'next/image'
 import { Button } from '@radix-ui/themes'
 import kakaoTalk from '@/public/images/svgs/kakaoTalk.svg'
-import visibility from '@/public/images/svgs/visibility.svg'
-import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import postSignIn from '@/apis/postSignIn'
 import { useRouter } from 'next/navigation'
 import useUserStore from '@/stores/useUserStore'
 import useKakaoButtonText from '@/hooks/useKakaoButtonText'
+import {
+  AuthDivider,
+  AuthNavigation,
+  PasswordSection,
+  ValidateErrorMessage,
+} from '@/components'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -63,6 +67,17 @@ function SignInForm(): JSX.Element {
 
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
 
+  const registerOptions = {
+    email: {
+      required: '이메일은 필수 입력입니다.',
+      validate: emailPattern.validate.email,
+    },
+    password: {
+      required: '비밀번호는 필수 입력입니다.',
+      minLength: passwordPattern,
+    },
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -77,10 +92,7 @@ function SignInForm(): JSX.Element {
         <Input
           variant="border"
           id="email"
-          {...register('email', {
-            required: '이메일은 필수 입력입니다.',
-            validate: emailPattern.validate.email,
-          })}
+          {...register('email', registerOptions.email)}
           type="email"
           placeholder="이메일을 입력해 주세요."
           className={`mt-4pxr ${errors.email ? 'border-0 ring-1 ring-error' : ''}`}
@@ -88,54 +100,22 @@ function SignInForm(): JSX.Element {
         />
 
         {errors.email && (
-          <small className="mt-4pxr text-error font-caption-02" role="alert">
-            {emailPattern.message}
-          </small>
+          <ValidateErrorMessage className="mt-4pxr">
+            {errors.email.message}
+          </ValidateErrorMessage>
         )}
       </div>
 
-      <div className="mt-24pxr">
-        <label htmlFor="password" className="text-gray-10 font-title-02">
-          비밀번호
-        </label>
-        <div className="relative mt-4pxr">
-          <Input
-            variant="border"
-            id="password"
-            {...register('password', {
-              required: '비밀번호는 필수 입력입니다.',
-              minLength: passwordPattern,
-            })}
-            type={showPassword ? 'text' : 'password'}
-            placeholder="비밀번호를 입력해주세요."
-            className={`${errors.password ? 'border-0 ring-1 ring-error' : ''}`}
-          />
-          <button
-            title="비밀번호 보이기/숨기기 버튼"
-            onClick={togglePasswordVisibility}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                togglePasswordVisibility()
-              }
-            }}
-            type="button"
-            tabIndex={0}
-            className="absolute right-16pxr top-1/2 -translate-y-1/2 cursor-pointer"
-          >
-            <Image
-              src={showPassword ? visibility : visibilityOff}
-              alt="비밀번호 켜고 꺼지게"
-              width={17}
-              height={17}
-            />
-          </button>
-        </div>
-        {errors.password && (
-          <small className="mt-4pxr text-error font-caption-02" role="alert">
-            {passwordPattern.message}
-          </small>
-        )}
-      </div>
+      <PasswordSection<ILoginFormInputs>
+        register={register}
+        id="password"
+        registerOption={registerOptions.password}
+        showPassword={showPassword}
+        errors={errors.password}
+        togglePasswordVisibility={togglePasswordVisibility}
+      >
+        비밀번호
+      </PasswordSection>
 
       <Button
         type="submit"
@@ -153,13 +133,7 @@ function SignInForm(): JSX.Element {
         </Link>
       </div>
 
-      <div className="mt-45pxr flex w-400pxr items-center justify-center gap-24pxr mb:w-full">
-        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
-        <div className="text-nowrap px-8pxr text-center text-gray-04 font-caption-03">
-          또는
-        </div>
-        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
-      </div>
+      <AuthDivider />
 
       <div className="mt-20pxr flex items-center justify-center">
         <Button
@@ -171,13 +145,8 @@ function SignInForm(): JSX.Element {
         </Button>
       </div>
 
-      <div className="mt-60pxr text-center text-gray-06 font-body-02">
-        아직 브릭 회원이 아닌가요?
-        <Link href="/signup">
-          <span className="pl-8pxr text-gray-10 underline underline-offset-2">
-            회원가입
-          </span>
-        </Link>
+      <div className="mt-60pxr">
+        <AuthNavigation />
       </div>
     </form>
   )

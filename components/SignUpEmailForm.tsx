@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { FocusEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   emailPattern,
@@ -8,18 +8,18 @@ import {
   passwordPattern,
 } from '@/constants/RegExr'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { Button } from '@radix-ui/themes'
-import Image from 'next/image'
 import { validateEmail, validateNickname } from '@/utils/handleValidation'
-import visibility from '@/public/images/svgs/visibility.svg'
-import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
-import checkedIcon from '@/public/images/svgs/checked.svg'
-import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
 import useNicknameValidation from '@/hooks/useNicknameValidation'
 import postSignUp from '@/apis/postSignUp'
-import Input from './Input'
+import {
+  PasswordSection,
+  ValidateErrorMessage,
+  ValidationIndicator,
+  Input,
+  AuthNavigation,
+} from '@/components'
 
 export interface ISignUpFormInputs {
   nickname: string
@@ -79,6 +79,48 @@ function SignUpEmailForm(): JSX.Element {
   const { isLengthValid, isValidPattern, hasNoWhitespace, showChecks } =
     useNicknameValidation({ watchNickname })
 
+  const nicknameValidationConfig = [
+    { isValidate: isLengthValid, text: '2-8자 이하' },
+    { isValidate: isValidPattern, text: '한글/영어/숫자 가능' },
+    { isValidate: hasNoWhitespace, text: '공백 불가' },
+  ]
+
+  const registerOptions = {
+    nickname: {
+      required: '',
+      pattern: nicknamePattern,
+      onBlur: async (e: FocusEvent<HTMLInputElement, Element>) => {
+        await validateNickname(e.target.value, setError)
+      },
+    },
+
+    email: {
+      required: '이메일은 필수 입력입니다.',
+      pattern: emailPattern,
+      onBlur: async (e: FocusEvent<HTMLInputElement, Element>) => {
+        try {
+          await validateEmail(e.target.value, setError)
+        } catch (error) {
+          setError('email', {
+            type: 'validate',
+            message: '이메일 형식에 맞지 않습니다.',
+          })
+        }
+      },
+    },
+
+    password: {
+      required: '비밀번호는 필수 입력입니다.',
+      minLength: passwordPattern,
+    },
+
+    passwordCheck: {
+      required: '비밀번호 확인은 필수 입력입니다.',
+      minLength: passwordPattern,
+      validate: passwordCheckValidate,
+    },
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -96,13 +138,7 @@ function SignUpEmailForm(): JSX.Element {
           <Input
             variant="border"
             id="nickname"
-            {...register('nickname', {
-              required: '',
-              pattern: nicknamePattern,
-              onBlur: async (e) => {
-                await validateNickname(e.target.value, setError)
-              },
-            })}
+            {...register('nickname', registerOptions.nickname)}
             type="text"
             placeholder="닉네임을 입력해 주세요."
             className={`mt-8pxr ${errors.nickname ? 'border-0 ring-1 ring-error' : ''}`}
@@ -112,53 +148,23 @@ function SignUpEmailForm(): JSX.Element {
             showChecks && (
               <div className="mt-4pxr inline-flex">
                 <div className="flex gap-16pxr">
-                  <div className="flex gap-2pxr">
-                    <Image
-                      src={isLengthValid ? checkedIcon : unCheckedIcon}
-                      alt={isLengthValid ? 'checkedIcon' : 'unCheckedIcon'}
-                      width={14}
-                      height={14}
-                    />
-                    <span
-                      className={`font-caption-02 ${isLengthValid ? 'text-gray-10' : 'text-gray-08'}`}
-                    >
-                      2-8자 이하
-                    </span>
-                  </div>
-                  <div className="flex gap-2pxr">
-                    <Image
-                      src={isValidPattern ? checkedIcon : unCheckedIcon}
-                      alt={isValidPattern ? 'checkedIcon' : 'unCheckedIcon'}
-                      width={14}
-                      height={14}
-                    />
-                    <span
-                      className={`font-caption-02 ${isValidPattern ? 'text-gray-10' : 'text-gray-08'}`}
-                    >
-                      한글/영어/숫자 가능
-                    </span>
-                  </div>
-                  <div className="flex gap-2pxr">
-                    <Image
-                      src={hasNoWhitespace ? checkedIcon : unCheckedIcon}
-                      alt={hasNoWhitespace ? 'checkedIcon' : 'unCheckedIcon'}
-                      width={14}
-                      height={14}
-                    />
-                    <span
-                      className={`font-caption-02 ${hasNoWhitespace ? 'text-gray-10' : 'text-gray-08'}`}
-                    >
-                      공백 불가
-                    </span>
-                  </div>
+                  {nicknameValidationConfig.map((config) => {
+                    const { isValidate, text } = config
+
+                    return (
+                      <ValidationIndicator isValidate={isValidate} key={text}>
+                        {text}
+                      </ValidationIndicator>
+                    )
+                  })}
                 </div>
               </div>
             )}
 
           {errors.nickname && String(errors.nickname.message).length !== 0 && (
-            <small className="mt-4pxr text-error font-caption-02" role="alert">
+            <ValidateErrorMessage className="mt-4pxr">
               {errors.nickname.message}
-            </small>
+            </ValidateErrorMessage>
           )}
         </div>
 
@@ -169,13 +175,7 @@ function SignUpEmailForm(): JSX.Element {
           <Input
             variant="border"
             id="email"
-            {...register('email', {
-              required: '이메일은 필수 입력입니다.',
-              pattern: emailPattern,
-              onBlur: async (e) => {
-                await validateEmail(e.target.value, setError)
-              },
-            })}
+            {...register('email', registerOptions.email)}
             type="email"
             placeholder="이메일을 입력해 주세요."
             className={`mt-8pxr ${errors.email ? 'border-0 ring-1 ring-error' : 'text-gray-10'}`}
@@ -183,108 +183,36 @@ function SignUpEmailForm(): JSX.Element {
           />
 
           {errors.email && (
-            <small className="mt-4pxr text-error font-caption-02" role="alert">
+            <ValidateErrorMessage className="mt-4pxr">
               {errors.email.message}
-            </small>
+            </ValidateErrorMessage>
           )}
         </div>
 
         <div className="mt-24pxr">
-          <label
-            htmlFor="password"
-            className="pt-24pxr text-gray-10 font-title-02"
+          <PasswordSection<ISignUpFormInputs>
+            register={register}
+            id="password"
+            registerOption={registerOptions.password}
+            showPassword={showPassword}
+            errors={errors.password}
+            togglePasswordVisibility={togglePasswordVisibility}
           >
             비밀번호
-          </label>
-          <div className="relative mt-8pxr">
-            <Input
-              variant="border"
-              id="password"
-              {...register('password', {
-                required: '비밀번호는 필수 입력입니다.',
-                minLength: passwordPattern,
-              })}
-              type={showPassword ? 'text' : 'password'}
-              placeholder="비밀번호를 입력해주세요."
-              className={`${errors.password ? 'border-0 ring-1 ring-error' : ''}`}
-              autoComplete="password"
-            />
-            <button
-              title="비밀번호 보이기/숨기기 버튼"
-              onClick={togglePasswordVisibility}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  togglePasswordVisibility()
-                }
-              }}
-              type="button"
-              tabIndex={0}
-              className="absolute right-16pxr top-1/2 -translate-y-1/2"
-            >
-              <Image
-                src={showPassword ? visibility : visibilityOff}
-                alt="비밀번호 켜고 꺼지게"
-                width={17}
-                height={17}
-              />
-            </button>
-          </div>
-          {errors.password && (
-            <small className="mt-4pxr text-error font-caption-02" role="alert">
-              {errors.password.message}
-            </small>
-          )}
+          </PasswordSection>
         </div>
 
         <div className="mt-24pxr">
-          <label
-            htmlFor="passwordCheck"
-            className="pt-24pxr text-gray-10 font-title-02"
+          <PasswordSection<ISignUpFormInputs>
+            register={register}
+            id="passwordCheck"
+            registerOption={registerOptions.passwordCheck}
+            showPassword={showPasswordCheck}
+            errors={errors.passwordCheck}
+            togglePasswordVisibility={togglePasswordCheckVisibility}
           >
             비밀번호 확인
-          </label>
-          <div className="relative mt-8pxr">
-            <Input
-              variant="border"
-              id="passwordCheck"
-              {...register('passwordCheck', {
-                required: '비밀번호 확인은 필수 입력입니다.',
-                minLength: passwordPattern,
-                validate: passwordCheckValidate,
-              })}
-              type={showPasswordCheck ? 'text' : 'password'}
-              placeholder="비밀번호를 다시 한번 입력해주세요."
-              className={`${errors.passwordCheck ? 'border-0 ring-1 ring-error' : ''}`}
-              autoComplete="new-password"
-            />
-            <button
-              title="비밀번호 보이기/숨기기 버튼"
-              onClick={togglePasswordCheckVisibility}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  togglePasswordCheckVisibility()
-                }
-              }}
-              type="button"
-              tabIndex={0}
-              className="absolute right-16pxr top-1/2 -translate-y-1/2"
-            >
-              <Image
-                src={showPasswordCheck ? visibility : visibilityOff}
-                alt="비밀번호 켜고 꺼지게"
-                width={17}
-                height={17}
-              />
-            </button>
-          </div>
-          {errors.passwordCheck && (
-            <small
-              className="-pt-10pxr text-error font-caption-02"
-              role="alert"
-            >
-              {errors.passwordCheck.message}
-            </small>
-          )}
+          </PasswordSection>
         </div>
       </div>
 
@@ -295,13 +223,8 @@ function SignUpEmailForm(): JSX.Element {
         확인
       </Button>
 
-      <div className="mt-52pxr text-center text-gray-06 font-body-02">
-        이미 회원이신가요?
-        <Link href="/signin">
-          <span className="pl-8pxr text-gray-10 underline underline-offset-2">
-            로그인
-          </span>
-        </Link>
+      <div className="mt-60pxr">
+        <AuthNavigation isSignUp />
       </div>
     </form>
   )

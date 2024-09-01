@@ -5,6 +5,7 @@ import { Button } from '@radix-ui/themes'
 import kakaoTalk from '@/public/images/svgs/kakaoTalk.svg'
 import Link from 'next/link'
 import useKakaoButtonText from '@/hooks/useKakaoButtonText'
+import { AuthDivider } from '@/components'
 
 function SignUpStartForm() {
   const kakaoButtonText = useKakaoButtonText()
@@ -29,13 +30,7 @@ function SignUpStartForm() {
         </Button>
       </div>
 
-      <div className="mt-45pxr flex w-full max-w-400pxr items-center justify-center gap-24pxr">
-        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
-        <div className="text-nowrap px-8pxr text-center text-gray-04 font-caption-03">
-          또는
-        </div>
-        <div className="h-1pxr w-full max-w-126pxr bg-gray-04" />
-      </div>
+      <AuthDivider />
 
       <Link className="mt-20pxr w-full" href="/signup/email">
         <Button
