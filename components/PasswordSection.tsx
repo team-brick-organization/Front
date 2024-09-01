@@ -35,8 +35,8 @@ function PasswordSection<T extends FieldValues>({
       : '비밀번호를 다시 한번 입력해주세요.'
 
   return (
-    <div>
-      <label htmlFor={id} className="pt-24pxr text-gray-10 font-title-02">
+    <div className="pt-24pxr">
+      <label htmlFor={id} className="text-gray-10 font-title-02">
         {children}
       </label>
       <div className="relative mt-8pxr">

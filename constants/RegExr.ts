@@ -15,13 +15,13 @@ export const emailPattern = {
   },
 }
 
-export const namePattern = {
-  value: /^[가-힣]{2,8}$/,
-  message: '이름을 입력해 주세요.',
+export const nicknameInputPattern = {
+  value: /^[가-힣a-zA-Z0-9]{2,8}$/,
+  message: '',
 }
 
 export const nicknamePattern = {
-  value: /^[가-힣a-zA-Z0-9]{2,8}$/,
+  value: /^[가-힣a-zA-Z0-9]+$/,
   message: '',
 }
 

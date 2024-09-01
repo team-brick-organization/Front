@@ -101,7 +101,7 @@ function SignInForm(): JSX.Element {
 
         {errors.email && (
           <ValidateErrorMessage className="mt-4pxr">
-            {errors.email.message}
+            {errors.email.message || emailPattern.message}
           </ValidateErrorMessage>
         )}
       </div>

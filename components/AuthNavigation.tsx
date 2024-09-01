@@ -7,10 +7,10 @@ interface IAuthNavigationProps {
 function AuthNavigation({ isSignUp }: IAuthNavigationProps) {
   return (
     <div className="text-center text-gray-06 font-body-02">
-      {isSignUp ? '아직 브릭 회원이 아닌가요?' : '이미 회원이신가요?'}
-      <Link href={isSignUp ? '/signup' : '/signin'}>
+      {isSignUp ? '이미 회원이신가요?' : '아직 브릭 회원이 아닌가요?'}
+      <Link href={isSignUp ? '/signin' : '/signup'}>
         <span className="pl-8pxr text-gray-10 underline underline-offset-2">
-          {isSignUp ? '회원가입' : '로그인'}
+          {isSignUp ? '로그인' : '회원가입'}
         </span>
       </Link>
     </div>
