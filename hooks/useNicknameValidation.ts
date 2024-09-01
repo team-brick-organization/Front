@@ -14,7 +14,8 @@ interface INicknameProps {
 //
 function useNicknameValidation({ watchNickname }: INicknameProps) {
   const isLengthValid =
-    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+    !!watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
+
   const isValidPattern = nicknamePattern.value.test(watchNickname)
   const hasNoWhitespace = !/\s/.test(watchNickname || '')
   const showChecks = watchNickname && watchNickname.length >= 2

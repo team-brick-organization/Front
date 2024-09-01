@@ -53,6 +53,7 @@ function ConfirmModal({
           )}
         </section>
         <button
+          title="닫기 버튼"
           type="button"
           onClick={onCancelFunc}
           className="absolute right-20pxr top-30pxr"

@@ -73,3 +73,8 @@ export { default as SocialDetailsImgCarouselProps } from './SocialDetailsImgCaro
 export { default as CommentEditForm } from './CommentEditForm'
 export { default as MainPage } from './MainPage'
 export { default as QnaEditModal } from './QnaEditModal'
+export { default as AuthDivider } from './AuthDivider'
+export { default as ValidationIndicator } from './ValidationIndicator'
+export { default as ValidateErrorMessage } from './ValidateErrorMessage'
+export { default as PasswordSection } from './PasswordSection'
+export { default as AuthNavigation } from './AuthNavigation'
