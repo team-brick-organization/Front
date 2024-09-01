@@ -10,10 +10,10 @@ import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import Link from 'next/link'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
-import useWindowWidth from '@/hooks/useWindowWidth'
 import postSignIn from '@/apis/postSignIn'
 import { useRouter } from 'next/navigation'
 import useUserStore from '@/stores/useUserStore'
+import useKakaoButtonText from '@/hooks/useKakaoButtonText'
 import Input from './Input'
 
 export interface ILoginFormInputs {
@@ -22,6 +22,7 @@ export interface ILoginFormInputs {
 }
 
 function SignInForm(): JSX.Element {
+  const kakaoButtonText = useKakaoButtonText()
   const router = useRouter()
   const { setAccessToken } = useUserStore()
 
@@ -61,12 +62,6 @@ function SignInForm(): JSX.Element {
   }
 
   const { showPassword, togglePasswordVisibility } = usePasswordVisibility()
-  const windowWidth = useWindowWidth()
-
-  const kakaoButtonText =
-    windowWidth && windowWidth <= 400
-      ? '카카오로 시작하기'
-      : '카카오로 3초만에 시작하기'
 
   return (
     <form

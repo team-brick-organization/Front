@@ -10,6 +10,9 @@ interface IPatchEditUserInfoProps {
   accessToken: string
 }
 
+/** 유저 정보 수정 API
+ * @param body => {introduce, name(optional), birthday, profileImageUrl}
+ */
 async function patchEditUserInfo({
   body,
   accessToken,

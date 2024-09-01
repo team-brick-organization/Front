@@ -11,13 +11,13 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@radix-ui/themes'
 import Image from 'next/image'
-import type { TypeEmail, TypeNickname } from 'types/types'
+import { validateEmail, validateNickname } from '@/utils/handleValidation'
 import visibility from '@/public/images/svgs/visibility.svg'
 import visibilityOff from '@/public/images/svgs/visibilityOff.svg'
 import checkedIcon from '@/public/images/svgs/checked.svg'
 import unCheckedIcon from '@/public/images/svgs/unChecked.svg'
 import usePasswordVisibility from '@/hooks/usePasswordVisibility'
-import postDuplicateCheck from '@/apis/postDuplicateCheck'
+import useNicknameValidation from '@/hooks/useNicknameValidation'
 import postSignUp from '@/apis/postSignUp'
 import Input from './Input'
 
@@ -41,78 +41,11 @@ function SignUpEmailForm(): JSX.Element {
   const watchNickname = watch('nickname')
   const password = watch('password')
 
-  async function fetchIsDuplicatedEmail<
-    BodyType extends TypeEmail | TypeNickname,
-  >(
-    text: BodyType,
-    fetcher: ({
-      body,
-    }: {
-      body: TypeEmail | TypeNickname
-    }) => Promise<Response>,
-  ) {
-    const response = await fetcher({
-      body: text,
-    })
-
-    if (!response.ok) {
-      throw new Error('이메일 중복 확인에 실패했습니다.')
-    }
-    const data: IPostDuplicateEmailResponse = await response.json()
-
-    return data.duplicateEmail
-  }
-
-  async function fetchIsDuplicatedNickname<
-    BodyType extends TypeEmail | TypeNickname,
-  >(
-    text: BodyType,
-    fetcher: ({
-      body,
-    }: {
-      body: TypeEmail | TypeNickname
-    }) => Promise<Response>,
-  ) {
-    const response = await fetcher({
-      body: text,
-    })
-
-    if (!response.ok) {
-      throw new Error('닉네임 중복 확인에 실패했습니다.')
-    }
-    const data: IPostDuplicateNicknameResponse = await response.json()
-
-    return data.duplicateName
-  }
-
   const onSubmit = async (data: ISignUpFormInputs) => {
     const { email, password: dataPassword, nickname } = data
 
-    const isDuplicateNickname = await fetchIsDuplicatedNickname<TypeNickname>(
-      { name: nickname },
-      postDuplicateCheck,
-    )
-
-    if (isDuplicateNickname) {
-      setError('nickname', {
-        type: 'validate',
-        message: '중복된 닉네임입니다.',
-      })
-      return
-    }
-
-    const isDuplicateEmail = await fetchIsDuplicatedEmail<TypeEmail>(
-      { email },
-      postDuplicateCheck,
-    )
-
-    if (isDuplicateEmail) {
-      setError('email', {
-        type: 'validate',
-        message: '이미 가입된 이메일입니다.',
-      })
-      return
-    }
+    await validateNickname(nickname, setError)
+    await validateEmail(email, setError)
 
     const signUpResponse = await postSignUp({
       body: {
@@ -143,11 +76,9 @@ function SignUpEmailForm(): JSX.Element {
     togglePasswordCheckVisibility,
   } = usePasswordVisibility()
 
-  const isLengthValid =
-    watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
-  const isValidPattern = nicknamePattern.value.test(watchNickname || '')
-  const hasNoWhitespace = !/\s/.test(watchNickname || '')
-  const showChecks = watchNickname && watchNickname.length >= 2
+  const { isLengthValid, isValidPattern, hasNoWhitespace, showChecks } =
+    useNicknameValidation({ watchNickname })
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -169,21 +100,7 @@ function SignUpEmailForm(): JSX.Element {
               required: '',
               pattern: nicknamePattern,
               onBlur: async (e) => {
-                const nickname = e.target.value
-
-                if (!nickname) return
-
-                const isDuplicateNickname = await fetchIsDuplicatedNickname(
-                  { name: nickname },
-                  postDuplicateCheck,
-                )
-
-                if (isDuplicateNickname) {
-                  setError('nickname', {
-                    type: 'validate',
-                    message: '중복된 닉네임 입니다.',
-                  })
-                }
+                await validateNickname(e.target.value, setError)
               },
             })}
             type="text"
@@ -256,21 +173,7 @@ function SignUpEmailForm(): JSX.Element {
               required: '이메일은 필수 입력입니다.',
               pattern: emailPattern,
               onBlur: async (e) => {
-                const email = e.target.value
-
-                if (!email) return
-
-                const isDuplicateEmail = await fetchIsDuplicatedEmail(
-                  { email },
-                  postDuplicateCheck,
-                )
-
-                if (isDuplicateEmail) {
-                  setError('email', {
-                    type: 'validate',
-                    message: '이미 가입된 이메일입니다.',
-                  })
-                }
+                await validateEmail(e.target.value, setError)
               },
             })}
             type="email"

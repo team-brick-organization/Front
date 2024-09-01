@@ -37,7 +37,6 @@ function ImageViewer({ images }: ImageViewerProps) {
       </Box>
       <Box className="grid h-400pxr w-full max-w-480pxr grid-cols-2 grid-rows-2 gap-10pxr mb:hidden">
         {images.slice(1, 5).map((image, index) => {
-          // 만약 리펙토링했을때 이미지수 늘린다면 image moreIcon받을시 index 넣어주기
           return (
             <div
               className="relative cursor-pointer overflow-hidden rounded-[10px]"
@@ -51,7 +50,9 @@ function ImageViewer({ images }: ImageViewerProps) {
                 className="h-195pxr w-235pxr object-cover"
                 onClick={() => setIsPortalOpen(true)}
               />
-              {/* {index === 3 && remainingImages > 0 && (
+
+              {/*
+              {index === 3 && remainingImages > 0 && (
                 <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center">
                   <Image src={moreImgIcon} alt="icon" width={40} height={40} />
                   <span className="text-center text-[#F9FAFC] font-headline-03">

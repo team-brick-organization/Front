@@ -15,13 +15,12 @@ import useEditProfileImageStore from '@/stores/useEditProfileImageStore'
 import useDate from '@/hooks/useDate'
 import { PersonIcon } from '@radix-ui/react-icons'
 import useUserInfoPortal from '@/hooks/useUserInfoPortal'
-import postDuplicateNickname from '@/apis/postDuplicateCheck'
 import patchEditUserInfo from '@/apis/patchEditUserInfo'
 import { InfoPortal, RegistrationSuccessUserInfoModal } from '@/components'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { TypeNickname } from 'types/types'
 import getUser from '@/apis/getUser'
+import { validateMyInfoNickName } from '@/utils/handleValidation'
 import useUserDataStore from '@/stores/useUserDataStore'
 import SocialDateTimeButton from './SocialDateTimeButton'
 import Input from './Input'
@@ -32,7 +31,7 @@ interface IManagingMyInfoProps {
   setIsPortalOpen: (value: boolean) => void
 }
 
-interface IProfileFormInputs {
+export interface IProfileFormInputs {
   detail: string
   birthday: string
   email: string
@@ -103,21 +102,6 @@ function ManagingMyInfo({
     }
   }, [watchBirthday, watchIntroduce, userData, profileImage])
 
-  async function fetchIsDuplicated<BodyType extends TypeNickname>(
-    text: BodyType,
-    fetcher: ({ body }: { body: BodyType }) => Promise<Response>,
-  ) {
-    const response = await fetcher({ body: text })
-
-    if (!response.ok) {
-      throw new Error('닉네임 중복 확인에 실패했습니다.')
-    }
-
-    const data: IPostDuplicateNicknameResponse = await response.json()
-
-    return data.duplicateName
-  }
-
   useEffect(() => {
     if (!hydrated) return
 
@@ -172,24 +156,6 @@ function ManagingMyInfo({
     const birthday = selectedDateTime
       ? selectedDateTime.toISOString().split('T')[0]
       : ''
-    // eslint-disable-next-line no-console
-    // console.log('제출 데이터', { introduce, name, birthday, profileImage })
-
-    // if문 => 사용자가 자신의 기존 이메일을 입력할 때는 중복 체크 오류가 나타나지 않도록 하는 로직
-    // nickname => 변경 데이터, userName => 기존 저장 데이터
-
-    // const isDuplicateNickname = await fetchIsDuplicated<TypeNickname>(
-    //   { name },
-    //   postDuplicateNickname,
-    // )
-
-    // if (isDuplicateNickname) {
-    //   setError('name', {
-    //     type: 'validate',
-    //     message: '중복된 닉네임입니다.',
-    //   })
-    //   return
-    // }
 
     try {
       const editUserInfoResponse = await patchEditUserInfo({
@@ -205,23 +171,22 @@ function ManagingMyInfo({
       if (!editUserInfoResponse.ok) {
         throw new Error('회원정보 수정에 실패했습니다.')
       }
-      userDataReFetchTrigger()
+      userDataReFetchTrigger() // 렌더링시 유저정보가 업데이트 안되는걸 방지
       handleOpenModal()
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('회원정보 수정에 실패했습니다.', error)
     }
   }
+
+  // 폼이 변경되거나 에러가 없을경우 변경버튼 활성화
   const hasErrors = !!errors.introduce || !!errors.name
   const isButtonActive = isFormChanged && !hasErrors
 
   if (!accessToken) return null
 
-  // const isLengthValid =
-  //   watchNickname && watchNickname.length >= 2 && watchNickname.length <= 8
-  // const isValidPattern = nicknamePattern.value.test(watchNickname || '')
-  // const hasNoWhitespace = !/\s/.test(watchNickname || '')
-  // const showChecks = watchNickname && watchNickname.length >= 2
+  // const { isLengthValid, isValidPattern, hasNoWhitespace, showChecks } =
+  //     useNicknameValidation({ watchNickname })
 
   return (
     <>
@@ -279,28 +244,12 @@ function ManagingMyInfo({
               required: '닉네임은 필수 입력입니다.',
               pattern: nicknamePattern,
               onBlur: async (e) => {
-                const name = e.target.value
-
-                if (!name) return
-
-                // 현재 닉네임과 동일한 경우 중복 체크 x
-                if (name === userData?.name) {
-                  clearErrors('name')
-                  return
-                }
-
-                const isDuplicateNickname =
-                  await fetchIsDuplicated<TypeNickname>(
-                    { name },
-                    postDuplicateNickname,
-                  )
-
-                if (isDuplicateNickname) {
-                  setError('name', {
-                    type: 'validate',
-                    message: '이미 중복된 닉네임입니다.',
-                  })
-                }
+                await validateMyInfoNickName(
+                  e.target.value,
+                  userData?.name,
+                  clearErrors,
+                  setError,
+                )
               },
             })}
             type="text"
