@@ -4,7 +4,7 @@ import { FocusEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   emailPattern,
-  nicknamePattern,
+  nicknameInputPattern,
   passwordPattern,
 } from '@/constants/RegExr'
 import { useRouter } from 'next/navigation'
@@ -88,7 +88,7 @@ function SignUpEmailForm(): JSX.Element {
   const registerOptions = {
     nickname: {
       required: '',
-      pattern: nicknamePattern,
+      pattern: nicknameInputPattern,
       onBlur: async (e: FocusEvent<HTMLInputElement, Element>) => {
         await validateNickname(e.target.value, setError)
       },
@@ -189,31 +189,27 @@ function SignUpEmailForm(): JSX.Element {
           )}
         </div>
 
-        <div className="mt-24pxr">
-          <PasswordSection<ISignUpFormInputs>
-            register={register}
-            id="password"
-            registerOption={registerOptions.password}
-            showPassword={showPassword}
-            errors={errors.password}
-            togglePasswordVisibility={togglePasswordVisibility}
-          >
-            비밀번호
-          </PasswordSection>
-        </div>
+        <PasswordSection<ISignUpFormInputs>
+          register={register}
+          id="password"
+          registerOption={registerOptions.password}
+          showPassword={showPassword}
+          errors={errors.password}
+          togglePasswordVisibility={togglePasswordVisibility}
+        >
+          비밀번호
+        </PasswordSection>
 
-        <div className="mt-24pxr">
-          <PasswordSection<ISignUpFormInputs>
-            register={register}
-            id="passwordCheck"
-            registerOption={registerOptions.passwordCheck}
-            showPassword={showPasswordCheck}
-            errors={errors.passwordCheck}
-            togglePasswordVisibility={togglePasswordCheckVisibility}
-          >
-            비밀번호 확인
-          </PasswordSection>
-        </div>
+        <PasswordSection<ISignUpFormInputs>
+          register={register}
+          id="passwordCheck"
+          registerOption={registerOptions.passwordCheck}
+          showPassword={showPasswordCheck}
+          errors={errors.passwordCheck}
+          togglePasswordVisibility={togglePasswordCheckVisibility}
+        >
+          비밀번호 확인
+        </PasswordSection>
       </div>
 
       <Button
